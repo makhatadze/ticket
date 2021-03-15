@@ -1,18 +1,14 @@
 <?php
-
+/**
+ *  routes/web.php
+ *
+ * Date-Time: 15.03.21
+ * Time: 12:31
+ * @author Vito Makhatadze <vitomaxatadze@gmail.com>
+ */
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-Route::get('/', function () {
+Route::any('/{slug?}', function () {
     return view('welcome');
 });
