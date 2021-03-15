@@ -3,7 +3,7 @@
  *  database/migrations/2021_03_15_072356_add_deleted_at_column_to_users_table.php
  *
  * Date-Time: 15.03.21
- * Time: 11:24
+ * Time: 12:10
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 use Illuminate\Database\Migrations\Migration;
