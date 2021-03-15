@@ -15,6 +15,7 @@ create .env file by .env.example
 
 ```sh
 php artisan migrate
+php artisan db:seed --class=UserSeeder
 ```
 
 ### Generate jwt secret
