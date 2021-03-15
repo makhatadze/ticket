@@ -4,13 +4,36 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
-{
-    use HasFactory, Notifiable;
 
+/**
+ * Class User
+ * @package App\Models
+ * @property integer $id
+ * @property string $name
+ * @property string $username
+ * @property boolean $active
+ * @property string|null $email
+ * @property string|null $email_verified_at
+ * @property string $password
+ * @property string $remember_token
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $deleted_at
+ */
+class User extends Authenticatable implements JWTSubject
+{
+    use HasFactory, Notifiable,softDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'roles';
     /**
      * The attributes that are mass assignable.
      *
