@@ -22,6 +22,7 @@
         "antd": "^4.14.0",
         "jwt-decode": "^3.1.2",
         "node-sass": "^5.0.0",
+        "prop-types": "^15.7.2",
         "react": "^17.0.1",
         "react-dedux": "^0.4.0-beta.4",
         "react-dom": "^17.0.1",
