@@ -32,6 +32,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject
 {
+    public const ACTIVE = true;
+    public const NOT_ACTIVE = false;
     use HasFactory, Notifiable,softDeletes;
 
     /**
@@ -39,7 +41,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var string
      */
-    protected $table = 'roles';
+    protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
