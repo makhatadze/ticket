@@ -11,6 +11,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Permission
@@ -29,5 +30,20 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Permission extends Model
 {
-    use HasFactory;
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'permissions';
+
+    /**
+     * Get permissions
+     *
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'roles_permissions');
+    }
 }
