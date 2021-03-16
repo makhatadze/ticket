@@ -3,7 +3,7 @@
  *  database/migrations/2021_03_16_104051_create_users_roles_table.php
  *
  * Date-Time: 16.03.21
- * Time: 14:41
+ * Time: 14:55
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 use Illuminate\Database\Migrations\Migration;
