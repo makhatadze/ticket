@@ -35,6 +35,8 @@ class RoleRequest extends FormRequest
         $rules = [
             'name' => 'required|string|max:255',
             'slug' => ['required','alpha_dash', Rule::unique('roles', 'slug')->ignore($this->role)],
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,id',
         ];
 
         // Check if request method is GET.
