@@ -1,0 +1,1 @@
+export const SLIDER_TOGGLE = 'SLIDER_TOGGLE';
