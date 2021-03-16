@@ -3,12 +3,12 @@ import setAuthToken from "../../core/utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import {SET_AUTH_ERRORS, SET_USER} from "./authTypes";
 import isEmpty from "../../core/validation/is-empty";
-
+const url = process.env.MIX_SERVER_API_URL;
 // Login - Get User Token
 export const loginUser = userData => dispatch => {
     return new Promise( async (resolve, reject) => {
         axios
-            .post('http://127.0.0.1:8000/api/v1/auth/login', userData)
+            .post(`${url}/auth/login`, userData)
             .then(res => {
                 // Save to localStorage
                 const {token} = res.data;
