@@ -25,9 +25,9 @@ class CreateRolesTable extends Migration
             $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('created_by')->unsigned()->nullable()->constrained('users')->onDelete('cascade');
-            $table->foreignId('updated_by')->unsigned()->nullable()->constrained('users')->onDelete('cascade');
-            $table->foreignId('deleted_by')->unsigned()->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('created_by')->unsigned()->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->unsigned()->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->unsigned()->nullable()->constrained('users')->onDelete('set null');
         });
     }
 
