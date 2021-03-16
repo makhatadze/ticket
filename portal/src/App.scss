@@ -1,3 +1,32 @@
-h1 {
-  color: Green;
+@import './scss/_variables.scss';
+
+.layout-wrapper {
+  display: flex;
+  flex-flow: nowrap row;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .nav {
+    height: 100vh;
+    width: 10vw;
+    min-width: 180px;
+    background-color: $mainColor;
+  }
+
+  .main-wrapper {
+    height: 100vh;
+    background-color: #F1F3F4;
+
+    .content {
+      padding: 24px;
+      margin: 24px 16px;
+      background-color: $colorC;
+      min-height: 280px;
+    }
+  }
+
+  .footer {
+    padding: 0;
+    text-align: center;
+  }
 }
