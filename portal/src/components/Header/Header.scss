@@ -1,0 +1,22 @@
+@import "../../scss/_variables.scss";
+.header{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 3px 0 $layoutBackground;
+  background-color: $colorC;
+  padding: 0 24px;
+  .trigger:hover{
+    color: #1890ff;
+  }
+  .user{
+    margin-right: 10px;
+    &:hover{
+      color: #1890ff;
+    }
+  }
+}
+.ant-menu{
+  border: none;
+}
