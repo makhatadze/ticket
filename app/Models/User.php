@@ -8,6 +8,7 @@
  */
 namespace App\Models;
 
+use App\Traits\HasRolesAndPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -34,7 +35,7 @@ class User extends Authenticatable implements JWTSubject
 {
     public const ACTIVE = true;
     public const NOT_ACTIVE = false;
-    use HasFactory, Notifiable,softDeletes;
+    use HasFactory, Notifiable,softDeletes, HasRolesAndPermissions;
 
     /**
      * The table associated with the model.
