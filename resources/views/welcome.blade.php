@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ticket System</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 </head>
 <body>
 <div id="app"></div>
