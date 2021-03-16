@@ -6,10 +6,12 @@
  * Time: 14:57
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
+
 namespace App\Repositories\Eloquent;
 
 use App\Http\Requests\Api\v1\RoleRequest;
 use App\Http\Resources\Api\v1\RoleCollection;
+use App\Http\Resources\Api\v1\RoleResource;
 use App\Models\Role;
 use App\Repositories\Eloquent\Base\BaseRepository;
 use App\Repositories\RoleRepositoryInterface;
@@ -34,7 +36,27 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
      */
     public function getData(RoleRequest $request): RoleCollection
     {
+        $data = $this->model->query();
 
+        $data = $data->paginate(10);
+        return new RoleCollection($data);
+    }
+
+    /**
+     * Create new role
+     *
+     * @param array $attributes
+     *
+     * @return RoleResource
+     */
+    public function createNewItem(RoleRequest $request): RoleResource
+    {
+        $attributes = $request->only('name','slug');
+        $this->model = $this->model->create($attributes);
+        if ($request->has('permissions') && $this->model){
+            $this->model->permissions()->sync($request['permissions']);
+        }
+        return new RoleResource($this->model);
     }
 
 }

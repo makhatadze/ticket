@@ -45,7 +45,7 @@ class RoleRequest extends FormRequest
                 'slug' => 'nullable|string|max:255',
             ];
         }
-
+        return $rules;
     }
 
     /**

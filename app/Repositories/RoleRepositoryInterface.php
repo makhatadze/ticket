@@ -9,6 +9,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\Api\v1\RoleRequest;
+use App\Http\Resources\Api\v1\RoleResource;
 
 interface RoleRepositoryInterface
 {
@@ -16,4 +17,13 @@ interface RoleRepositoryInterface
      * @param RoleRequest $request
      */
     public function getData(RoleRequest $request);
+
+    /**
+     * Create new model
+     *
+     * @param RoleRequest $request
+     *
+     * @return RoleResource
+     */
+    public function createNewItem(RoleRequest $request): RoleResource;
 }
