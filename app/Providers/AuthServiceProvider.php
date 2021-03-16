@@ -1,7 +1,15 @@
 <?php
-
+/**
+ *  app/Providers/AuthServiceProvider.php
+ *
+ * Date-Time: 16.03.21
+ * Time: 16:56
+ * @author Vito Makhatadze <vitomaxatadze@gmail.com>
+ */
 namespace App\Providers;
 
+use App\Models\Role;
+use App\Policies\RolePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Role::class => RolePolicy::class
     ];
 
     /**
@@ -25,6 +34,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::before(function ($user) {
+           return $user->isAdmin();
+        });
+    }
+
+    private function abort(string $message = "You don't have access this action.", $status = 403){
+        abort(response()->json([
+            'error' => [
+                'message' => $message,
+                'status' => $status
+            ]
+        ], $status));
     }
 }
