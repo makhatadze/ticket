@@ -13,7 +13,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
 
         // Roles
-//        Route::post('role/{role}/restore',[RoleController::class,'restore']);
+        Route::post('role/{role}/restore',[RoleController::class,'restore']);
         Route::apiResource('role', RoleController::class);
     });
 

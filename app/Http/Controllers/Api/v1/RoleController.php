@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\TrashException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\RoleRequest;
@@ -93,5 +94,42 @@ class RoleController extends Controller
     public function update(RoleRequest $request, int $id)
     {
         return $this->roleRepository->updateItem($id, $request);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return RoleResource|JsonResponse
+     */
+    public function destroy(int $id)
+    {
+        if (false === $this->roleRepository->delete($id)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Can not deleted.'
+            ]);
+        }
+        return new RoleResource($this->roleRepository->findTrash($id));
+    }
+
+    /**
+     * Restore specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return RoleResource|JsonResponse
+     * @throws ValidationException
+     */
+    public function restore(int $id)
+    {
+        if (false === $this->roleRepository->restore($id)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Can not restored.'
+            ]);
+        }
+        return new RoleResource($this->roleRepository->findOrFail($id));
     }
 }

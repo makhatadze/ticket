@@ -9,6 +9,7 @@
 
 namespace App\Repositories\Eloquent\Base;
 
+use App\Exceptions\TrashException;
 use App\Exceptions\UpdateException;
 use App\Exceptions\ValidationException;
 use Illuminate\Database\Eloquent\Model;
@@ -187,6 +188,10 @@ class BaseRepository implements EloquentRepositoryInterface
     public function findTrash(int $id): Model
     {
         $model = $this->model->withTrashed()->find($id);
+        if (null === $model) {
+            throw new TrashException();
+        }
+
         if (null === $model->deleted_at) {
             throw new TrashException();
         }
