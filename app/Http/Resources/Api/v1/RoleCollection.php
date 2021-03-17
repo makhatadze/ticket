@@ -8,12 +8,14 @@
  */
 namespace App\Http\Resources\Api\v1;
 
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class RoleCollection extends ResourceCollection
 {
     private $pagination;
+    private $permissions;
 
     public function __construct($resource)
     {
@@ -23,6 +25,8 @@ class RoleCollection extends ResourceCollection
             'current' => $resource->currentPage(),
             'pageSize' => $resource->perPage()
         ];
+
+        $this->permissions = Permission::all();
 
         $resource = $resource->getCollection();
         parent::__construct($resource);
@@ -42,7 +46,8 @@ class RoleCollection extends ResourceCollection
                     return new RoleResource($role);
                 }
             ),
-            'pagination' => $this->pagination
+            'pagination' => $this->pagination,
+            'permissions' => new PermissionCollection($this->permissions)
         ];
     }
 }
