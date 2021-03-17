@@ -1,0 +1,2 @@
+export const GET_ROLES = 'GET_ROLES';
+export const SET_ROLES_LOADING = 'SET_ROLES_LOADING';
