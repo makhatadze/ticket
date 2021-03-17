@@ -3,11 +3,12 @@
  *  app/Policies/UserPolicy.php
  *
  * Date-Time: 17.03.21
- * Time: 11:58
+ * Time: 12:00
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 namespace App\Policies;
 
+use App\Exceptions\PermissionException;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -18,66 +19,86 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
+     * @param User $user
+     *
      * @return mixed
+     * @throws PermissionException
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
-        //
+        if(!$user->hasPermission('read_user')) {
+            throw new PermissionException();
+        }
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param User $user
+     *
      * @return mixed
+     * @throws PermissionException
      */
-    public function view(User $user, User $model)
+    public function view(User $user): bool
     {
-        //
+        if(!$user->hasPermission('read_user')) {
+            throw new PermissionException();
+        }
+        return true;
     }
 
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
+     * @param User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
-        //
+        if(!$user->hasPermission('create_user')) {
+            throw new PermissionException();
+        }
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param User $user
+     *
      * @return mixed
+     * @throws PermissionException
      */
-    public function update(User $user, User $model)
+    public function update(User $user): bool
     {
-        //
+        if(!$user->hasPermission('update_user')) {
+            throw new PermissionException();
+        }
+        return true;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param User $user
+     *
      * @return mixed
+     * @throws PermissionException
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user): bool
     {
-        //
+        if(!$user->hasPermission('delete_user')) {
+            throw new PermissionException();
+        }
+        return true;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param User  $user
+     * @param User  $model
      * @return mixed
      */
     public function restore(User $user, User $model)
@@ -88,8 +109,8 @@ class UserPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param User  $user
+     * @param User  $model
      * @return mixed
      */
     public function forceDelete(User $user, User $model)

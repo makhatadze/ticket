@@ -27,7 +27,7 @@ class RolePolicy
      */
     public function viewAny(User $user)
     {
-        if($user->hasPermission('read_role')) {
+        if(!$user->hasPermission('read_role')) {
             throw new PermissionException();
         }
         return true;
@@ -42,7 +42,7 @@ class RolePolicy
      */
     public function view(User $user)
     {
-        if($user->hasPermission('read_role')) {
+        if(!$user->hasPermission('read_role')) {
             throw new PermissionException();
         }
         return true;
@@ -56,7 +56,7 @@ class RolePolicy
      */
     public function create(User $user)
     {
-        if($user->hasPermission('create_role')) {
+        if(!$user->hasPermission('create_role')) {
             throw new PermissionException();
         }
         return true;
@@ -71,7 +71,7 @@ class RolePolicy
      */
     public function update(User $user)
     {
-        if($user->hasPermission('update_role')) {
+        if(!$user->hasPermission('update_role')) {
             throw new PermissionException();
         }
         return true;
@@ -86,7 +86,7 @@ class RolePolicy
      */
     public function delete(User $user)
     {
-        if($user->hasPermission('delete_role')) {
+        if(!$user->hasPermission('delete_role')) {
             throw new PermissionException();
         }
         return true;
