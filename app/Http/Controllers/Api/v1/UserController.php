@@ -9,9 +9,43 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\UserRequest;
+use App\Http\Resources\Api\v1\UserCollection;
+use App\Models\User;
+use App\Repositories\UserRepositoryInterface;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    //
+    private $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+
+        $this->authorizeResource(User::class);
+    }
+
+    /**
+     * Get the list of resource methods which do not have model parameters.
+     *
+     * @return array
+     */
+    protected function resourceMethodsWithoutModels(): array
+    {
+        return ['index', 'store', 'update', 'destroy', 'show', 'restore'];
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param UserRequest $request
+     *
+     * @return UserCollection
+     */
+    public function index(UserRequest $request): UserCollection
+    {
+        return $this->userRepository->getData($request);
+    }
+
 }

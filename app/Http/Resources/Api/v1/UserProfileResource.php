@@ -1,16 +1,16 @@
 <?php
 /**
- *  app/Http/Resources/Api/v1/UserResource.php
+ *  app/Http/Resources/Api/v1/UserProfileResource.php
  *
- * Date-Time: 16.03.21
- * Time: 15:10
+ * Date-Time: 17.03.21
+ * Time: 12:13
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 namespace App\Http\Resources\Api\v1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class UserProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,11 +22,13 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'phone' => $this->phone,
+            'country' => $this->country,
+            'birthday' => $this->birthday,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'userProfile' => new UserProfileResource($this->userProfile)
         ];
     }
 }

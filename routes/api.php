@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\RoleController;
+use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -17,8 +18,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('role', RoleController::class);
 
         // Roles
-//        Route::post('role/{role}/restore',[RoleController::class,'restore']);
-//        Route::apiResource('user', RoleController::class);
+        Route::post('user/{user}/restore',[UserController::class,'restore']);
+        Route::apiResource('user', UserController::class);
     });
 
 });

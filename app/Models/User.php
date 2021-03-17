@@ -99,7 +99,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return MorphOne
      */
-    public function profile()
+    public function userProfile()
     {
         return $this->morphOne(UserProfile::class, 'profileable');
     }
