@@ -20,7 +20,7 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 {
 
     /**
-     * UserRepository constructor.
+     * RoleRepository constructor.
      *
      * @param Role $model
      */
