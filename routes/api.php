@@ -17,7 +17,7 @@ Route::prefix('v1')->group(function () {
         Route::post('role/{role}/restore',[RoleController::class,'restore']);
         Route::apiResource('role', RoleController::class);
 
-        // Roles
+        // Users
         Route::post('user/{user}/restore',[UserController::class,'restore']);
         Route::apiResource('user', UserController::class);
     });

@@ -37,6 +37,11 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
     public function getData(RoleRequest $request): RoleCollection
     {
         $data = $this->model->query();
+        // name, permissions [], start_date, end_date
+
+        // $request->sort -> sort attribute
+        // $request->order -> order attribute lowercase
+        // requestidan mova per_page
 
         $data = $data->paginate(10);
         return new RoleCollection($data);
