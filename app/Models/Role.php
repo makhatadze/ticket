@@ -8,6 +8,7 @@
  */
 namespace App\Models;
 
+use App\Traits\CustomBleableTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +34,7 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  */
 class Role extends Model
 {
-    use BlameableTrait, softDeletes;
+    use BlameableTrait, softDeletes, CustomBleableTrait;
     /**
      * The table associated with the model.
      *
@@ -58,23 +59,4 @@ class Role extends Model
         return $this->belongsToMany(Permission::class, 'roles_permissions');
     }
 
-    /**
-     * Get Created By
-     *
-     * @return HasOne
-     */
-    public function createdBy(): HasOne
-    {
-        return $this->hasOne(User::class,'id','created_by');
-    }
-
-    /**
-     * Get Updated By
-     *
-     * @return HasOne
-     */
-    public function updatedBy(): HasOne
-    {
-        return $this->hasOne(User::class,'id','updated_by');
-    }
 }
