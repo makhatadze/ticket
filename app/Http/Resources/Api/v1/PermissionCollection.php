@@ -3,9 +3,10 @@
  *  app/Http/Resources/Api/v1/PermissionCollection.php
  *
  * Date-Time: 17.03.21
- * Time: 09:44
+ * Time: 10:17
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
+
 namespace App\Http\Resources\Api\v1;
 
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class PermissionCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Collection
      */

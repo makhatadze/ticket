@@ -6,8 +6,10 @@
  * Time: 14:52
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
+
 namespace App\Repositories\Eloquent\Base;
 
+use App\Exceptions\UpdateException;
 use App\Exceptions\ValidationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
@@ -75,10 +77,15 @@ class BaseRepository implements EloquentRepositoryInterface
      * @param string $attribute
      *
      * @return mixed
+     * @throws UpdateException|ValidationException
      */
-    public function update(int $id, $data = [], $attribute = 'id')
+    public function update(int $id, $data = [], $attribute = 'id'): Model
     {
-        return $this->findOrFail($id)->update($data);
+        $this->model = $this->findOrFail($id);
+        if (!$this->model->update($data)) {
+            throw new UpdateException();
+        }
+        return $this->model;
     }
 
     /**
@@ -104,7 +111,6 @@ class BaseRepository implements EloquentRepositoryInterface
     {
         return $this->findTrash($id)->restore();
     }
-
 
 
     /**

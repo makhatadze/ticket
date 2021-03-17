@@ -47,8 +47,9 @@ interface EloquentRepositoryInterface
      * @param array $data
      * @param string $attribute
      *
+     * @return Model
      */
-    public function update(int $id, $data = [], $attribute = 'id');
+    public function update(int $id, $data = [], $attribute = 'id'): Model;
 
     /**
      * @param integer $id

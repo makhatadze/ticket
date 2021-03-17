@@ -80,4 +80,18 @@ class RoleController extends Controller
         $data = $this->roleRepository->findOrFail($id);
         return new RoleResource($data);
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param RoleRequest $request
+     * @param int $id
+     *
+     * @return RoleResource|JsonResponse
+     * @throws ValidationException
+     */
+    public function update(RoleRequest $request, int $id)
+    {
+        return $this->roleRepository->updateItem($id, $request);
+    }
 }

@@ -51,12 +51,48 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
      */
     public function createNewItem(RoleRequest $request): RoleResource
     {
-        $attributes = $request->only('name','slug');
-        $this->model = $this->model->create($attributes);
-        if ($request->has('permissions') && $this->model){
+        $attributes = $request->only('name', 'slug');
+        $this->model = $this->create($attributes);
+
+        // Attach permissions
+        $this->syncPermissions($request);
+
+        return new RoleResource($this->model);
+    }
+
+    /**
+     * Update role item
+     *
+     * @param int $id
+     * @param RoleRequest $request
+     *
+     * @return mixed
+     */
+    public function updateItem(int $id, RoleRequest $request): RoleResource
+    {
+        $attributes = $request->only('name', 'slug');
+        $this->model = $this->update($id, $attributes);
+
+        // Remove permissions
+        $this->model->permissions()->detach();
+
+        // Attach permissions
+        $this->syncPermissions($request);
+
+        return new RoleResource($this->model);
+    }
+
+    /**
+     *  Attach roles permissions
+     *
+     * @param RoleRequest $request
+     *
+     */
+    protected function syncPermissions(RoleRequest $request)
+    {
+        if ($request->has('permissions') && $this->model) {
             $this->model->permissions()->sync($request['permissions']);
         }
-        return new RoleResource($this->model);
     }
 
 }
