@@ -9,12 +9,15 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\RoleRequest;
 use App\Http\Resources\Api\v1\RoleCollection;
 use App\Http\Resources\Api\v1\RoleResource;
 use App\Models\Role;
 use App\Repositories\RoleRepositoryInterface;
+use http\Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -62,5 +65,19 @@ class RoleController extends Controller
     public function store(RoleRequest $request): RoleResource
     {
         return $this->roleRepository->createNewItem($request);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     *
+     * @return ValidationException|RoleResource|Exception|JsonResponse
+     * @throws ValidationException
+     */
+    public function show(int $id)
+    {
+        $data = $this->roleRepository->findOrFail($id);
+        return new RoleResource($data);
     }
 }

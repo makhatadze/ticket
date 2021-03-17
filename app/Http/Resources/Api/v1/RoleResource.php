@@ -30,6 +30,7 @@ class RoleResource extends JsonResource
             'updatedAt' => $this->updated_at,
             'createdBy' => new UserResource($this->createdBy),
             'updatedBy' => new UserResource($this->updatedBy),
+            'permissions' => new PermissionCollection($this->permissions)
         ];
     }
 }
