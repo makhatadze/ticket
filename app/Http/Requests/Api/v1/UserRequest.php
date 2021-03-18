@@ -33,12 +33,9 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'birthday' => 'date',
-            'country' => 'nullable|max:2',
-            'phone' => 'nullable|max:15',
-            'password' => 'required|between:8,255|confirmed',
+            'name' => 'required|string|max:255',
+            'username' => 'required|unique:users|max:255',
+            'password' => 'required|between:6,255|confirmed',
             'password_confirmation' => 'required',
             'role' => 'nullable|integer|exists:roles,id',
             'permissions' => 'nullable|array',

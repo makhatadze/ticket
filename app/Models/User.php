@@ -94,13 +94,4 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    /**
-     * Get Updated By
-     *
-     * @return MorphOne
-     */
-    public function userProfile()
-    {
-        return $this->morphOne(UserProfile::class, 'profileable');
-    }
 }
