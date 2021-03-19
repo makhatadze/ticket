@@ -9,7 +9,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\DataNotFoundException;
 use App\Exceptions\DeleteException;
+use App\Exceptions\RestoreException;
+use App\Exceptions\TrashException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\IpRestrictionRequest;
@@ -121,16 +124,10 @@ class IpRestrictionController extends Controller
      * @param int $id
      *
      * @return IpRestrictionResource|JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|RestoreException|DataNotFoundException|TrashException
      */
-    public function restore(int $id)
+    public function restore(int $id): IpRestrictionResource
     {
-        if (false === $this->roleRepository->restore($id)) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Can not restored.'
-            ]);
-        }
-        return new RoleResource($this->roleRepository->findOrFail($id));
+        return new IpRestrictionResource($this->ipRestictionRepository->restore($id));
     }
 }
