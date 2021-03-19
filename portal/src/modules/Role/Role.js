@@ -40,10 +40,11 @@ class Role extends Component {
                 title: 'Action',
                 dataIndex: '',
                 key: 'x',
-                render: (e) => <Link className="ant-dropdown-link" onClick={() => console.log(123)}>Edit</Link>
+                render: (e) => <Link to='' className="ant-dropdown-link" onClick={(e) => this.editRole(e)}>Edit</Link>
             },
         ]
 
+        this.editRole = this.editRole.bind(this)
         this.handleTableChange = this.handleTableChange.bind(this)
     }
 
@@ -55,6 +56,10 @@ class Role extends Component {
 
     handleTableChange(pagination, filters, sorter) {
         console.log('Filter')
+    }
+
+    editRole(event) {
+        event.preventDefault()
     }
 
     render() {

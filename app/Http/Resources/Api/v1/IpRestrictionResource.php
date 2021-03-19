@@ -23,7 +23,7 @@ class IpRestrictionResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'ip' => $this->slug,
+            'ip' => $this->ip,
             'status' => $this->status,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
