@@ -9,6 +9,7 @@
 
 namespace App\Repositories\Eloquent\Base;
 
+use App\Exceptions\DataNotFoundException;
 use App\Exceptions\TrashException;
 use App\Exceptions\UpdateException;
 use App\Exceptions\ValidationException;
@@ -154,7 +155,7 @@ class BaseRepository implements EloquentRepositoryInterface
     {
         $data = $this->model->find($id, $columns);
         if (!$data) {
-            throw new ValidationException();
+            throw new DataNotFoundException();
         }
         return $data;
     }
@@ -172,7 +173,7 @@ class BaseRepository implements EloquentRepositoryInterface
     {
         $data = $this->model->firstOrFail($id, $columns);
         if (!$data) {
-            throw new ValidationException();
+            throw new DataNotFoundException();
         }
         return $data;
     }
