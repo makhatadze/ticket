@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\IpRestrictionRequest;
@@ -99,5 +100,18 @@ class IpRestrictionController extends Controller
         $this->ipRestictionRepository = $this->ipRestictionRepository->update($id, $attributes);
 
         return new IpRestrictionResource($this->ipRestictionRepository);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return IpRestrictionResource|JsonResponse
+     * @throws DeleteException
+     */
+    public function destroy(int $id)
+    {
+        return new IpRestrictionResource($this->ipRestictionRepository->delete($id));
     }
 }
