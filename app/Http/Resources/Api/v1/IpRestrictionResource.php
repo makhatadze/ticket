@@ -20,6 +20,15 @@ class IpRestrictionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'ip' => $this->slug,
+            'status' => $this->status,
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
+            'createdBy' => new UserResource($this->createdBy),
+            'updatedBy' => new UserResource($this->updatedBy),
+        ];
     }
 }
