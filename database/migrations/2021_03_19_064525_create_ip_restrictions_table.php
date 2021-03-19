@@ -3,7 +3,7 @@
  *  database/migrations/2021_03_19_064525_create_ip_restrictions_table.php
  *
  * Date-Time: 19.03.21
- * Time: 10:50
+ * Time: 11:04
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 use Illuminate\Database\Migrations\Migration;
@@ -21,6 +21,7 @@ class CreateIpRestrictionsTable extends Migration
     {
         Schema::create('ip_restrictions', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->ipAddress('ip');
             $table->boolean('status')->default(true);
             $table->timestamps();

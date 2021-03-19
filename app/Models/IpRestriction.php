@@ -10,17 +10,15 @@
 namespace App\Models;
 
 use App\Traits\CustomBleableTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
 /**
  * Class IpRestriction
  * @package App\Models
  *
- * @property integer $id
+ * @property string $name
  * @property string $ip
  * @property boolean $status
  * @property string $created_at
@@ -46,6 +44,7 @@ class IpRestriction extends Model
      * @var array
      */
     protected $fillable = [
+        'name',
         'ip',
         'status'
     ];
