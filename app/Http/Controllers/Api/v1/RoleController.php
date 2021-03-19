@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\TrashException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
@@ -102,16 +103,11 @@ class RoleController extends Controller
      * @param int $id
      *
      * @return RoleResource|JsonResponse
+     * @throws DeleteException
      */
     public function destroy(int $id)
     {
-        if (false === $this->roleRepository->delete($id)) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Can not deleted.'
-            ]);
-        }
-        return new RoleResource($this->roleRepository->findTrash($id));
+        return new RoleResource($this->roleRepository->delete($id));
     }
 
     /**

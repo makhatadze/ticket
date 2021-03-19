@@ -10,9 +10,11 @@
 namespace App\Repositories\Eloquent\Base;
 
 use App\Exceptions\DataNotFoundException;
+use App\Exceptions\DeleteException;
 use App\Exceptions\TrashException;
 use App\Exceptions\UpdateException;
 use App\Exceptions\ValidationException;
+use App\Models\IpRestriction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -95,11 +97,19 @@ class BaseRepository implements EloquentRepositoryInterface
      *
      * @param integer $id
      *
-     * @return boolean
+     * @return Model
+     * @throws DeleteException
+     * @throws TrashException
+     * @throws ValidationException
      */
-    public function delete(int $id): bool
+    public function delete(int $id): Model
     {
-        return $this->model->destroy($id);
+        $this->model = $this->findOrFail($id);
+        if (!$this->model->destroy($id)) {
+            throw new DeleteException();
+        }
+
+        return $this->findTrash($id);
     }
 
     /**

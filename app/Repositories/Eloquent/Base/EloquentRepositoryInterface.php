@@ -54,9 +54,9 @@ interface EloquentRepositoryInterface
     /**
      * @param integer $id
      *
-     * @return boolean
+     * @return Model
      */
-    public function delete(int $id): bool;
+    public function delete(int $id): Model;
 
     /**
      * @param integer $id
