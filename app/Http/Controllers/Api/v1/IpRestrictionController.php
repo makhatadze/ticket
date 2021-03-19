@@ -8,12 +8,15 @@
  */
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\IpRestrictionRequest;
 use App\Http\Resources\Api\v1\IpRestrictionCollection;
 use App\Http\Resources\Api\v1\IpRestrictionResource;
 use App\Policies\IpRestrictionPolicy;
 use App\Repositories\IpRestrictionRepositoryInterface;
+use http\Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class IpRestrictionController extends Controller
@@ -64,5 +67,19 @@ class IpRestrictionController extends Controller
         $this->ipRestictionRepository = $this->ipRestictionRepository->create($attributes);
 
         return new IpRestrictionResource($this->ipRestictionRepository);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     *
+     * @return IpRestrictionResource
+     * @throws ValidationException
+     */
+    public function show(int $id)
+    {
+        $data = $this->ipRestictionRepository->findOrFail($id);
+        return new IpRestrictionResource($data);
     }
 }
