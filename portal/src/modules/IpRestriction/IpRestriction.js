@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import * as Proptypes from "prop-types";
 import {connect} from "react-redux";
-import {getIpRestrictions} from "../../actions/ip-restriction/ipRestrictionActions";
+import {getIpRestrictions, showIpRestrictionForm} from "../../actions/ip-restriction/ipRestrictionActions";
 import {Button, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
-import isEmpty from "../../core/validation/is-empty";
+import {withRouter} from "react-router";
+import IpRestrictionForm from "./IpRestrictionForm";
 
 class IpRestriction extends Component {
     constructor(props) {
@@ -51,9 +52,7 @@ class IpRestriction extends Component {
     }
 
     componentDidMount() {
-        let {searchQuery} = this.props.ipRestrictions
-
-        this.props.getIpRestrictions(searchQuery);
+        this.props.getIpRestrictions();
     }
 
     handleTableChange(pagination, filters, sorter) {
@@ -67,10 +66,11 @@ class IpRestriction extends Component {
 
     render() {
         const {data, searchParams} = this.props.ipRestrictions;
-        console.log(data)
+
         return (
             <>
-                <Button className="mb-4" type="primary">Create Ip</Button>
+
+                <Button className="mb-4" type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create Ip</Button>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -79,17 +79,19 @@ class IpRestriction extends Component {
                     loading={false}
                     onChange={this.handleTableChange}
                 />
+                <IpRestrictionForm />
             </>
         );
     }
 }
 
 IpRestriction.propTypes = {
-    getIpRestrictions: Proptypes.func.isRequired
+    getIpRestrictions: Proptypes.func.isRequired,
+    showIpRestrictionForm: Proptypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     ipRestrictions: state.ipRestrictions
 })
 
-export default connect(mapStateToProps, {getIpRestrictions})(IpRestriction)
+export default withRouter(connect(mapStateToProps, {getIpRestrictions,showIpRestrictionForm})(IpRestriction))

@@ -1,4 +1,8 @@
-import {GET_IP_RESTRICTIONS, SET_IP_RESTRICTIONS_LOADING} from "../../actions/ip-restriction/ipRestirctionTypes";
+import {
+    CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FORM,
+    GET_IP_RESTRICTIONS,
+    SET_IP_RESTRICTIONS_LOADING, SHOW_IP_RESTRICTION_FORM
+} from "../../actions/ip-restriction/ipRestirctionTypes";
 
 
 const initialState = {
@@ -17,7 +21,8 @@ const initialState = {
         sort: 'id',
         order: 'desc'
     },
-    searchQuery: ''
+    searchQuery: '',
+    showIpRestrictionForm : false
 }
 
 export default function (state = initialState,action) {
@@ -39,6 +44,21 @@ export default function (state = initialState,action) {
                     ...action.payload.pagination,
                     loading: false
                 }
+            }
+        case CLEAR_IP_RESTRICTION_SEARCH_QUERY:
+            return {
+                ...state,
+                searchQuery: ''
+            }
+        case SHOW_IP_RESTRICTION_FORM:
+            return {
+                ...state,
+                showIpRestrictionForm: true
+            }
+        case CLOSE_IP_RESTRICTION_FORM:
+            return {
+                ...state,
+                showIpRestrictionForm: false
             }
         default:
             return state;
