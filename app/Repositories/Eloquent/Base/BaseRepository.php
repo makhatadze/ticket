@@ -11,6 +11,7 @@ namespace App\Repositories\Eloquent\Base;
 
 use App\Exceptions\DataNotFoundException;
 use App\Exceptions\DeleteException;
+use App\Exceptions\RestoreException;
 use App\Exceptions\TrashException;
 use App\Exceptions\UpdateException;
 use App\Exceptions\ValidationException;
@@ -117,11 +118,17 @@ class BaseRepository implements EloquentRepositoryInterface
      *
      * @param integer $id
      *
-     * @return boolean
+     * @return Model
+     * @throws TrashException
+     * @throws RestoreException
      */
-    public function restore(int $id): bool
+    public function restore(int $id): Model
     {
-        return $this->findTrash($id)->restore();
+        $this->model = $this->findTrash($id);
+        if (!$this->model->restore()) {
+            throw new RestoreException();
+        }
+        return $this->model;
     }
 
 

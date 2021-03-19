@@ -61,9 +61,9 @@ interface EloquentRepositoryInterface
     /**
      * @param integer $id
      *
-     * @return boolean
+     * @return Model
      */
-    public function restore(int $id);
+    public function restore(int $id): Model;
 
     /**
      * @param integer $id

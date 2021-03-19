@@ -120,12 +120,6 @@ class RoleController extends Controller
      */
     public function restore(int $id)
     {
-        if (false === $this->roleRepository->restore($id)) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Can not restored.'
-            ]);
-        }
-        return new RoleResource($this->roleRepository->findOrFail($id));
+        return new RoleResource($this->roleRepository->restore($id));
     }
 }
