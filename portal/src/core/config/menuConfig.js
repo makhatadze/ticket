@@ -62,7 +62,7 @@ export default [
             },
             {
                 title: 'Ip Restrictions',
-                key: '/ip',
+                key: '/ip-restriction',
                 icon: 'SafetyOutlined',
                 isLevel: true
             }
