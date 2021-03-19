@@ -8,8 +8,10 @@
  */
 namespace App\Providers;
 
+use App\Models\IpRestriction;
 use App\Models\Role;
 use App\Models\User;
+use App\Policies\IpRestrictionPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -25,7 +27,8 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         Role::class => RolePolicy::class,
-        User::class => UserPolicy::class
+        User::class => UserPolicy::class,
+        IpRestriction::class => IpRestrictionPolicy::class
     ];
 
     /**
