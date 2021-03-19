@@ -114,4 +114,23 @@ class IpRestrictionController extends Controller
     {
         return new IpRestrictionResource($this->ipRestictionRepository->delete($id));
     }
+
+    /**
+     * Restore specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return IpRestrictionResource|JsonResponse
+     * @throws ValidationException
+     */
+    public function restore(int $id)
+    {
+        if (false === $this->roleRepository->restore($id)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Can not restored.'
+            ]);
+        }
+        return new RoleResource($this->roleRepository->findOrFail($id));
+    }
 }
