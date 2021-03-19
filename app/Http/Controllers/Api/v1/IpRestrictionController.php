@@ -6,6 +6,7 @@
  * Time: 11:08
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Exceptions\ValidationException;
@@ -62,7 +63,7 @@ class IpRestrictionController extends Controller
      */
     public function store(IpRestrictionRequest $request): IpRestrictionResource
     {
-        $attributes = $request->only('name','ip','status');
+        $attributes = $request->only('name', 'ip', 'status');
 
         $this->ipRestictionRepository = $this->ipRestictionRepository->create($attributes);
 
@@ -81,5 +82,22 @@ class IpRestrictionController extends Controller
     {
         $data = $this->ipRestictionRepository->findOrFail($id);
         return new IpRestrictionResource($data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param IpRestrictionRequest $request
+     * @param int $id
+     *
+     * @return IpRestrictionResource|JsonResponse
+     */
+    public function update(IpRestrictionRequest $request, int $id)
+    {
+        $attributes = $request->only('name', 'ip', 'status');
+
+        $this->ipRestictionRepository = $this->ipRestictionRepository->update($id, $attributes);
+
+        return new IpRestrictionResource($this->ipRestictionRepository);
     }
 }
