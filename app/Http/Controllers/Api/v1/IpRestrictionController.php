@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\IpRestrictionRequest;
 use App\Http\Resources\Api\v1\IpRestrictionCollection;
+use App\Http\Resources\Api\v1\IpRestrictionResource;
 use App\Policies\IpRestrictionPolicy;
 use App\Repositories\IpRestrictionRepositoryInterface;
 use Illuminate\Http\Request;
@@ -47,5 +48,21 @@ class IpRestrictionController extends Controller
     public function index(IpRestrictionRequest $request): IpRestrictionCollection
     {
         return $this->ipRestictionRepository->getData($request);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param IpRestrictionRequest $request
+     *
+     * @return IpRestrictionResource
+     */
+    public function store(IpRestrictionRequest $request): IpRestrictionResource
+    {
+        $attributes = $request->only('name','ip','status');
+
+        $this->ipRestictionRepository = $this->ipRestictionRepository->create($attributes);
+
+        return new IpRestrictionResource($this->ipRestictionRepository);
     }
 }
