@@ -1,9 +1,14 @@
 import React, {Component} from "react";
 import {Button, Form, Input, Modal, Space, Switch} from "antd";
 import * as PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {closeIpRestrictionForm, createIpRestriction} from "../../actions/ip-restriction/ipRestrictionActions";
+import {connect, useDispatch} from "react-redux";
+import {
+    closeIpRestrictionForm,
+    createIpRestriction,
+    setUpdateIpRestriction, updateIpRestriction
+} from "../../actions/ip-restriction/ipRestrictionActions";
 import {toast} from "react-toastify";
+import isEmpty from "../../core/validation/is-empty";
 
 
 class IpRestrictionForm extends Component {
@@ -34,6 +39,15 @@ class IpRestrictionForm extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.ipRestrictions.showIpRestrictionForm.modalIp !== this.props.ipRestrictions.showIpRestrictionForm.modalIp) {
+            const {modalIp} = this.props.ipRestrictions.showIpRestrictionForm;
+            if (!isEmpty(modalIp)) {
+                this.setState({id: modalIp.id, name: modalIp.name, ip: modalIp.ip, status: modalIp.status})
+            }
+        }
+    }
+
     async onSubmit() {
         const data = {
             name: this.state.name,
@@ -41,22 +55,37 @@ class IpRestrictionForm extends Component {
             status: this.state.status
         }
         this.setState({loading: true})
-        await this.props.createIpRestriction(data)
-            .then(res =>  {
-                console.log(res)
-                toast.success(`${res.data.ip} - Created.`);
-                this.setState({loading: false})
-                this.closeIpRestrictionForm()
-            })
-            .catch(err => {
-                toast.error('Can not created.')
-                this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
-            })
+
+        if (this.state.id !== null) {
+            await updateIpRestriction(this.state.id,data)
+                .then(res => {
+                    this.props.setUpdateIpRestriction(res.data)
+                    toast.success(`${res.data.ip} - Updated.`);
+                    this.setState({loading: false})
+                    this.closeIpRestrictionForm()
+                })
+                .catch(err => {
+                    toast.error('Can not updated.')
+                    this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
+                })
+        } else {
+            await this.props.createIpRestriction(data)
+                .then(res => {
+                    console.log(res)
+                    toast.success(`${res.data.ip} - Created.`);
+                    this.setState({loading: false})
+                    this.closeIpRestrictionForm()
+                })
+                .catch(err => {
+                    toast.error('Can not created.')
+                    this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
+                })
+        }
     }
 
     onChange(e) {
         this.setState({
-                [e.target.name]: e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
@@ -74,9 +103,12 @@ class IpRestrictionForm extends Component {
 
     render() {
         const {showIpRestrictionForm} = this.props.ipRestrictions
+        const {ip} = this.state
         return (
             <>
-                <Modal footer={null} title={this.state.id ? 'Update Ip' : 'Create Ip'} visible={showIpRestrictionForm}
+                <Modal footer={null}
+                       title={this.state.id ? `Update - ${showIpRestrictionForm.modalIp.ip}` : 'Create Ip'}
+                       visible={showIpRestrictionForm.show}
                        maskClosable={false} onCancel={this.closeIpRestrictionForm}>
                     <Form {...this.formItemLayout} onFinish={this.onSubmit}>
                         <Form.Item
@@ -108,7 +140,7 @@ class IpRestrictionForm extends Component {
                                    valuePropName="checked"
                         >
                             <Switch defaultChecked={this.state.status} name="status" onChange={() => this.setState({
-                                    status: event.target.value
+                                status: event.target.value
                             })}/>
                         </Form.Item>
                         <Button type="primary" htmlType="submit" loading={this.state.loading}
@@ -124,9 +156,16 @@ class IpRestrictionForm extends Component {
 
 IpRestrictionForm.propTypes = {
     createIpRestriction: PropTypes.func.isRequired,
-    closeIpRestrictionForm: PropTypes.func.isRequired
+    closeIpRestrictionForm: PropTypes.func.isRequired,
+    setUpdateIpRestriction: PropTypes.func.isRequired
 }
 const mapStateToProps = state => ({
-    ipRestrictions : state.ipRestrictions
+    ipRestrictions: state.ipRestrictions
 })
-export default connect(mapStateToProps,{createIpRestriction,closeIpRestrictionForm})(IpRestrictionForm)
+export default connect(mapStateToProps,
+    {
+        createIpRestriction,
+        closeIpRestrictionForm,
+        setUpdateIpRestriction
+    })
+(IpRestrictionForm)

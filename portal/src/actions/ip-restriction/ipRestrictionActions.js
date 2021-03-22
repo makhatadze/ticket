@@ -5,7 +5,7 @@ const url = process.env.MIX_SERVER_API_URL;
 import {
     CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FORM,
     GET_IP_RESTRICTIONS,
-    SET_IP_RESTRICTIONS_LOADING, SHOW_IP_RESTRICTION_FORM
+    SET_IP_RESTRICTIONS_LOADING, SET_UPDATED_IP_RESTRICTION, SHOW_IP_RESTRICTION_FORM
 } from "./ipRestirctionTypes";
 
 // Get Ip Restrictions
@@ -28,6 +28,16 @@ export const getIpRestrictions = () => (dispatch,getState) => {
         )
 }
 
+// Get Ip Restriction by ip.
+export const getIpRestrictionByIp = (id) => {
+    return new Promise(async (resolve, reject) => {
+        axios
+            .get(`${url}/ip-restriction/${id}`)
+            .then((res) => resolve(res.data))
+            .catch(err => reject(err))
+    })
+}
+
 // Create new Ip Restriction
 export const createIpRestriction = data => (dispatch) => {
     return new Promise(async (resolve, reject) => {
@@ -41,6 +51,15 @@ export const createIpRestriction = data => (dispatch) => {
             .catch(err => {
                 reject(err)
             })
+    })
+}
+
+// Update ip restriction
+export const updateIpRestriction = (id,data) => {
+    return new Promise(async (resolve,reject) => {
+        axios.patch(`${url}/ip-restriction/${id}`,data)
+            .then(res => resolve(res.data))
+            .catch(err => reject(err))
     })
 }
 
@@ -59,9 +78,10 @@ export const clearIpRestrictionSearchQuery = () => {
 }
 
 // Show Ip Restriction Form
-export const showIpRestrictionForm = () => {
+export const showIpRestrictionForm = (data = {}) => {
     return {
-        type: SHOW_IP_RESTRICTION_FORM
+        type: SHOW_IP_RESTRICTION_FORM,
+        payload: data
     }
 }
 
@@ -71,3 +91,12 @@ export const closeIpRestrictionForm = () => {
         type: CLOSE_IP_RESTRICTION_FORM
     }
 }
+
+// Merge updated ip restriction.
+export const setUpdateIpRestriction = (payload) => {
+    return {
+        type: SET_UPDATED_IP_RESTRICTION,
+        payload
+    }
+}
+

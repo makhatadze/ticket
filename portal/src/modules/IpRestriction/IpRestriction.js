@@ -1,16 +1,22 @@
 import React, {Component} from 'react';
 import * as Proptypes from "prop-types";
 import {connect} from "react-redux";
-import {getIpRestrictions, showIpRestrictionForm} from "../../actions/ip-restriction/ipRestrictionActions";
+import {
+    getIpRestrictionByIp,
+    getIpRestrictions,
+    showIpRestrictionForm
+} from "../../actions/ip-restriction/ipRestrictionActions";
 import {Button, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router";
 import IpRestrictionForm from "./IpRestrictionForm";
+import {toast} from "react-toastify";
 
 class IpRestriction extends Component {
     constructor(props) {
         super(props);
         this.handleTableChange = this.handleTableChange.bind(this)
+        this.editIpRestriction = this.editIpRestriction.bind(this)
         this.columns = [
             {
                 title: 'ID',
@@ -44,8 +50,8 @@ class IpRestriction extends Component {
                 title: 'Action',
                 dataIndex: '',
                 key: 'x',
-                render: (e) => <Link to='' className="ant-dropdown-link"
-                                     onClick={(e) => this.editIpRestriction(e)}>Edit</Link>
+                render: (element) => <Link to='' className="ant-dropdown-link"
+                                           onClick={(event) => this.editIpRestriction(event, element)}>Edit</Link>
 
             }
         ]
@@ -59,9 +65,12 @@ class IpRestriction extends Component {
         console.log('Filter IpRestrictions')
     }
 
-    editIpRestriction(event) {
+    async editIpRestriction(event, data) {
         event.preventDefault()
-        console.log('Edit Ip Restriction')
+        await getIpRestrictionByIp(data.id)
+            .then(res => this.props.showIpRestrictionForm(res.data))
+            .catch(err => toast.error(err.response.data.message))
+
     }
 
     render() {
@@ -70,7 +79,8 @@ class IpRestriction extends Component {
         return (
             <>
 
-                <Button className="mb-4" type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create Ip</Button>
+                <Button className="mb-4" type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create
+                    Ip</Button>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -79,7 +89,7 @@ class IpRestriction extends Component {
                     loading={false}
                     onChange={this.handleTableChange}
                 />
-                <IpRestrictionForm />
+                <IpRestrictionForm/>
             </>
         );
     }
@@ -87,11 +97,15 @@ class IpRestriction extends Component {
 
 IpRestriction.propTypes = {
     getIpRestrictions: Proptypes.func.isRequired,
-    showIpRestrictionForm: Proptypes.func.isRequired
+    showIpRestrictionForm: Proptypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     ipRestrictions: state.ipRestrictions
 })
 
-export default withRouter(connect(mapStateToProps, {getIpRestrictions,showIpRestrictionForm})(IpRestriction))
+export default withRouter(connect(mapStateToProps,
+    {
+        getIpRestrictions,
+        showIpRestrictionForm
+    })(IpRestriction))
