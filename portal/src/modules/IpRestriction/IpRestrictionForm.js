@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Button, Form, Input, Modal, Space, Switch} from "antd";
 import * as PropTypes from "prop-types";
-import {connect, useDispatch} from "react-redux";
+import {connect} from "react-redux";
 import {
     closeIpRestrictionForm,
     createIpRestriction,

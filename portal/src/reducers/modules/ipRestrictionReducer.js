@@ -1,7 +1,7 @@
 import {
-    CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FORM,
+    CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FORM, CLOSE_IP_RESTRICTION_VIEW,
     GET_IP_RESTRICTIONS,
-    SET_IP_RESTRICTIONS_LOADING, SET_UPDATED_IP_RESTRICTION, SHOW_IP_RESTRICTION_FORM
+    SET_IP_RESTRICTIONS_LOADING, SET_UPDATED_IP_RESTRICTION, SHOW_IP_RESTRICTION_FORM, SHOW_IP_RESTRICTION_VIEW
 } from "../../actions/ip-restriction/ipRestirctionTypes";
 
 
@@ -23,6 +23,10 @@ const initialState = {
     },
     searchQuery: '',
     showIpRestrictionForm: {
+        show: false,
+        modalIp: {}
+    },
+    showIpRestrictionView: {
         show: false,
         modalIp: {}
     }
@@ -74,6 +78,23 @@ export default function (state = initialState, action) {
                     modalIp: {}
                 }
             }
+        case SHOW_IP_RESTRICTION_VIEW:
+            return {
+                ...state,
+                showIpRestrictionView: {
+                    show: true,
+                    modalIp: action.payload
+                }
+            }
+        case CLOSE_IP_RESTRICTION_VIEW: {
+            return {
+                ...state,
+                showIpRestrictionView: {
+                    show: false,
+                    modalIp: {}
+                }
+            }
+        }
         default:
             return state;
     }

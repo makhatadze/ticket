@@ -4,19 +4,21 @@ import {connect} from "react-redux";
 import {
     getIpRestrictionByIp,
     getIpRestrictions,
-    showIpRestrictionForm
+    showIpRestrictionForm, showIpRestrictionView
 } from "../../actions/ip-restriction/ipRestrictionActions";
-import {Button, Table, Tag} from "antd";
+import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router";
 import IpRestrictionForm from "./IpRestrictionForm";
 import {toast} from "react-toastify";
+import IpRestrictionView from "./IpRestrictionView";
 
 class IpRestriction extends Component {
     constructor(props) {
         super(props);
         this.handleTableChange = this.handleTableChange.bind(this)
         this.editIpRestriction = this.editIpRestriction.bind(this)
+        this.showIpRestriction = this.showIpRestriction.bind(this)
         this.columns = [
             {
                 title: 'ID',
@@ -50,8 +52,14 @@ class IpRestriction extends Component {
                 title: 'Action',
                 dataIndex: '',
                 key: 'x',
-                render: (element) => <Link to='' className="ant-dropdown-link"
-                                           onClick={(event) => this.editIpRestriction(event, element)}>Edit</Link>
+                render: (element) => <>
+                    <Space size="middle">
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => this.showIpRestriction(event, element)}>Show</Link>
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => this.editIpRestriction(event, element)}>Edit</Link>
+                    </Space>
+                </>
 
             }
         ]
@@ -63,6 +71,13 @@ class IpRestriction extends Component {
 
     handleTableChange(pagination, filters, sorter) {
         console.log('Filter IpRestrictions')
+    }
+
+    async showIpRestriction(event,data) {
+        event.preventDefault();
+        await getIpRestrictionByIp(data.id)
+            .then(res => this.props.showIpRestrictionView(res.data))
+            .catch(err => toast.error(err.response.data.message))
     }
 
     async editIpRestriction(event, data) {
@@ -90,6 +105,7 @@ class IpRestriction extends Component {
                     onChange={this.handleTableChange}
                 />
                 <IpRestrictionForm/>
+                <IpRestrictionView />
             </>
         );
     }
@@ -98,6 +114,7 @@ class IpRestriction extends Component {
 IpRestriction.propTypes = {
     getIpRestrictions: Proptypes.func.isRequired,
     showIpRestrictionForm: Proptypes.func.isRequired,
+    showIpRestrictionView: Proptypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -107,5 +124,6 @@ const mapStateToProps = state => ({
 export default withRouter(connect(mapStateToProps,
     {
         getIpRestrictions,
-        showIpRestrictionForm
+        showIpRestrictionForm,
+        showIpRestrictionView
     })(IpRestriction))

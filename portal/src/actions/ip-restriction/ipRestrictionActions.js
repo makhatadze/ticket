@@ -3,9 +3,9 @@ import axios from "axios";
 const url = process.env.MIX_SERVER_API_URL;
 
 import {
-    CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FORM,
+    CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FORM, CLOSE_IP_RESTRICTION_VIEW,
     GET_IP_RESTRICTIONS,
-    SET_IP_RESTRICTIONS_LOADING, SET_UPDATED_IP_RESTRICTION, SHOW_IP_RESTRICTION_FORM
+    SET_IP_RESTRICTIONS_LOADING, SET_UPDATED_IP_RESTRICTION, SHOW_IP_RESTRICTION_FORM, SHOW_IP_RESTRICTION_VIEW
 } from "./ipRestirctionTypes";
 
 // Get Ip Restrictions
@@ -89,6 +89,21 @@ export const showIpRestrictionForm = (data = {}) => {
 export const closeIpRestrictionForm = () => {
     return {
         type: CLOSE_IP_RESTRICTION_FORM
+    }
+}
+
+// Show Ip Restriction View
+export const showIpRestrictionView = (payload) => {
+    return {
+        type: SHOW_IP_RESTRICTION_VIEW,
+        payload
+    }
+}
+
+// Close Ip Restriction View
+export const closeIpRestrictionView = () => {
+    return {
+        type: CLOSE_IP_RESTRICTION_VIEW
     }
 }
 
