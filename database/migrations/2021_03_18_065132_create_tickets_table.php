@@ -24,6 +24,7 @@ class CreateTicketsTable extends Migration
             $table->foreignId('department_id')->unsigned()->nullable()->constrained('departments')->onDelete('cascade');
             $table->foreignId('issue_id')->unsigned()->nullable()->constrained('issues')->onDelete('cascade');
             $table->string('body');
+            $table->boolean('deadline');
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('created_by')->unsigned()->nullable()->constrained('users')->onDelete('set null');
