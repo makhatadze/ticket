@@ -3,7 +3,7 @@ import * as Proptypes from "prop-types";
 import {connect} from "react-redux";
 import {
     getIpRestrictionByIp,
-    getIpRestrictions,
+    getIpRestrictions, setIpRestrictionSearchQuery, showIpRestrictionFilter,
     showIpRestrictionForm, showIpRestrictionView
 } from "../../actions/ip-restriction/ipRestrictionActions";
 import {Button, Space, Table, Tag} from "antd";
@@ -12,6 +12,9 @@ import {withRouter} from "react-router";
 import IpRestrictionForm from "./IpRestrictionForm";
 import {toast} from "react-toastify";
 import IpRestrictionView from "./IpRestrictionView";
+import IpRestrictionFilter from "./IpRestrictionFilter";
+import queryString from "querystring";
+import isEmpty from "../../core/validation/is-empty";
 
 class IpRestriction extends Component {
     constructor(props) {
@@ -69,11 +72,30 @@ class IpRestriction extends Component {
         this.props.getIpRestrictions();
     }
 
-    handleTableChange(pagination, filters, sorter) {
-        console.log('Filter IpRestrictions')
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.ipRestrictions.searchQuery !== this.props.ipRestrictions.searchQuery) {
+            this.props.getIpRestrictions()
+        }
     }
 
-    async showIpRestriction(event,data) {
+    handleTableChange(pagination, filters, sorter) {
+        let data = {
+            current: pagination.current
+        }
+        if (!isEmpty(sorter)) {
+            if (sorter.order) {
+                data = {
+                    ...data,
+                    sort: sorter.field,
+                    order: (sorter.order === 'ascend') ? 'asc' : 'desc'
+                }
+            }
+        }
+        this.props.setIpRestrictionSearchQuery(data)
+
+    }
+
+    async showIpRestriction(event, data) {
         event.preventDefault();
         await getIpRestrictionByIp(data.id)
             .then(res => this.props.showIpRestrictionView(res.data))
@@ -96,6 +118,8 @@ class IpRestriction extends Component {
 
                 <Button className="mb-4" type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create
                     Ip</Button>
+                <Button className="mb-4 ml-2" type="primary"
+                        onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -105,7 +129,8 @@ class IpRestriction extends Component {
                     onChange={this.handleTableChange}
                 />
                 <IpRestrictionForm/>
-                <IpRestrictionView />
+                <IpRestrictionView/>
+                <IpRestrictionFilter/>
             </>
         );
     }
@@ -114,7 +139,9 @@ class IpRestriction extends Component {
 IpRestriction.propTypes = {
     getIpRestrictions: Proptypes.func.isRequired,
     showIpRestrictionForm: Proptypes.func.isRequired,
-    showIpRestrictionView: Proptypes.func.isRequired
+    showIpRestrictionView: Proptypes.func.isRequired,
+    showIpRestrictionFilter: Proptypes.func.isRequired,
+    setIpRestrictionSearchQuery: Proptypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -125,5 +152,7 @@ export default withRouter(connect(mapStateToProps,
     {
         getIpRestrictions,
         showIpRestrictionForm,
-        showIpRestrictionView
+        showIpRestrictionView,
+        showIpRestrictionFilter,
+        setIpRestrictionSearchQuery
     })(IpRestriction))

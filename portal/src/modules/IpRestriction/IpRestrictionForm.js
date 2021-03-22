@@ -24,7 +24,7 @@ class IpRestrictionForm extends Component {
         }
 
         this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this)
+        this.onSubmit = this.onSubmit.bind(this);
         this.closeIpRestrictionForm = this.closeIpRestrictionForm.bind(this)
         this.formItemLayout = {
             labelCol: {

@@ -3,9 +3,16 @@ import axios from "axios";
 const url = process.env.MIX_SERVER_API_URL;
 
 import {
-    CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FORM, CLOSE_IP_RESTRICTION_VIEW,
+    CLEAR_IP_RESTRICTION_SEARCH_QUERY, CLOSE_IP_RESTRICTION_FILTER,
+    CLOSE_IP_RESTRICTION_FORM,
+    CLOSE_IP_RESTRICTION_VIEW,
     GET_IP_RESTRICTIONS,
-    SET_IP_RESTRICTIONS_LOADING, SET_UPDATED_IP_RESTRICTION, SHOW_IP_RESTRICTION_FORM, SHOW_IP_RESTRICTION_VIEW
+    SET_IP_RESTRICTION_SEARCH_QUERY,
+    SET_IP_RESTRICTIONS_LOADING,
+    SET_UPDATED_IP_RESTRICTION,
+    SHOW_IP_RESTRICTION_FILTER,
+    SHOW_IP_RESTRICTION_FORM,
+    SHOW_IP_RESTRICTION_VIEW
 } from "./ipRestirctionTypes";
 
 // Get Ip Restrictions
@@ -77,6 +84,7 @@ export const clearIpRestrictionSearchQuery = () => {
     }
 }
 
+
 // Show Ip Restriction Form
 export const showIpRestrictionForm = (data = {}) => {
     return {
@@ -104,6 +112,28 @@ export const showIpRestrictionView = (payload) => {
 export const closeIpRestrictionView = () => {
     return {
         type: CLOSE_IP_RESTRICTION_VIEW
+    }
+}
+
+// Set Search query
+export const setIpRestrictionSearchQuery = (payload = {}) => {
+    return {
+        type: SET_IP_RESTRICTION_SEARCH_QUERY,
+        payload
+    }
+}
+
+// Show Ip Restriction Filter
+export const showIpRestrictionFilter = () => {
+    return {
+        type: SHOW_IP_RESTRICTION_FILTER
+    }
+}
+
+// Close Ip Restriction Filter
+export const closeIpRestrictionFilter = () => {
+    return {
+        type: CLOSE_IP_RESTRICTION_FILTER
     }
 }
 

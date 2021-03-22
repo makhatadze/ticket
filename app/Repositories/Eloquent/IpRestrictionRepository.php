@@ -36,7 +36,7 @@ class IpRestrictionRepository extends BaseRepository implements IpRestrictionRep
     {
         $data = $this->model->query();
 
-        $data = $data->paginate(10);
+        $data = $data->paginate(1);
         return new IpRestrictionCollection($data);
     }
 }
