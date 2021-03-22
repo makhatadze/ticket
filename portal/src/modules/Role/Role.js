@@ -5,6 +5,7 @@ import {getRoles} from "../../actions/role/roleActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
+import RoleForm from "./RoleForm";
 
 
 class Role extends Component {
@@ -75,6 +76,7 @@ class Role extends Component {
                     loading={false}
                     onChange={this.handleTableChange}
                 />
+                <RoleForm />
             </>
         );
     }

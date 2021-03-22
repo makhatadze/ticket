@@ -36,7 +36,8 @@ export default function (state = initialState, action) {
                     ...state.searchParams,
                     ...action.payload.pagination,
                     loading: false
-                }
+                },
+                permissions: action.payload.permissions
             }
         default:
             return state;
