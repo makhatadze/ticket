@@ -28,7 +28,7 @@ class IpRestrictionRequest extends FormRequest
     {
         $rules = [
             'name' => ['required','string', Rule::unique('ip_restrictions', 'name')->ignore($this->ipRestriction)],
-            'ip' => 'required|ip',
+            'ip' => ['required','ip', Rule::unique('ip_restrictions', 'ip')->ignore($this->ipRestriction)],
             'status' => 'required|boolean',
         ];
 

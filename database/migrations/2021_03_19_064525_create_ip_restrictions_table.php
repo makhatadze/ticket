@@ -21,8 +21,8 @@ class CreateIpRestrictionsTable extends Migration
     {
         Schema::create('ip_restrictions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->ipAddress('ip');
+            $table->string('name')->unique();
+            $table->ipAddress('ip')->unique();
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();

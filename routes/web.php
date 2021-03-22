@@ -9,6 +9,8 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::any('/{slug?}', function () {
-    return view('welcome');
+Route::middleware('ipMiddleware')->group(function () {
+    Route::any('/{slug?}', function () {
+        return view('welcome');
+    });
 });
