@@ -9,6 +9,7 @@ import {
 } from "../../actions/ip-restriction/ipRestrictionActions";
 import {toast} from "react-toastify";
 import isEmpty from "../../core/validation/is-empty";
+import formLayout from "../../core/config/formLayout";
 
 
 class IpRestrictionForm extends Component {
@@ -26,17 +27,6 @@ class IpRestrictionForm extends Component {
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.closeIpRestrictionForm = this.closeIpRestrictionForm.bind(this)
-        this.formItemLayout = {
-            labelCol: {
-                xs: {span: 24},
-                sm: {span: 5},
-            },
-            wrapperCol: {
-                xs: {span: 48},
-                sm: {span: 24},
-            },
-            layout: 'vertical'
-        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -110,7 +100,7 @@ class IpRestrictionForm extends Component {
                        title={this.state.id ? `Update - ${showIpRestrictionForm.modalIp.ip}` : 'Create Ip'}
                        visible={showIpRestrictionForm.show}
                        maskClosable={false} onCancel={this.closeIpRestrictionForm}>
-                    <Form {...this.formItemLayout} onFinish={this.onSubmit}>
+                    <Form {...formLayout} onFinish={this.onSubmit}>
                         <Form.Item
                             label='Name'
                             hasFeedback
