@@ -51,7 +51,6 @@ class IpRestrictionForm extends Component {
                 .then(res => {
                     this.props.setUpdateIpRestriction(res.data)
                     toast.success(`${res.data.ip} - Updated.`);
-                    this.setState({loading: false})
                     this.closeIpRestrictionForm()
                 })
                 .catch(err => {
@@ -63,7 +62,6 @@ class IpRestrictionForm extends Component {
                 .then(res => {
                     console.log(res)
                     toast.success(`${res.data.ip} - Created.`);
-                    this.setState({loading: false})
                     this.closeIpRestrictionForm()
                 })
                 .catch(err => {

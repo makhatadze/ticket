@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Button, Form, Input, Modal, Select, Switch} from "antd";
 import slugify from "slugify";
 import PropTypes from "prop-types";
-import {closeRoleForm, createRole, getRoles} from "../../actions/role/roleActions";
+import {closeRoleForm, createRole, getRoles, setUpdateRole, updateRole} from "../../actions/role/roleActions";
 import {connect} from "react-redux";
 import formLayout from "../../core/config/formLayout";
 import isEmpty from "../../core/validation/is-empty";
@@ -31,7 +31,12 @@ class RoleForm extends Component {
         if (prevProps.roles.showRoleForm.modalRole !== this.props.roles.showRoleForm.modalRole) {
             const {modalRole} = this.props.roles.showRoleForm;
             if (!isEmpty(modalRole)) {
-                console.log(modalRole)
+                this.setState({
+                    id: modalRole.id,
+                    name: modalRole.name,
+                    slug: modalRole.slug,
+                    permissions: modalRole.permissions.map((el) => el.id)
+                })
             }
         }
     }
@@ -44,7 +49,16 @@ class RoleForm extends Component {
         }
         this.setState({loading: true})
         if (this.state.id !== null) {
-
+            await updateRole(this.state.id, data)
+                .then(res => {
+                    this.props.setUpdateRole(res.data);
+                    toast.success(`${res.data.name} - Updated`);
+                    this.closeRoleForm()
+                })
+                .catch(err => {
+                    toast.error('Can not updated.');
+                    this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
+                })
         } else {
             await this.props.createRole(data)
                 .then(res => {
@@ -98,6 +112,7 @@ class RoleForm extends Component {
             </Option>)
         })
 
+
         return (
             <Modal footer={null}
                    title={this.state.id ? `Update - ${showRoleForm.modalRole.name}` : 'Create Role'}
@@ -139,11 +154,13 @@ class RoleForm extends Component {
                     >
                         <Select
                             mode="multiple"
+                            allowClear
                             size="default"
                             placeholder="Please select"
                             defaultValue={this.state.permissions}
                             onChange={this.handleChange}
                             style={{width: '100%'}}
+                            value={this.state.permissions}
                         >
                             {selectPermissions}
                         </Select>
@@ -160,11 +177,19 @@ class RoleForm extends Component {
 
 RoleForm.propTypes = {
     createRole: PropTypes.func.isRequired,
-    closeRoleForm: PropTypes.func.isRequired
+    closeRoleForm: PropTypes.func.isRequired,
+    updateRole: PropTypes.func.isRequired,
+    setUpdateRole: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     roles: state.roles
 })
 
-export default connect(mapStateToProps, {createRole, closeRoleForm})(RoleForm)
+export default connect(mapStateToProps,
+    {
+        createRole,
+        closeRoleForm,
+        updateRole,
+        setUpdateRole
+    })(RoleForm)

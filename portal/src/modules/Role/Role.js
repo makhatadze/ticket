@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {Button, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
-import {getRoles, showRoleForm} from "../../actions/role/roleActions";
+import {getRoleByIp, getRoles, showRoleForm} from "../../actions/role/roleActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import RoleForm from "./RoleForm";
+import {toast} from "react-toastify";
 
 
 class Role extends Component {
@@ -41,7 +42,7 @@ class Role extends Component {
                 title: 'Action',
                 dataIndex: '',
                 key: 'x',
-                render: (e) => <Link to='' className="ant-dropdown-link" onClick={(e) => this.editRole(e)}>Edit</Link>
+                render: (e) => <Link to='' className="ant-dropdown-link" onClick={(event) => this.editRole(event,e)}>Edit</Link>
             },
         ]
 
@@ -65,8 +66,11 @@ class Role extends Component {
         console.log('Filter')
     }
 
-    editRole(event) {
+    async editRole(event,data) {
         event.preventDefault()
+        await getRoleByIp(data.id)
+            .then(res => this.props.showRoleForm(res.data))
+            .catch(err => toast.error(err.response.data.message))
     }
 
     render() {

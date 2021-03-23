@@ -2,7 +2,7 @@ import {
     CLEAR_ROLE_SEARCH_QUERY,
     CLOSE_ROLE_FORM,
     GET_ROLES,
-    SET_ROLES_LOADING,
+    SET_ROLES_LOADING, SET_UPDATED_ROLE,
     SHOW_ROLE_FORM
 } from "../../actions/role/roleTypes";
 
@@ -69,6 +69,11 @@ export default function (state = initialState, action) {
                     show: false,
                     modalRole: {}
                 }
+            }
+        case SET_UPDATED_ROLE:
+            return {
+                ...state,
+                data: state.data.map(el => el.id === action.payload.id ? action.payload : el)
             }
         default:
             return state;
