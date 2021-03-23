@@ -2,9 +2,11 @@ import React, {Component} from "react";
 import {Button, Form, Input, Modal, Select, Switch} from "antd";
 import slugify from "slugify";
 import PropTypes from "prop-types";
-import {getRoles} from "../../actions/role/roleActions";
+import {closeRoleForm, createRole, getRoles} from "../../actions/role/roleActions";
 import {connect} from "react-redux";
 import formLayout from "../../core/config/formLayout";
+import isEmpty from "../../core/validation/is-empty";
+import {toast} from "react-toastify";
 
 class RoleForm extends Component {
     constructor(props) {
@@ -20,13 +22,44 @@ class RoleForm extends Component {
 
 
         this.setName = this.setName.bind(this)
-        this.handleChange= this.handleChange.bind(this)
-        this.onSubmit= this.onSubmit.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
+        this.closeRoleForm = this.closeRoleForm.bind(this)
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.roles.showRoleForm.modalRole !== this.props.roles.showRoleForm.modalRole) {
+            const {modalRole} = this.props.roles.showRoleForm;
+            if (!isEmpty(modalRole)) {
+                console.log(modalRole)
+            }
+        }
     }
 
     async onSubmit() {
+        const data = {
+            name: this.state.name,
+            slug: this.state.slug,
+            permissions: this.state.permissions
+        }
+        this.setState({loading: true})
+        if (this.state.id !== null) {
+
+        } else {
+            await this.props.createRole(data)
+                .then(res => {
+                    toast.success(`${res.data.name} - Created`);
+                    this.setState({loading: false})
+                    this.closeRoleForm()
+                })
+                .catch(err => {
+                    toast.error('Can not created.')
+                    this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
+                })
+        }
     }
 
+    // set name and slugify slug by name
     setName(e) {
         this.setState({
             name: e.target.value,
@@ -34,13 +67,28 @@ class RoleForm extends Component {
         })
     }
 
+    // permissions change event
     handleChange(value) {
         this.setState({permissions: value})
     }
 
+    // Close role form.
+    closeRoleForm() {
+        this.setState({
+            id: null,
+            name: '',
+            slug: '',
+            permissions: [],
+            errors: {},
+            loading: false
+        })
+        this.props.closeRoleForm()
+    }
+
+
     render() {
-        const {permissions} = this.props.roles;
-        const { Option } = Select;
+        const {permissions, showRoleForm} = this.props.roles;
+        const {Option} = Select;
 
         const selectPermissions = [];
 
@@ -52,9 +100,9 @@ class RoleForm extends Component {
 
         return (
             <Modal footer={null}
-                   title='Create'
-                   visible={true}
-                   maskClosable={false} onCancel={this.closeIpRestrictionForm}>
+                   title={this.state.id ? `Update - ${showRoleForm.modalRole.name}` : 'Create Role'}
+                   visible={showRoleForm.show}
+                   maskClosable={false} onCancel={this.closeRoleForm}>
                 <Form {...formLayout} onFinish={this.onSubmit}>
                     <Form.Item
                         label='Name'
@@ -77,7 +125,8 @@ class RoleForm extends Component {
                             marginBottom: 1
                         }}
                     >
-                        <Input placeholder="" name="slug" value={this.state.slug} id="error"/>
+                        <Input placeholder="Enter name and auto generate" name="slug" value={this.state.slug}
+                               id="error"/>
                     </Form.Item>
                     <Form.Item
                         label='Permissions'
@@ -110,11 +159,12 @@ class RoleForm extends Component {
 }
 
 RoleForm.propTypes = {
-    getRoles: PropTypes.func.isRequired
+    createRole: PropTypes.func.isRequired,
+    closeRoleForm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     roles: state.roles
 })
 
-export default connect(mapStateToProps, {getRoles})(RoleForm)
+export default connect(mapStateToProps, {createRole, closeRoleForm})(RoleForm)

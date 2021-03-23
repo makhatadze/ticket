@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
-import {getRoles} from "../../actions/role/roleActions";
+import {getRoles, showRoleForm} from "../../actions/role/roleActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
@@ -54,6 +54,12 @@ class Role extends Component {
         this.props.getRoles(searchQuery);
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.roles.searchQuery !== this.props.roles.searchQuery) {
+            this.props.getRoles()
+        }
+    }
+
 
     handleTableChange(pagination, filters, sorter) {
         console.log('Filter')
@@ -67,7 +73,7 @@ class Role extends Component {
         const {data, searchParams} = this.props.roles
         return (
             <>
-                <Button className="mb-4" type="primary">Create Role</Button>
+                <Button className="mb-4" type="primary" onClick={() => this.props.showRoleForm()}>Create Role</Button>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -83,11 +89,12 @@ class Role extends Component {
 }
 
 Role.propTypes = {
-    getRoles: PropTypes.func.isRequired
+    getRoles: PropTypes.func.isRequired,
+    showRoleForm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     roles: state.roles
 })
 
-export default withRouter(connect(mapStateToProps,{getRoles})(Role));
+export default withRouter(connect(mapStateToProps,{getRoles,showRoleForm})(Role));
