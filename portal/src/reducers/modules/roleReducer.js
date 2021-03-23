@@ -1,4 +1,10 @@
-import {GET_ROLES, SET_ROLES_LOADING} from "../../actions/role/roleTypes";
+import {
+    CLEAR_ROLE_SEARCH_QUERY,
+    CLOSE_ROLE_FORM,
+    GET_ROLES,
+    SET_ROLES_LOADING,
+    SHOW_ROLE_FORM
+} from "../../actions/role/roleTypes";
 
 const initialState = {
     data: [],
@@ -15,7 +21,11 @@ const initialState = {
         order: 'desc'
     },
     searchQuery: '',
-    permissions: []
+    permissions: [],
+    showRoleForm: {
+        show: false,
+        modalRole: {}
+    }
 };
 
 export default function (state = initialState, action) {
@@ -38,6 +48,27 @@ export default function (state = initialState, action) {
                     loading: false
                 },
                 permissions: action.payload.permissions
+            }
+        case CLEAR_ROLE_SEARCH_QUERY:
+            return {
+                ...state,
+                searchQuery: ''
+            }
+        case SHOW_ROLE_FORM:
+            return {
+                ...state,
+                showRoleForm: {
+                    show: true,
+                    modalRole: action.payload
+                }
+            }
+        case CLOSE_ROLE_FORM:
+            return {
+                ...state,
+                showRoleForm: {
+                    show: false,
+                    modalRole: {}
+                }
             }
         default:
             return state;
