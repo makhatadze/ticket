@@ -45,9 +45,9 @@ class IpRestrictionForm extends Component {
             status: this.state.status
         }
         this.setState({loading: true})
-
+        console.log(this.state.status)
         if (this.state.id !== null) {
-            await updateIpRestriction(this.state.id,data)
+            await updateIpRestriction(this.state.id, data)
                 .then(res => {
                     this.props.setUpdateIpRestriction(res.data)
                     toast.success(`${res.data.ip} - Updated.`);
@@ -125,11 +125,12 @@ class IpRestrictionForm extends Component {
                         </Form.Item>
                         <Form.Item name="switch"
                                    label="Status"
-                                   valuePropName="checked"
                         >
-                            <Switch defaultChecked={this.state.status} name="status" onChange={() => this.setState({
-                                status: event.target.value
-                            })}/>
+                            <Switch checked={this.state.status} name="status"
+                                    onChange={() => this.setState({
+                                        status: !this.state.status
+                                    })}
+                            />
                         </Form.Item>
                         <Button type="primary" htmlType="submit" loading={this.state.loading}
                                 className="ant-btn ant-btn-success mt-2">
