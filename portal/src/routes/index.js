@@ -8,6 +8,7 @@ import CLayout from "../modules/Layout/Layout";
 import Dashboard from "../modules/Dashboard/Dashboard";
 import Role from "../modules/Role/Role";
 import IpRestriction from "../modules/IpRestriction/IpRestriction";
+import NotFound from "../modules/404/NotFound";
 
 
 const Routes = () => {
@@ -25,6 +26,7 @@ const Routes = () => {
                             <PrivateRoute exact path="/dashboard" component={Dashboard}/>
                             <PrivateRoute exact path="/role" component={Role}/>
                             <PrivateRoute exact path="/ip-restriction" component={IpRestriction}/>
+                            <PrivateRoute component={NotFound} />
                         </Switch>
                     </CLayout>
                 }/>
