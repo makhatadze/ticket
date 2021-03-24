@@ -1,18 +1,23 @@
 import React, {Component} from 'react';
-import {Button, Table, Tag} from "antd";
+import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
-import {getRoleByIp, getRoles, showRoleForm} from "../../actions/role/roleActions";
+import {getRoleByIp, getRoles, showRoleForm, showRoleView} from "../../actions/role/roleActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import RoleForm from "./RoleForm";
 import {toast} from "react-toastify";
+import RoleView from "./RoleView";
 
 
 class Role extends Component {
     constructor(props) {
         super(props);
 
+
+        this.editRole = this.editRole.bind(this)
+        this.handleTableChange = this.handleTableChange.bind(this)
+        this.showRole = this.showRole.bind(this)
         this.columns = [
             {
                 title: 'ID',
@@ -42,12 +47,17 @@ class Role extends Component {
                 title: 'Action',
                 dataIndex: '',
                 key: 'x',
-                render: (e) => <Link to='' className="ant-dropdown-link" onClick={(event) => this.editRole(event,e)}>Edit</Link>
+                render: (element) => <>
+                    <Space size="middle">
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => this.showRole(event, element)}>Show</Link>
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => this.editRole(event, element)}>Edit</Link>
+                    </Space>
+                </>
             },
         ]
 
-        this.editRole = this.editRole.bind(this)
-        this.handleTableChange = this.handleTableChange.bind(this)
     }
 
     componentDidMount() {
@@ -66,10 +76,19 @@ class Role extends Component {
         console.log('Filter')
     }
 
-    async editRole(event,data) {
+    // Show edit role modal
+    async editRole(event, data) {
         event.preventDefault()
         await getRoleByIp(data.id)
             .then(res => this.props.showRoleForm(res.data))
+            .catch(err => toast.error(err.response.data.message))
+    }
+
+    // Show view modal
+    async showRole(event, data) {
+        event.preventDefault();
+        await getRoleByIp(data.id)
+            .then(res => this.props.showRoleView(res.data))
             .catch(err => toast.error(err.response.data.message))
     }
 
@@ -86,7 +105,8 @@ class Role extends Component {
                     loading={false}
                     onChange={this.handleTableChange}
                 />
-                <RoleForm />
+                <RoleForm/>
+                <RoleView/>
             </>
         );
     }
@@ -94,11 +114,18 @@ class Role extends Component {
 
 Role.propTypes = {
     getRoles: PropTypes.func.isRequired,
-    showRoleForm: PropTypes.func.isRequired
+    showRoleForm: PropTypes.func.isRequired,
+    showRoleView: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     roles: state.roles
 })
 
-export default withRouter(connect(mapStateToProps,{getRoles,showRoleForm})(Role));
+export default withRouter(connect(mapStateToProps,
+    {
+        getRoles,
+        showRoleForm,
+        showRoleView
+    })
+(Role));

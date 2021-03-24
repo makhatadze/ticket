@@ -4,11 +4,11 @@ const url = process.env.MIX_SERVER_API_URL;
 
 import {
     CLEAR_ROLE_SEARCH_QUERY,
-    CLOSE_ROLE_FORM,
+    CLOSE_ROLE_FORM, CLOSE_ROLE_VIEW,
     GET_ROLES,
     SET_ROLES_LOADING,
     SET_UPDATED_ROLE,
-    SHOW_ROLE_FORM
+    SHOW_ROLE_FORM, SHOW_ROLE_VIEW
 } from "./roleTypes";
 
 // Get Roles
@@ -100,5 +100,19 @@ export const showRoleForm = (payload = {}) => {
 export const closeRoleForm = () => {
     return {
         type: CLOSE_ROLE_FORM
+    }
+}
+
+// Show role view
+export const showRoleView = (payload) => {
+    return {
+        type: SHOW_ROLE_VIEW,
+        payload
+    }
+}
+// Close role view
+export const closeRoleView = () => {
+    return {
+        type: CLOSE_ROLE_VIEW
     }
 }
