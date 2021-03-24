@@ -48,4 +48,9 @@ class IpRestriction extends Model
         'ip',
         'status'
     ];
+    
+    public function scopeSorted($query,array $sortParams)
+    {
+	return $query->orderBy($sortParams['sort'],$sortParams['order']);
+    }
 }
