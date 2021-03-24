@@ -1,10 +1,11 @@
 import {
-    CLEAR_ROLE_SEARCH_QUERY,
+    CLEAR_ROLE_SEARCH_QUERY, CLOSE_ROLE_FILTER,
     CLOSE_ROLE_FORM, CLOSE_ROLE_VIEW,
-    GET_ROLES,
-    SET_ROLES_LOADING, SET_UPDATED_ROLE,
+    GET_ROLES, SET_ROLE_SEARCH_QUERY,
+    SET_ROLES_LOADING, SET_UPDATED_ROLE, SHOW_ROLE_FILTER,
     SHOW_ROLE_FORM, SHOW_ROLE_VIEW
 } from "../../actions/role/roleTypes";
+import * as queryString from "querystring";
 
 const initialState = {
     data: [],
@@ -29,7 +30,8 @@ const initialState = {
     showRoleView: {
         show: false,
         modalRole: {}
-    }
+    },
+    showRoleFilter: false
 };
 
 export default function (state = initialState, action) {
@@ -95,7 +97,35 @@ export default function (state = initialState, action) {
                     modalRole: {}
                 }
             }
+        case SHOW_ROLE_FILTER:
+            return {
+                ...state,
+                showRoleFilter: true
+            }
+        case CLOSE_ROLE_FILTER:
+            return {
+                ...state,
+                showRoleFilter: false
+            }
+        case SET_ROLE_SEARCH_QUERY:
+            let searchQuery = queryString.parse(state.searchQuery)
+            return {
+                ...state,
+                searchQuery: `?${queryString.stringify(getSearchQueryParams({...state.searchParams, ...searchQuery, ...action.payload}))}`
+            }
         default:
             return state;
+    }
+}
+
+// Return only available search params
+function getSearchQueryParams(searchData) {
+    return {
+        per_page: searchData.pageSize,
+        page: searchData.current,
+        id: searchData.id,
+        name: searchData.name,
+        sort: searchData.sort,
+        order: searchData.order
     }
 }

@@ -1,13 +1,22 @@
 import React, {Component} from 'react';
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
-import {getRoleByIp, getRoles, showRoleForm, showRoleView} from "../../actions/role/roleActions";
+import {
+    getRoleByIp,
+    getRoles,
+    setRoleSearchQuery,
+    showRoleFilter,
+    showRoleForm,
+    showRoleView
+} from "../../actions/role/roleActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import RoleForm from "./RoleForm";
 import {toast} from "react-toastify";
 import RoleView from "./RoleView";
+import RoleFilter from "./RoleFilter";
+import isEmpty from "../../core/validation/is-empty";
 
 
 class Role extends Component {
@@ -73,7 +82,21 @@ class Role extends Component {
 
 
     handleTableChange(pagination, filters, sorter) {
-        console.log('Filter')
+        let data = {
+            current: pagination.current,
+            sort: 'id',
+            order: 'desc'
+        }
+        if (!isEmpty(sorter)) {
+            if (sorter.order) {
+                data = {
+                    ...data,
+                    sort: sorter.field,
+                    order: (sorter.order === 'ascend') ? 'asc' : 'desc'
+                }
+            }
+        }
+        this.props.setRoleSearchQuery(data)
     }
 
     // Show edit role modal
@@ -97,6 +120,8 @@ class Role extends Component {
         return (
             <>
                 <Button className="mb-4" type="primary" onClick={() => this.props.showRoleForm()}>Create Role</Button>
+                <Button className="mb-4 ml-2" type="primary"
+                        onClick={() => this.props.showRoleFilter()}>Filter</Button>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -107,6 +132,7 @@ class Role extends Component {
                 />
                 <RoleForm/>
                 <RoleView/>
+                <RoleFilter/>
             </>
         );
     }
@@ -115,7 +141,9 @@ class Role extends Component {
 Role.propTypes = {
     getRoles: PropTypes.func.isRequired,
     showRoleForm: PropTypes.func.isRequired,
-    showRoleView: PropTypes.func.isRequired
+    showRoleView: PropTypes.func.isRequired,
+    showRoleFilter: PropTypes.func.isRequired,
+    setRoleSearchQuery: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -126,6 +154,8 @@ export default withRouter(connect(mapStateToProps,
     {
         getRoles,
         showRoleForm,
-        showRoleView
+        showRoleView,
+        showRoleFilter,
+        setRoleSearchQuery
     })
 (Role));

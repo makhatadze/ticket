@@ -3,13 +3,14 @@ import axios from 'axios'
 const url = process.env.MIX_SERVER_API_URL;
 
 import {
-    CLEAR_ROLE_SEARCH_QUERY,
+    CLEAR_ROLE_SEARCH_QUERY, CLOSE_ROLE_FILTER,
     CLOSE_ROLE_FORM, CLOSE_ROLE_VIEW,
-    GET_ROLES,
+    GET_ROLES, SET_ROLE_SEARCH_QUERY,
     SET_ROLES_LOADING,
-    SET_UPDATED_ROLE,
+    SET_UPDATED_ROLE, SHOW_ROLE_FILTER,
     SHOW_ROLE_FORM, SHOW_ROLE_VIEW
 } from "./roleTypes";
+import {SET_IP_RESTRICTION_SEARCH_QUERY} from "../ip-restriction/ipRestirctionTypes";
 
 // Get Roles
 export const getRoles = () => (dispatch, getState) => {
@@ -114,5 +115,27 @@ export const showRoleView = (payload) => {
 export const closeRoleView = () => {
     return {
         type: CLOSE_ROLE_VIEW
+    }
+}
+
+// Show role filter
+export const showRoleFilter = () => {
+    return {
+        type: SHOW_ROLE_FILTER
+    }
+}
+
+// Close role filter
+export const closeRoleFilter = () => {
+    return {
+        type: CLOSE_ROLE_FILTER
+    }
+}
+
+// Set role search query
+export const setRoleSearchQuery = (payload = {}) => {
+    return {
+        type: SET_ROLE_SEARCH_QUERY,
+        payload
     }
 }
