@@ -106,11 +106,13 @@ class RoleForm extends Component {
 
         const selectPermissions = [];
 
-        permissions.forEach(el => {
-            selectPermissions.push(<Option key={el.id} value={el.id}>
-                {el.name}
-            </Option>)
-        })
+        if(!isEmpty(permissions)) {
+            permissions.forEach(el => {
+                selectPermissions.push(<Option key={el.id} value={el.id}>
+                    {el.name}
+                </Option>)
+            })
+        }
 
 
         return (
