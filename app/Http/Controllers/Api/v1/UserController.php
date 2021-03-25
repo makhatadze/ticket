@@ -8,12 +8,16 @@
  */
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\UserRequest;
+use App\Http\Resources\Api\v1\RoleResource;
 use App\Http\Resources\Api\v1\UserCollection;
 use App\Http\Resources\Api\v1\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
+use http\Exception;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
@@ -58,6 +62,20 @@ class UserController extends Controller
     public function store(UserRequest $request): UserResource
     {
         return $this->userRepository->createNewItem($request);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     *
+     * @return UserResource
+     * @throws ValidationException
+     */
+    public function show(int $id): UserResource
+    {
+        $data = $this->userRepository->findOrFail($id);
+        return new UserResource($data);
     }
 
 }
