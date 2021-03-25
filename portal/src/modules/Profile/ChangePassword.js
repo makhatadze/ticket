@@ -1,9 +1,13 @@
-import React,{Component} from "react";
+import React, {Component} from "react";
 import {Button, Form, Input, Modal, Select} from "antd";
 import formLayout from "../../core/config/formLayout";
-import {EyeTwoTone,EyeInvisibleOutlined} from "@ant-design/icons";
+import {EyeTwoTone, EyeInvisibleOutlined} from "@ant-design/icons";
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {resetPassword} from "../../actions/auth/authActions";
+import {toast} from "react-toastify";
 
-class ChangePassword extends Component{
+class ChangePassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,17 +27,20 @@ class ChangePassword extends Component{
             password: this.state.password,
             password_confirmation: this.state.password_confirmation,
         }
-        this.setState({loading: true, errors: {}})
-        if (this.state.password !== this.state.current_password) {
-            this.setState({
-                loading: false,
-                errors: {
-                    password_confirmation : ['The password confirmation does not match']
-                }
+        this.setState({errors: {}, loading: false})
+        await this.props.resetPassword(data)
+            .then(res => {
+                this.setState({
+                    current_password: '',
+                    password: '',
+                    password_confirmation: '',
+                    loading: false
+                })
+                toast.success('Password changed successfully');
             })
-        } else {
-            console.log('Send reset password request.')
-        }
+            .catch(err => {
+                this.setState({errors: JSON.parse(err), loading: false});
+            })
     }
 
     onChange(e) {
@@ -45,7 +52,7 @@ class ChangePassword extends Component{
     render() {
         return (
             <div className="row">
-                <div className="col-md-4 col-sm-6">
+                <div className="col-md-4 col-sm-10">
                     <Form {...formLayout} onFinish={this.onResetPassword}>
                         <Form.Item
                             label='Current Password'
@@ -61,8 +68,8 @@ class ChangePassword extends Component{
                                 name="current_password"
                                 value={this.state.current_password}
                                 onChange={this.onChange}
-                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined  />)}
-                                   id="error"
+                                iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
+                                id="error"
                             />
                         </Form.Item>
                         <Form.Item
@@ -79,7 +86,7 @@ class ChangePassword extends Component{
                                 name="password"
                                 value={this.state.password}
                                 onChange={this.onChange}
-                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined  />)}
+                                iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                                 id="error"
                             />
                         </Form.Item>
@@ -97,7 +104,7 @@ class ChangePassword extends Component{
                                 name="password_confirmation"
                                 value={this.state.password_confirmation}
                                 onChange={this.onChange}
-                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined  />)}
+                                iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                                 id="error"
                             />
                         </Form.Item>
@@ -107,13 +114,14 @@ class ChangePassword extends Component{
                         </Button>
                     </Form>
                 </div>
-                <div className="col-md-4 col-sm-6">
-
-                </div>
             </div>
         )
     }
 }
 
+ChangePassword.propTypes = {
+    resetPassword: PropTypes.func.isRequired,
+}
+const mapStateToProps = state => ({})
 
-export default ChangePassword;
+export default connect(mapStateToProps, {resetPassword})(ChangePassword);

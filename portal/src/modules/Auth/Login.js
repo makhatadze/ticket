@@ -52,7 +52,6 @@ class Login extends Component {
         }).catch(err => {
             toast.error(err)
             this.setState({errors: this.props.auth.errors, loading: false});
-            console.log(this.state.errors)
         })
     }
 
