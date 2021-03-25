@@ -9,12 +9,24 @@
 namespace App\Http\Requests\Api\v1;
 
 use App\Exceptions\ValidationException;
+use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-
+use Illuminate\Validation\Factory as ValidationFactory;
 class UserRequest extends FormRequest
 {
+    public function __construct(ValidationFactory $validationFactory)
+    {
+        $validationFactory->extend(
+            'hasConnRole',
+            function ($attribute, $value, $parameters) {
+                return Role::hasConnectionToPermission($this->role,$value);
+            },
+            'Sorry, Role not have this permission'
+        );
+        parent::__construct();
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -39,7 +51,7 @@ class UserRequest extends FormRequest
             'password_confirmation' => 'required',
             'role' => 'nullable|integer|exists:roles,id',
             'permissions' => 'nullable|array',
-            'permissions.*' => 'exists:permissions,id',
+            'permissions.*' => 'exists:permissions,id|hasConnRole',
         ];
 
         // Check if request method is GET.
