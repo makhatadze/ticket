@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import TextFieldGroup from "../../components/TextFieldGroup/TextFieldGroup";
 import {loginUser} from "../../actions/auth/authActions";
 import {Button} from "antd";
+import './Login.scss';
 
 class Login extends Component {
     constructor() {
@@ -61,11 +62,11 @@ class Login extends Component {
 
     render() {
         return (
-            <>
+            <div className="auth">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
-                            <h1 className="display-4 text-center">Log In</h1>
+                            <h1 className="display-4 text-center">Ticket System</h1>
                             <p className="lead text-center">
                                 Sign in to your account
                             </p>
@@ -86,14 +87,16 @@ class Login extends Component {
                                     value={this.state.password}
                                     onChange={this.onChange}
                                 />
-                                <Button type="primary" htmlType="suit" loading={this.state.loading}>
-                                    Log In
-                                </Button>
+                                <div className="login-button">
+                                    <Button type="primary" htmlType="suit" loading={this.state.loading}>
+                                        Log In
+                                    </Button>
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
 }
