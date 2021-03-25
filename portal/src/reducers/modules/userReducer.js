@@ -1,15 +1,10 @@
 import {
-    CLEAR_IP_RESTRICTION_SEARCH_QUERY,
-    CLOSE_IP_RESTRICTION_FILTER,
-    CLOSE_IP_RESTRICTION_FORM,
-    CLOSE_IP_RESTRICTION_VIEW,
-    GET_IP_RESTRICTIONS,
-    SET_IP_RESTRICTION_SEARCH_QUERY,
-    SET_IP_RESTRICTIONS_LOADING,
-    SET_UPDATED_IP_RESTRICTION, SHOW_IP_RESTRICTION_FILTER,
-    SHOW_IP_RESTRICTION_FORM,
-    SHOW_IP_RESTRICTION_VIEW
-} from "../../actions/ip-restriction/ipRestirctionTypes";
+    CLEAR_USERS_SEARCH_QUERY, CLOSE_USERS_FILTER, CLOSE_USERS_FORM, CLOSE_USERS_VIEW,
+    GET_USERS,
+    SET_UPDATED_USER,
+    SET_USERS_LOADING, SET_USERS_SEARCH_QUERY, SHOW_USERS_FILTER,
+    SHOW_USERS_FORM, SHOW_USERS_VIEW
+} from "../../actions/user/userTypes";
 import * as queryString from "querystring";
 
 
@@ -24,26 +19,26 @@ const initialState = {
         pageSize: 10,
         id: '',
         name: '',
-        ip: '',
-        status: '',
+        username: '',
+        active: '',
         sort: 'id',
         order: 'desc'
     },
     searchQuery: '',
-    showIpRestrictionForm: {
+    showUserForm : {
         show: false,
-        modalIp: {}
+        modalUser: {}
     },
-    showIpRestrictionView: {
+    showUserView: {
         show: false,
-        modalIp: {}
+        modalUser: {}
     },
-    showIpRestrictionFilter: false
+    showUserFilter: false
 }
 
-export default function (state = initialState, action) {
+export default function (state = initialState,action) {
     switch (action.type) {
-        case SET_IP_RESTRICTIONS_LOADING:
+        case SET_USERS_LOADING:
             return {
                 ...state,
                 searchParams: {
@@ -51,7 +46,7 @@ export default function (state = initialState, action) {
                     loading: true
                 }
             }
-        case GET_IP_RESTRICTIONS:
+        case GET_USERS:
             return {
                 ...state,
                 data: action.payload.data,
@@ -61,64 +56,63 @@ export default function (state = initialState, action) {
                     loading: false
                 }
             }
-        case SET_UPDATED_IP_RESTRICTION:
+        case SET_UPDATED_USER:
             return {
                 ...state,
                 data: state.data.map(el => el.id === action.payload.id ? action.payload : el)
             }
-        case CLEAR_IP_RESTRICTION_SEARCH_QUERY:
+        case CLEAR_USERS_SEARCH_QUERY:
             return {
                 ...state,
                 searchQuery: ''
             }
-        case SHOW_IP_RESTRICTION_FORM:
+        case SHOW_USERS_FORM:
             return {
                 ...state,
-                showIpRestrictionForm: {
+                showUserForm: {
                     show: true,
-                    modalIp: action.payload
+                    modalUser: action.payload
                 }
             }
-        case CLOSE_IP_RESTRICTION_FORM:
+        case CLOSE_USERS_FORM:
             return {
                 ...state,
-                showIpRestrictionForm :{
+                showUserForm: {
                     show: false,
-                    modalIp: {}
+                    modalUser: {}
                 }
             }
-        case SHOW_IP_RESTRICTION_VIEW:
+        case SHOW_USERS_VIEW:
             return {
                 ...state,
-                showIpRestrictionView: {
+                showUserView: {
                     show: true,
-                    modalIp: action.payload
+                    modalUser: action.payload
                 }
             }
-        case CLOSE_IP_RESTRICTION_VIEW: {
+        case CLOSE_USERS_VIEW:
             return {
                 ...state,
-                showIpRestrictionView: {
+                showUserView: {
                     show: false,
-                    modalIp: {}
+                    modalUser: {}
                 }
             }
-        }
-        case SET_IP_RESTRICTION_SEARCH_QUERY:
+        case SET_USERS_SEARCH_QUERY:
             let searchQuery = queryString.parse(state.searchQuery)
             return {
                 ...state,
                 searchQuery: `?${queryString.stringify(getSearchQueryParams({...state.searchParams,...searchQuery,...action.payload}))}`
             }
-        case SHOW_IP_RESTRICTION_FILTER:
+        case SHOW_USERS_FILTER:
             return {
                 ...state,
-                showIpRestrictionFilter: true
+                showUserFilter: true
             }
-        case CLOSE_IP_RESTRICTION_FILTER:
+        case CLOSE_USERS_FILTER:
             return {
                 ...state,
-                showIpRestrictionFilter: false
+                showUserFilter: false
             }
         default:
             return state;
@@ -132,7 +126,7 @@ function getSearchQueryParams(searchData) {
         page: searchData.current,
         id: searchData.id,
         name: searchData.name,
-        ip: searchData.ip,
+        active: searchData.active,
         sort: searchData.sort,
         order: searchData.order
     }
