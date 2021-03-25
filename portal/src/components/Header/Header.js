@@ -43,6 +43,9 @@ class CHeader extends Component {
         if (key === 'logout') {
             this.props.logoutUser();
         }
+        if (key ==='profile') {
+            this.props.history.push('profile')
+        }
     }
 
 
@@ -58,9 +61,14 @@ class CHeader extends Component {
                         <MenuFoldOutlined className="trigger" onClick={this.toggle}/>
                     )}
                 <Popover content={
-                    <Menu selectable={false} onClick={this.menuClick}>
-                        <Item key="logout">logout</Item>
-                    </Menu>
+                    <>
+                        <Menu selectable={false} onClick={this.menuClick}>
+                            <Item key="profile">profile</Item>
+                        </Menu>
+                        <Menu selectable={false} onClick={this.menuClick}>
+                            <Item key="logout">logout</Item>
+                        </Menu>
+                    </>
                 }
                          placement="bottom"
                          trigger="hover"
