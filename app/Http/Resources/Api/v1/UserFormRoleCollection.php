@@ -1,19 +1,22 @@
 <?php
 /**
- *  app/Http/Resources/Api/v1/UserCollection.php
+ *  app/Http/Resources/Api/v1/RoleCollection.php
  *
- * Date-Time: 17.03.21
- * Time: 12:07
+ * Date-Time: 16.03.21
+ * Time: 15:07
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
+
 namespace App\Http\Resources\Api\v1;
 
-use App\Models\Role;
+use App\Models\Permission;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class UserCollection extends ResourceCollection
+class UserFormRoleCollection extends ResourceCollection
 {
     private $pagination;
+    private $permissions;
 
     public function __construct($resource)
     {
@@ -24,6 +27,8 @@ class UserCollection extends ResourceCollection
             'pageSize' => $resource->perPage()
         ];
 
+        $this->permissions = Permission::all();
+
         $resource = $resource->getCollection();
         parent::__construct($resource);
     }
@@ -31,19 +36,15 @@ class UserCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
      */
     public function toArray($request)
     {
-        return [
-            'data' => $this->collection->map(
+        return $this->collection->map(
                 function ($role) {
-                    return new UserResource($role);
+                    return new RoleResource($role);
                 }
-            ),
-            'pagination' => $this->pagination,
-            'roles' => new UserFormRoleCollection(Role::query()->paginate(50))
-        ];
+            );
     }
 }

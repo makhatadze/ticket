@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import * as Proptypes from "prop-types";
 import {connect} from "react-redux";
 import {getUsers, showUserForm} from "../../actions/user/userActions";
-import { Space, Table, Tag} from "antd";
+import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 
 class User extends Component {
@@ -103,16 +103,15 @@ class User extends Component {
         return (
             <div className="users">
                 <div className="row mb-4 action-container">
-                    {/*<div className="col-sm-6 col-lg-8 action-column-left">*/}
-                    {/*    <Button type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create*/}
-                    {/*        Ip</Button>*/}
-                    {/*    <Button className="ml-2" type="primary"*/}
-                    {/*            onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>*/}
-                    {/*</div>*/}
-                    {/*<div className="col-6 col-lg-4 action-column-right">*/}
-                    {/*    <Button className="ml-2" type="primary"*/}
-                    {/*            onClick={() => window.print()}>Print</Button>*/}
-                    {/*</div>*/}
+                    <div className="col-sm-6 col-lg-8 action-column-left">
+                        <Button type="primary" onClick={() => this.props.showUserForm()}>Create User</Button>
+                        {/*<Button className="ml-2" type="primary"*/}
+                        {/*        onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>*/}
+                    </div>
+                    <div className="col-6 col-lg-4 action-column-right">
+                        <Button className="ml-2" type="primary"
+                                onClick={() => window.print()}>Print</Button>
+                    </div>
                 </div>
                 <Table
                     columns={this.columns}

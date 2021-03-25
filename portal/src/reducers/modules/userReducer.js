@@ -10,6 +10,7 @@ import * as queryString from "querystring";
 
 const initialState = {
     data: [],
+    roles: [],
     searchParams: {
         loading: false,
         count: null,
@@ -50,6 +51,7 @@ export default function (state = initialState,action) {
             return {
                 ...state,
                 data: action.payload.data,
+                roles: action.payload.roles,
                 searchParams: {
                     ...state.searchParams,
                     ...action.payload.pagination,
