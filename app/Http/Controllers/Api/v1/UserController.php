@@ -17,8 +17,8 @@ use App\Http\Resources\Api\v1\UserCollection;
 use App\Http\Resources\Api\v1\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
-use http\Exception;
 use Illuminate\Http\JsonResponse;
+
 
 class UserController extends Controller
 {

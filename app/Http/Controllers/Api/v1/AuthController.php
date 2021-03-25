@@ -9,10 +9,16 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\UpdateException;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\Auth\ChangePasswordRequest;
 use App\Http\Requests\Api\v1\Auth\LoginRequest;
+use App\Http\Resources\Api\v1\UserResource;
 use App\Models\User;
+use App\Repositories\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -21,12 +27,18 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
      * Create a new AuthController instance.
      *
-     * @return void
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct()
+    public function __construct(UserRepositoryInterface $userRepository)
     {
+        $this->userRepository = $userRepository;
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 
@@ -79,6 +91,20 @@ class AuthController extends Controller
             'permissions' => [],
             'roles' => [],
         ]);
+    }
+
+    /**
+     * Restore specified resource from storage.
+     *
+     * @param ChangePasswordRequest $request
+     *
+     * @return UserResource|JsonResponse
+     * @throws UpdateException|ValidationException
+     */
+    public function changePassword(ChangePasswordRequest $request )
+    {
+        $attributes['password'] = Hash::make($request['password']);
+        return new UserResource($this->userRepository->update(auth()->user()->id,$attributes));
     }
 }
 
