@@ -1,16 +1,32 @@
 import React, {Component} from 'react';
-import {Button, Table, Tag} from "antd";
+import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
-import {getRoles} from "../../actions/role/roleActions";
+import {
+    getRoleByIp,
+    getRoles,
+    setRoleSearchQuery,
+    showRoleFilter,
+    showRoleForm,
+    showRoleView
+} from "../../actions/role/roleActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
+import RoleForm from "./RoleForm";
+import {toast} from "react-toastify";
+import RoleView from "./RoleView";
+import RoleFilter from "./RoleFilter";
+import isEmpty from "../../core/validation/is-empty";
 
 
 class Role extends Component {
     constructor(props) {
         super(props);
 
+
+        this.editRole = this.editRole.bind(this)
+        this.handleTableChange = this.handleTableChange.bind(this)
+        this.showRole = this.showRole.bind(this)
         this.columns = [
             {
                 title: 'ID',
@@ -40,12 +56,17 @@ class Role extends Component {
                 title: 'Action',
                 dataIndex: '',
                 key: 'x',
-                render: (e) => <Link to='' className="ant-dropdown-link" onClick={(e) => this.editRole(e)}>Edit</Link>
+                render: (element) => <>
+                    <Space size="middle">
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => this.showRole(event, element)}>Show</Link>
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => this.editRole(event, element)}>Edit</Link>
+                    </Space>
+                </>
             },
         ]
 
-        this.editRole = this.editRole.bind(this)
-        this.handleTableChange = this.handleTableChange.bind(this)
     }
 
     componentDidMount() {
@@ -53,20 +74,54 @@ class Role extends Component {
         this.props.getRoles(searchQuery);
     }
 
-
-    handleTableChange(pagination, filters, sorter) {
-        console.log('Filter')
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.roles.searchQuery !== this.props.roles.searchQuery) {
+            this.props.getRoles()
+        }
     }
 
-    editRole(event) {
+
+    handleTableChange(pagination, filters, sorter) {
+        let data = {
+            current: pagination.current,
+            sort: 'id',
+            order: 'desc'
+        }
+        if (!isEmpty(sorter)) {
+            if (sorter.order) {
+                data = {
+                    ...data,
+                    sort: sorter.field,
+                    order: (sorter.order === 'ascend') ? 'asc' : 'desc'
+                }
+            }
+        }
+        this.props.setRoleSearchQuery(data)
+    }
+
+    // Show edit role modal
+    async editRole(event, data) {
         event.preventDefault()
+        await getRoleByIp(data.id)
+            .then(res => this.props.showRoleForm(res.data))
+            .catch(err => toast.error(err.response.data.message))
+    }
+
+    // Show view modal
+    async showRole(event, data) {
+        event.preventDefault();
+        await getRoleByIp(data.id)
+            .then(res => this.props.showRoleView(res.data))
+            .catch(err => toast.error(err.response.data.message))
     }
 
     render() {
         const {data, searchParams} = this.props.roles
         return (
             <>
-                <Button className="mb-4" type="primary">Create Role</Button>
+                <Button className="mb-4" type="primary" onClick={() => this.props.showRoleForm()}>Create Role</Button>
+                <Button className="mb-4 ml-2" type="primary"
+                        onClick={() => this.props.showRoleFilter()}>Filter</Button>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -75,17 +130,32 @@ class Role extends Component {
                     loading={false}
                     onChange={this.handleTableChange}
                 />
+                <RoleForm/>
+                <RoleView/>
+                <RoleFilter/>
             </>
         );
     }
 }
 
 Role.propTypes = {
-    getRoles: PropTypes.func.isRequired
+    getRoles: PropTypes.func.isRequired,
+    showRoleForm: PropTypes.func.isRequired,
+    showRoleView: PropTypes.func.isRequired,
+    showRoleFilter: PropTypes.func.isRequired,
+    setRoleSearchQuery: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     roles: state.roles
 })
 
-export default withRouter(connect(mapStateToProps,{getRoles})(Role));
+export default withRouter(connect(mapStateToProps,
+    {
+        getRoles,
+        showRoleForm,
+        showRoleView,
+        showRoleFilter,
+        setRoleSearchQuery
+    })
+(Role));

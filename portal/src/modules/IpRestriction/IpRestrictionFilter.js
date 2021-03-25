@@ -8,6 +8,7 @@ import * as PropTypes from "prop-types";
 import {connect} from "react-redux";
 import isEmpty from "../../core/validation/is-empty";
 import queryString from "querystring";
+import formLayout from "../../core/config/formLayout";
 
 class IpRestrictionFilter extends Component {
     constructor(props) {
@@ -19,17 +20,7 @@ class IpRestrictionFilter extends Component {
             errors: {},
             loading: false
         }
-        this.formItemLayout = {
-            labelCol: {
-                xs: {span: 24},
-                sm: {span: 5},
-            },
-            wrapperCol: {
-                xs: {span: 48},
-                sm: {span: 24},
-            },
-            layout: 'vertical'
-        }
+
         this.resetFilter = this.resetFilter.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
@@ -90,7 +81,7 @@ class IpRestrictionFilter extends Component {
                        title='Filter'
                        visible={showIpRestrictionFilter}
                        maskClosable={false} onCancel={this.closeIpRestrictionFilter}>
-                    <Form {...this.formItemLayout} onFinish={this.onSubmit}>
+                    <Form {...formLayout} onFinish={this.onSubmit}>
                         <Form.Item
                             label='ID'
                             hasFeedback

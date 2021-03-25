@@ -80,7 +80,9 @@ class IpRestriction extends Component {
 
     handleTableChange(pagination, filters, sorter) {
         let data = {
-            current: pagination.current
+            current: pagination.current,
+            sort: 'id',
+            order: 'desc'
         }
         if (!isEmpty(sorter)) {
             if (sorter.order) {

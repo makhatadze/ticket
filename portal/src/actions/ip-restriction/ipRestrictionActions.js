@@ -46,13 +46,14 @@ export const getIpRestrictionByIp = (id) => {
 }
 
 // Create new Ip Restriction
-export const createIpRestriction = data => (dispatch) => {
+export const createIpRestriction = data => (dispatch,getState) => {
+    const {searchQuery} = getState().ipRestrictions;
+
     return new Promise(async (resolve, reject) => {
         axios
             .post(`${url}/ip-restriction`,data)
             .then(res => {
-                dispatch(clearIpRestrictionSearchQuery())
-                dispatch(getIpRestrictions())
+                searchQuery === '' ? dispatch(getIpRestrictions()) : dispatch(clearIpRestrictionSearchQuery())
                 resolve(res.data)
             })
             .catch(err => {

@@ -9,6 +9,7 @@ import {
 } from "../../actions/ip-restriction/ipRestrictionActions";
 import {toast} from "react-toastify";
 import isEmpty from "../../core/validation/is-empty";
+import formLayout from "../../core/config/formLayout";
 
 
 class IpRestrictionForm extends Component {
@@ -26,17 +27,6 @@ class IpRestrictionForm extends Component {
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.closeIpRestrictionForm = this.closeIpRestrictionForm.bind(this)
-        this.formItemLayout = {
-            labelCol: {
-                xs: {span: 24},
-                sm: {span: 5},
-            },
-            wrapperCol: {
-                xs: {span: 48},
-                sm: {span: 24},
-            },
-            layout: 'vertical'
-        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -55,13 +45,12 @@ class IpRestrictionForm extends Component {
             status: this.state.status
         }
         this.setState({loading: true})
-
+        console.log(this.state.status)
         if (this.state.id !== null) {
-            await updateIpRestriction(this.state.id,data)
+            await updateIpRestriction(this.state.id, data)
                 .then(res => {
                     this.props.setUpdateIpRestriction(res.data)
                     toast.success(`${res.data.ip} - Updated.`);
-                    this.setState({loading: false})
                     this.closeIpRestrictionForm()
                 })
                 .catch(err => {
@@ -73,7 +62,6 @@ class IpRestrictionForm extends Component {
                 .then(res => {
                     console.log(res)
                     toast.success(`${res.data.ip} - Created.`);
-                    this.setState({loading: false})
                     this.closeIpRestrictionForm()
                 })
                 .catch(err => {
@@ -110,7 +98,7 @@ class IpRestrictionForm extends Component {
                        title={this.state.id ? `Update - ${showIpRestrictionForm.modalIp.ip}` : 'Create Ip'}
                        visible={showIpRestrictionForm.show}
                        maskClosable={false} onCancel={this.closeIpRestrictionForm}>
-                    <Form {...this.formItemLayout} onFinish={this.onSubmit}>
+                    <Form {...formLayout} onFinish={this.onSubmit}>
                         <Form.Item
                             label='Name'
                             hasFeedback
@@ -137,11 +125,12 @@ class IpRestrictionForm extends Component {
                         </Form.Item>
                         <Form.Item name="switch"
                                    label="Status"
-                                   valuePropName="checked"
                         >
-                            <Switch defaultChecked={this.state.status} name="status" onChange={() => this.setState({
-                                status: event.target.value
-                            })}/>
+                            <Switch checked={this.state.status} name="status"
+                                    onChange={() => this.setState({
+                                        status: !this.state.status
+                                    })}
+                            />
                         </Form.Item>
                         <Button type="primary" htmlType="submit" loading={this.state.loading}
                                 className="ant-btn ant-btn-success mt-2">
