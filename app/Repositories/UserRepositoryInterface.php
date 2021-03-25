@@ -31,4 +31,14 @@ interface UserRepositoryInterface
      * @return UserResource
      */
     public function createNewItem(UserRequest $request): UserResource;
+
+    /**
+     * Update user item
+     *
+     * @param int $id
+     * @param UserRequest $request
+     *
+     * @return mixed
+     */
+    public function updateItem(int $id, UserRequest $request): UserResource;
 }

@@ -78,4 +78,17 @@ class UserController extends Controller
         return new UserResource($data);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param UserRequest $request
+     * @param int $id
+     *
+     * @return RoleResource|JsonResponse
+     */
+    public function update(UserRequest $request, int $id)
+    {
+        return $this->userRepository->updateItem($id, $request);
+    }
+
 }

@@ -65,6 +65,34 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
+     * Update user item
+     *
+     * @param int $id
+     * @param UserRequest $request
+     *
+     * @return mixed
+     */
+    public function updateItem(int $id, UserRequest $request): UserResource
+    {
+        $attributes = $request->only('name', 'username');
+        $this->model = $this->update($id, $attributes);
+
+        // Remove roles
+        $this->model->roles()->detach();
+
+        // Remove permissions
+        $this->model->permissions()->detach();
+
+        // Attach role
+        $this->model->roles()->attach($request['role']);
+
+        // Attach permissions
+        $this->syncPermissions($request);
+
+        return new UserResource($this->model);
+    }
+
+    /**
      *  Attach user permissions
      *
      * @param UserRequest $request
