@@ -8,12 +8,11 @@
  */
 namespace App\Models;
 
+use App\Exceptions\DataNotFoundException;
 use App\Traits\CustomBleableTrait;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
@@ -59,4 +58,19 @@ class Role extends Model
         return $this->belongsToMany(Permission::class, 'roles_permissions');
     }
 
+    /**
+     * @param int $roleId
+     * @param int $permissionId
+     *
+     * @return bool
+     * @throws DataNotFoundException
+     */
+    public static function hasConnectionToPermission(int $roleId, int $permissionId): bool
+    {
+        $model = self::query()->where('id',$roleId)->first();
+        if (!$model) {
+            throw new DataNotFoundException();
+        }
+        return $model->permissions()->where('id',$permissionId)->exists();
+    }
 }
