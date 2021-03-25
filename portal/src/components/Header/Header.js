@@ -43,8 +43,8 @@ class CHeader extends Component {
         if (key === 'logout') {
             this.props.logoutUser();
         }
-        if (key ==='profile') {
-            this.props.history.push('profile')
+        if (key ==='change-password') {
+            this.props.history.push('change-password')
         }
     }
 
@@ -63,7 +63,7 @@ class CHeader extends Component {
                 <Popover content={
                     <>
                         <Menu selectable={false} onClick={this.menuClick}>
-                            <Item key="profile">profile</Item>
+                            <Item key="change-password">change password</Item>
                         </Menu>
                         <Menu selectable={false} onClick={this.menuClick}>
                             <Item key="logout">logout</Item>
