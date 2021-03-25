@@ -17,7 +17,7 @@ import {toast} from "react-toastify";
 import RoleView from "./RoleView";
 import RoleFilter from "./RoleFilter";
 import isEmpty from "../../core/validation/is-empty";
-
+import './Role.scss';
 
 class Role extends Component {
     constructor(props) {
@@ -118,10 +118,18 @@ class Role extends Component {
     render() {
         const {data, searchParams} = this.props.roles
         return (
-            <>
-                <Button className="mb-4" type="primary" onClick={() => this.props.showRoleForm()}>Create Role</Button>
-                <Button className="mb-4 ml-2" type="primary"
-                        onClick={() => this.props.showRoleFilter()}>Filter</Button>
+            <div className="role">
+                <div className="row mb-4 action-container">
+                    <div className="col-sm-6 col-lg-8 action-column-left">
+                        <Button type="primary" onClick={() => this.props.showRoleForm()}>Create Role</Button>
+                        <Button className="ml-2" type="primary"
+                                onClick={() => this.props.showRoleFilter()}>Filter</Button>
+                    </div>
+                    <div className="col-6 col-lg-4 action-column-right">
+                        <Button className="ml-2" type="primary"
+                                onClick={() => window.print()}>Print</Button>
+                    </div>
+                </div>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -133,7 +141,7 @@ class Role extends Component {
                 <RoleForm/>
                 <RoleView/>
                 <RoleFilter/>
-            </>
+            </div>
         );
     }
 }

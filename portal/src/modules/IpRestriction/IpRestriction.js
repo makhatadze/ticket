@@ -13,8 +13,8 @@ import IpRestrictionForm from "./IpRestrictionForm";
 import {toast} from "react-toastify";
 import IpRestrictionView from "./IpRestrictionView";
 import IpRestrictionFilter from "./IpRestrictionFilter";
-import queryString from "querystring";
 import isEmpty from "../../core/validation/is-empty";
+import './IpRestriction.scss';
 
 class IpRestriction extends Component {
     constructor(props) {
@@ -116,12 +116,19 @@ class IpRestriction extends Component {
         const {data, searchParams} = this.props.ipRestrictions;
 
         return (
-            <>
-
-                <Button className="mb-4" type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create
-                    Ip</Button>
-                <Button className="mb-4 ml-2" type="primary"
-                        onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>
+            <div className="ip-restriction">
+                <div className="row mb-4 action-container">
+                    <div className="col-sm-6 col-lg-8 action-column-left">
+                        <Button type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create
+                            Ip</Button>
+                        <Button className="ml-2" type="primary"
+                                onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>
+                    </div>
+                    <div className="col-6 col-lg-4 action-column-right">
+                        <Button className="ml-2" type="primary"
+                                onClick={() => window.print()}>Print</Button>
+                    </div>
+                </div>
                 <Table
                     columns={this.columns}
                     rowKey={record => record.id}
@@ -133,7 +140,7 @@ class IpRestriction extends Component {
                 <IpRestrictionForm/>
                 <IpRestrictionView/>
                 <IpRestrictionFilter/>
-            </>
+            </div>
         );
     }
 }
