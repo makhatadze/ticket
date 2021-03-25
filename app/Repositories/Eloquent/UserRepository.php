@@ -11,9 +11,11 @@ namespace App\Repositories\Eloquent;
 
 use App\Http\Requests\Api\v1\UserRequest;
 use App\Http\Resources\Api\v1\UserCollection;
+use App\Http\Resources\Api\v1\UserResource;
 use App\Models\User;
 use App\Repositories\Eloquent\Base\BaseRepository;
 use App\Repositories\UserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -38,5 +40,40 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         $data = $data->paginate(10);
         return new UserCollection($data);
+    }
+
+    /**
+     * Create new user
+     *
+     * @param UserRequest $request
+     *
+     * @return UserResource
+     */
+    public function createNewItem(UserRequest $request): UserResource
+    {
+        $attributes = $request->only('name', 'username','active');
+        $attributes['password'] = Hash::make($request['password']);
+        $this->model = $this->create($attributes);
+
+        // Attach role
+        $this->model->roles()->attach($request['role']);
+
+        // Attach permissions
+        $this->syncPermissions($request);
+
+        return new UserResource($this->model);
+    }
+
+    /**
+     *  Attach user permissions
+     *
+     * @param UserRequest $request
+     *
+     */
+    protected function syncPermissions(UserRequest $request)
+    {
+        if ($request->has('permissions') && $this->model) {
+            $this->model->permissions()->sync($request['permissions']);
+        }
     }
 }

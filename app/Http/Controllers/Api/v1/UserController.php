@@ -11,9 +11,9 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\UserRequest;
 use App\Http\Resources\Api\v1\UserCollection;
+use App\Http\Resources\Api\v1\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -46,6 +46,18 @@ class UserController extends Controller
     public function index(UserRequest $request): UserCollection
     {
         return $this->userRepository->getData($request);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param UserRequest $request
+     *
+     * @return UserResource
+     */
+    public function store(UserRequest $request): UserResource
+    {
+        return $this->userRepository->createNewItem($request);
     }
 
 }
