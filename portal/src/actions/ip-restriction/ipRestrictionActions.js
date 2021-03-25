@@ -53,7 +53,7 @@ export const createIpRestriction = data => (dispatch,getState) => {
         axios
             .post(`${url}/ip-restriction`,data)
             .then(res => {
-                searchQuery === '' ? dispatch(getIpRestrictions()) : dispatch(clearIpRestrictionSearchQuery())
+                searchQuery === '' ? getIpRestrictions() : dispatch(clearIpRestrictionSearchQuery())
                 resolve(res.data)
             })
             .catch(err => {

@@ -134,7 +134,7 @@ class IpRestriction extends Component {
                     rowKey={record => record.id}
                     dataSource={data}
                     pagination={searchParams}
-                    loading={false}
+                    loading={searchParams.loading}
                     onChange={this.handleTableChange}
                 />
                 <IpRestrictionForm/>
