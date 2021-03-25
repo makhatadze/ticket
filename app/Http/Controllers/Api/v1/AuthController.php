@@ -43,7 +43,7 @@ class AuthController extends Controller
         $credentials = $request->only('username','password');
 
         // Add validation where status true.
-        $credentials = array_merge($credentials,['active'=>User::ACTIVE]);
+        $credentials = array_merge($credentials,['active'=>User::ACTIVE,'deleted_at' => null]);
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {

@@ -8,6 +8,7 @@
  */
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\UserRequest;
@@ -89,6 +90,32 @@ class UserController extends Controller
     public function update(UserRequest $request, int $id)
     {
         return $this->userRepository->updateItem($id, $request);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return UserResource|JsonResponse
+     * @throws DeleteException
+     */
+    public function destroy(int $id)
+    {
+        return new UserResource($this->userRepository->delete($id));
+    }
+
+    /**
+     * Restore specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return UserResource|JsonResponse
+     * @throws ValidationException
+     */
+    public function restore(int $id)
+    {
+        return new UserResource($this->userRepository->restore($id));
     }
 
 }
