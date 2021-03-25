@@ -1,7 +1,7 @@
 export default {
     labelCol: {
-        xs: {span: 24},
-        sm: {span: 5},
+        xs: {span: 48},
+        sm: {span: 10},
     },
     wrapperCol: {
         xs: {span: 48},
