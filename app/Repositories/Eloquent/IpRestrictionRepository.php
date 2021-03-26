@@ -34,9 +34,12 @@ class IpRestrictionRepository extends BaseRepository implements IpRestrictionRep
      */
     public function getData(IpRestrictionRequest $request): IpRestrictionCollection
     {
-        $data = $this->model->query();
-
-        $data = $data->paginate(1);
-        return new IpRestrictionCollection($data);
+        $sortParams = $request->only('sort','order');
+	
+        $data =  (!empty($sortParams)) ? $this->model->sorted($sortParams) : $this->model->query();
+	
+        $data = $data->paginate(3);
+	
+	return new IpRestrictionCollection($data);
     }
 }
