@@ -163,7 +163,7 @@ class User extends Component {
                 <div className="row mb-4 action-container">
                     <div className="col-sm-6 col-lg-8 action-column-left">
                         <Button type="primary" onClick={() => this.showUserForm()}>Create User</Button>
-                        <Button className="ml-2" type="primary"
+                        <Button type="primary"
                                 onClick={() => this.props.showUserFilter()}>Filter</Button>
                     </div>
                     <div className="col-6 col-lg-4 action-column-right">
