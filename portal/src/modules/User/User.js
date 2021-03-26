@@ -1,13 +1,14 @@
 import React, {Component} from "react";
 import * as Proptypes from "prop-types";
 import {connect} from "react-redux";
-import {getUserById, getUsers, setUserFormLoading, showUserForm} from "../../actions/user/userActions";
+import {getUserById, getUsers, setUserFormLoading, showUserForm, showUserView} from "../../actions/user/userActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import './User.scss';
 import isEmpty from "../../core/validation/is-empty";
 import {getRolePermissions} from "../../actions/role/roleActions";
 import UserForm from "./UserForm";
+import UserView from "./UserView";
 
 class User extends Component {
     constructor(props) {
@@ -95,7 +96,11 @@ class User extends Component {
 
     async showUser(event, data) {
         event.preventDefault();
-        console.log(data)
+        await getUserById(data.id)
+            .then(res => {
+                this.props.showUserView(res.data)
+            })
+            .catch(err => console.log(err))
     }
 
     editUser(event, data) {
@@ -142,6 +147,7 @@ class User extends Component {
                     onChange={this.handleTableChange}
                 />
                 <UserForm />
+                <UserView />
             </div>
         )
     }
@@ -150,7 +156,8 @@ class User extends Component {
 User.propTypes = {
     getUsers: Proptypes.func.isRequired,
     showUserForm: Proptypes.func.isRequired,
-    setUserFormLoading: Proptypes.func.isRequired
+    setUserFormLoading: Proptypes.func.isRequired,
+    showUserView: Proptypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -160,5 +167,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     getUsers,
     showUserForm,
-    setUserFormLoading
+    setUserFormLoading,
+    showUserView
 })(User);

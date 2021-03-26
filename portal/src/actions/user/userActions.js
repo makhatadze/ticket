@@ -1,11 +1,11 @@
 import axios from "axios";
 import {
     CLEAR_USERS_SEARCH_QUERY,
-    CLOSE_USERS_FORM,
+    CLOSE_USERS_FORM, CLOSE_USERS_VIEW,
     GET_USERS, SET_UPDATED_USER, SET_USER_FORM_LOADING,
     SET_USERS_LOADING,
     SET_USERS_SEARCH_QUERY,
-    SHOW_USERS_FORM
+    SHOW_USERS_FORM, SHOW_USERS_VIEW
 } from "./userTypes";
 
 
@@ -100,6 +100,21 @@ export const showUserForm = (data = {}) => {
 export const closeUserForm = () => {
     return {
         type: CLOSE_USERS_FORM
+    }
+}
+
+// Show user view modal
+export const showUserView = (payload) => {
+    return {
+        type: SHOW_USERS_VIEW,
+        payload
+    }
+}
+
+// Close user view modal
+export const closeUserView = () => {
+    return {
+        type: CLOSE_USERS_VIEW
     }
 }
 

@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             'active' => $this->active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'role' => $this->roles()->get(['id','name','slug'])->toArray(),
+            'role' => $this->roles()->first(['id','name','slug']),
             'permissions' => $this->permissions()->get(['id','name','slug'])->toArray()
         ];
     }
