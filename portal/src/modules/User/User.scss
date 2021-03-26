@@ -1,0 +1,20 @@
+@import "../../scss/_variables.scss";
+
+.users {
+  .action-container {
+    .action-column-right {
+      text-align-last: end;
+    }
+  }
+}
+
+@media (max-width: $small) {
+  .users{
+    .action-container {
+      .action-column-right {
+        margin-top: 5px;
+        text-align-last: start;
+      }
+    }
+  }
+}
