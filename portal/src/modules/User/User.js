@@ -31,7 +31,8 @@ class User extends Component {
         this.deleteUser = this.deleteUser.bind(this);
         this.state = {
             showDeleteConfirm: false,
-            deleteUser: {}
+            deleteUser: {},
+            selectedRowKeys: []
         }
         this.columns = [
             {
@@ -109,6 +110,7 @@ class User extends Component {
     }
 
     handleTableChange(pagination, filters, sorter) {
+        this.setState({selectedRowKeys: []})
         let data = {
             current: pagination.current,
             sort: 'id',
@@ -168,6 +170,8 @@ class User extends Component {
                     </div>
                     <div className="col-6 col-lg-4 action-column-right">
                         <Button type="primary"
+                                onClick={() => window.print()}>Export</Button>
+                        <Button type="primary"
                                 onClick={() => window.print()}>Print</Button>
                     </div>
                 </div>
@@ -178,6 +182,11 @@ class User extends Component {
                     pagination={searchParams}
                     loading={searchParams.loading}
                     onChange={this.handleTableChange}
+                    rowSelection={{
+                        type: "checkbox",
+                        onChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys: selectedRowKeys}),
+                        selectedRowKeys: this.state.selectedRowKeys
+                    }}
                 />
                 <UserForm/>
                 <UserView/>
