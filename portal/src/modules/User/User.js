@@ -1,14 +1,24 @@
 import React, {Component} from "react";
 import * as Proptypes from "prop-types";
 import {connect} from "react-redux";
-import {getUserById, getUsers, setUserFormLoading, showUserForm, showUserView} from "../../actions/user/userActions";
-import {Button, Space, Table, Tag} from "antd";
+import {
+    deleteUser,
+    getUserById,
+    getUsers,
+    setUserFormLoading,
+    showUserForm,
+    showUserView
+} from "../../actions/user/userActions";
+import {Alert, Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import './User.scss';
 import isEmpty from "../../core/validation/is-empty";
 import {getRolePermissions} from "../../actions/role/roleActions";
 import UserForm from "./UserForm";
 import UserView from "./UserView";
+import Modal from "antd/es/modal/Modal";
+import {ExclamationCircleOutlined} from "@ant-design/icons";
+import {toast} from "react-toastify";
 
 class User extends Component {
     constructor(props) {
@@ -17,6 +27,12 @@ class User extends Component {
         this.editUser = this.editUser.bind(this);
         this.showUser = this.showUser.bind(this);
         this.showUserForm = this.showUserForm.bind(this);
+        this.showDeleteUser = this.showDeleteUser.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
+        this.state = {
+            showDeleteConfirm: false,
+            deleteUser: {}
+        }
         this.columns = [
             {
                 title: 'ID',
@@ -56,6 +72,8 @@ class User extends Component {
                               onClick={(event) => this.showUser(event, element)}>Show</Link>
                         <Link to='' className="ant-dropdown-link"
                               onClick={(event) => this.editUser(event, element)}>Edit</Link>
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => this.showDeleteUser(event, element)}>Delete</Link>
                     </Space>
                 </>
 
@@ -69,9 +87,27 @@ class User extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.users.searchQuery !== this.props.users.searchQuery) {
-            console.log(123456)
             this.props.getUsers()
         }
+    }
+
+    async deleteUser() {
+        !isEmpty(this.state.deleteUser) ?
+            await deleteUser(this.state.deleteUser.id)
+                .then(res => {
+                    this.props.getUsers();
+                    toast.success(`${res.data.name} - Deleted`);
+                    this.setState({showDeleteConfirm: false, deleteUser: {}})
+                })
+                .catch(err => console.log(err))
+            : '';
+    }
+
+    showDeleteUser(event, data) {
+        event.preventDefault();
+        this.setState({showDeleteConfirm: true, deleteUser: data})
+        console.log(this.state)
+
     }
 
     handleTableChange(pagination, filters, sorter) {
@@ -108,16 +144,16 @@ class User extends Component {
         this.showUserForm(data)
     }
 
-    async showUserForm (data = {}) {
+    async showUserForm(data = {}) {
         this.props.setUserFormLoading();
-        if(isEmpty(data)) {
+        if (isEmpty(data)) {
             await getRolePermissions()
                 .then(res => {
                     this.props.showUserForm({roles: res.data})
                 })
                 .catch(err => console.log(err))
         } else if (data.id !== undefined) {
-            await getUserById(data.id,'?roles-permissions=true')
+            await getUserById(data.id, '?roles-permissions=true')
                 .then(res => this.props.showUserForm(res.data))
                 .catch(err => console.log(err))
         }
@@ -146,8 +182,22 @@ class User extends Component {
                     loading={searchParams.loading}
                     onChange={this.handleTableChange}
                 />
-                <UserForm />
-                <UserView />
+                <UserForm/>
+                <UserView/>
+                <Modal
+                    title="Delete user"
+                    maskClosable={false}
+                    visible={this.state.showDeleteConfirm}
+                    onOk={this.deleteUser}
+                    onCancel={() => this.setState({showDeleteConfirm: false, deleteUser: {}})}
+                    okText="Delete"
+                    cancelText="Cancel"
+                >
+                    {isEmpty(this.state.deleteUser) ? '' : (
+                        <Alert message={`Are you sure? you want to delete - ${this.state.deleteUser.name}`}
+                               type="warning" showIcon/>
+                    )}
+                </Modal>
             </div>
         )
     }

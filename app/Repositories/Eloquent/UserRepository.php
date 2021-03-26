@@ -38,7 +38,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $data = $this->model->query();
 
-        $data = $data->paginate(10);
+        $data = $data->paginate(3);
         return new UserCollection($data);
     }
 

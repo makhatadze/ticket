@@ -66,6 +66,16 @@ export const updateUser = (id,data) => {
     })
 }
 
+// Delete user
+export const deleteUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        axios
+            .delete(`${url}/user/${id}`)
+            .then((res) => resolve(res.data))
+            .catch(err => reject(err))
+    })
+}
+
 // Merge updated user.
 export const setUpdateUser = (payload) => {
     return {
