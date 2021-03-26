@@ -43,7 +43,6 @@ class UserCollection extends ResourceCollection
                 }
             ),
             'pagination' => $this->pagination,
-            'roles' => new UserFormRoleCollection(Role::query()->paginate(50))
         ];
     }
 }
