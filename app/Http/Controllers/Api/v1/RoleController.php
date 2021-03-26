@@ -15,12 +15,14 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\RoleRequest;
 use App\Http\Resources\Api\v1\RoleCollection;
+use App\Http\Resources\Api\v1\RolePermissionResource;
 use App\Http\Resources\Api\v1\RoleResource;
 use App\Models\Role;
 use App\Repositories\RoleRepositoryInterface;
 use http\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class RoleController extends Controller
 {
@@ -121,5 +123,17 @@ class RoleController extends Controller
     public function restore(int $id)
     {
         return new RoleResource($this->roleRepository->restore($id));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function getWithPermissions(Request $request): AnonymousResourceCollection
+    {
+        return RolePermissionResource::collection($this->roleRepository->all());
     }
 }

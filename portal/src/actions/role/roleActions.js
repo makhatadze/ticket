@@ -139,3 +139,13 @@ export const setRoleSearchQuery = (payload = {}) => {
         payload
     }
 }
+
+// Get role permissions simple resource
+export const getRolePermissions = () => {
+    return new Promise(async (resolve, reject) => {
+        axios
+            .get(`${url}/role-permission`)
+            .then(res => resolve(res.data))
+            .catch(err => reject(err.response.data))
+    })
+}

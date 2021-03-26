@@ -9,12 +9,26 @@
 namespace App\Http\Requests\Api\v1;
 
 use App\Exceptions\ValidationException;
+use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
+    public function __construct(ValidationFactory $validationFactory)
+    {
+        $validationFactory->extend(
+            'hasConnRole',
+            function ($attribute, $value, $parameters) {
+                return Role::hasConnectionToPermission($this->role,$value);
+            },
+            'Sorry, Role not have this permission'
+        );
+        parent::__construct();
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,13 +48,22 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'username' => 'required|unique:users|max:255',
-            'password' => 'required|between:6,255|confirmed',
-            'password_confirmation' => 'required',
+            'username' => ['required','string','max:255',Rule::unique('users', 'username')->ignore($this->user)],
+            'active' => 'required|boolean',
             'role' => 'nullable|integer|exists:roles,id',
             'permissions' => 'nullable|array',
-            'permissions.*' => 'exists:permissions,id',
+            'permissions.*' => 'exists:permissions,id|hasConnRole',
         ];
+
+        if ($this->method() === 'POST') {
+            $rules ['password'] = 'required|between:6,255|confirmed';
+            $rules['password_confirmation'] = 'required';
+        }
+
+        if ($this->method() === 'PATCH' && $this->password !== null) {
+            $rules ['password'] = 'required|between:6,255|confirmed';
+            $rules['password_confirmation'] = 'required';
+        }
 
         // Check if request method is GET.
         if ($this->method() === 'GET') {
@@ -48,6 +71,7 @@ class UserRequest extends FormRequest
 
             ];
         }
+
         return $rules;
     }
 

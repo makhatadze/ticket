@@ -23,9 +23,12 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
+            'username' => $this->username,
+            'active' => $this->active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'role' => $this->roles()->first(['id','name','slug']),
+            'permissions' => $this->permissions()->get(['id','name','slug'])->toArray()
         ];
     }
 }

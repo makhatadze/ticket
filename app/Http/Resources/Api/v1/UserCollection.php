@@ -8,6 +8,7 @@
  */
 namespace App\Http\Resources\Api\v1;
 
+use App\Models\Role;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class UserCollection extends ResourceCollection
@@ -41,7 +42,7 @@ class UserCollection extends ResourceCollection
                     return new UserResource($role);
                 }
             ),
-            'pagination' => $this->pagination
+            'pagination' => $this->pagination,
         ];
     }
 }

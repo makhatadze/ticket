@@ -14,7 +14,6 @@ import setAuthToken from "./core/utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import {logoutUser, setUser} from "./actions/auth/authActions";
 
-
 // Check for token
 if (localStorage.jwtToken) {
     // Set auth token header auth

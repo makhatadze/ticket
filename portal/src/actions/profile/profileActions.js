@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import {CLEAR_CURRENT_PROFILE, GET_CURRENT_PROFILE, PROFILE_LOADING} from "./profileTypes";
+import {logoutUser} from "../auth/authActions";
 
 const url = process.env.MIX_SERVER_API_URL;
 
@@ -15,11 +16,12 @@ export const getCurrentProfile = () => dispatch => {
                 payload: res.data
             })
         )
-        .catch(err =>
-            dispatch({
-                type: GET_CURRENT_PROFILE,
-                payload: {}
-            })
+        .catch(err => {
+                if (err.response.status === 401) {
+                    dispatch(logoutUser());
+                    window.location.href = '/login';
+                }
+            }
         );
 };
 

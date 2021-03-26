@@ -11,6 +11,8 @@ Route::middleware('ipMiddleware')->group(function () {
         Route::prefix('auth')->group(function () {
             Route::post('login', [AuthController::class, 'login']);
             Route::middleware('auth:api')->get('current-user', [AuthController::class, 'getCurrentUser']);
+            Route::middleware('auth:api')->patch('change-password', [AuthController::class, 'changePassword']);
+
         });
 
         Route::middleware('auth:api')->group(function () {
@@ -18,6 +20,7 @@ Route::middleware('ipMiddleware')->group(function () {
             // Roles
             Route::post('role/{role}/restore',[RoleController::class,'restore']);
             Route::apiResource('role', RoleController::class);
+            Route::get('role-permission',[RoleController::class,'getWithPermissions']);
 
             // Users
             Route::post('user/{user}/restore',[UserController::class,'restore']);
