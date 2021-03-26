@@ -15,6 +15,7 @@ use App\Http\Requests\Api\v1\UserRequest;
 use App\Http\Resources\Api\v1\RoleResource;
 use App\Http\Resources\Api\v1\UserCollection;
 use App\Http\Resources\Api\v1\UserResource;
+use App\Http\Resources\Api\v1\UserRolePermissionsResource;
 use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
@@ -68,14 +69,18 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param UserRequest $request
      * @param int $id
      *
-     * @return UserResource
+     * @return UserRolePermissionsResource
      * @throws ValidationException
      */
-    public function show(int $id): UserResource
+    public function show(UserRequest $request,int $id)
     {
         $data = $this->userRepository->findOrFail($id);
+        if ($request['roles-permissions']) {
+            return new UserRolePermissionsResource($data);
+        }
         return new UserResource($data);
     }
 

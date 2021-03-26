@@ -3,7 +3,7 @@
  *  app/Http/Resources/Api/v1/RolePermissionResource.php
  *
  * Date-Time: 26.03.21
- * Time: 09:34
+ * Time: 09:48
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 namespace App\Http\Resources\Api\v1;

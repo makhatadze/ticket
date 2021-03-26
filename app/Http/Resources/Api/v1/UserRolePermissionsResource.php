@@ -1,16 +1,18 @@
 <?php
 /**
- *  app/Http/Resources/Api/v1/UserResource.php
+ *  app/Http/Resources/Api/v1/UserRolePermissionsResource.php
  *
- * Date-Time: 16.03.21
- * Time: 15:10
+ * Date-Time: 26.03.21
+ * Time: 09:46
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 namespace App\Http\Resources\Api\v1;
 
+use App\Models\Role;
+use App\Repositories\RoleRepositoryInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class UserRolePermissionsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,12 +25,11 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'username' => $this->username,
+            'username' => $this->email,
             'active' => $this->active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'role' => $this->roles()->get(['id','name','slug'])->toArray(),
-            'permissions' => $this->permissions()->get(['id','name','slug'])->toArray()
+            'permissions' => $this->permissions()->get(['id','name','slug'])->toArray(),
+            'roles' => RolePermissionResource::collection(Role::all())
         ];
     }
 }
