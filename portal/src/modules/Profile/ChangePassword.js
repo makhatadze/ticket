@@ -52,7 +52,7 @@ class ChangePassword extends Component {
     render() {
         return (
             <div className="row">
-                <div className="col-md-4 col-sm-10">
+                <div className="col-md-6 col-lg-4 col-sm-10">
                     <Form {...formLayout} onFinish={this.onResetPassword}>
                         <Form.Item
                             label='Current Password'
