@@ -98,10 +98,9 @@ class User extends Component {
         console.log(data)
     }
 
-    async editUser(event, data) {
+    editUser(event, data) {
         event.preventDefault()
-        console.log(data)
-
+        this.showUserForm(data)
     }
 
     async showUserForm (data = {}) {
@@ -111,6 +110,10 @@ class User extends Component {
                 .then(res => {
                     this.props.showUserForm({roles: res.data})
                 })
+                .catch(err => console.log(err))
+        } else if (data.id !== undefined) {
+            await getUserById(data.id,'?roles-permissions=true')
+                .then(res => this.props.showUserForm(res.data))
                 .catch(err => console.log(err))
         }
     }

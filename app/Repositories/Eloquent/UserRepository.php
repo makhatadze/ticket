@@ -75,6 +75,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function updateItem(int $id, UserRequest $request): UserResource
     {
         $attributes = $request->only('name', 'username');
+        if ($request['password'] !== null) {
+            $attributes['password'] = Hash::make($request['password']);
+        }
         $this->model = $this->update($id, $attributes);
 
         // Remove roles

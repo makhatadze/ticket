@@ -25,9 +25,9 @@ class UserRolePermissionsResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'username' => $this->email,
+            'username' => $this->username,
             'active' => $this->active,
-            'role' => $this->roles()->get(['id','name','slug'])->toArray(),
+            'role' => $this->roles()->first(['id','name','slug']),
             'permissions' => $this->permissions()->get(['id','name','slug'])->toArray(),
             'roles' => RolePermissionResource::collection(Role::all())
         ];

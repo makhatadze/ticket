@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import isEmpty from "../../core/validation/is-empty";
 import Spinner from "../../components/Spinner/Spinner";
 import * as PropTypes from "prop-types";
-import {closeUserForm, createUser} from "../../actions/user/userActions";
+import {closeUserForm, createUser, setUpdateUser, updateUser} from "../../actions/user/userActions";
 import {Button, Form, Input, Modal, Select, Switch} from "antd";
 import formLayout from "../../core/config/formLayout";
 import {EyeInvisibleOutlined, EyeTwoTone} from "@ant-design/icons";
@@ -31,6 +31,25 @@ class UserForm extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.users.showUserForm.modalUser !== this.props.users.showUserForm.modalUser) {
+            const {modalUser} = this.props.users.showUserForm;
+            if (!isEmpty(modalUser)) {
+                if (modalUser.id !== undefined) {
+                    console.log(modalUser)
+                    this.setState({
+                        id: modalUser.id,
+                        name: modalUser.name,
+                        username: modalUser.username,
+                        active: modalUser.active,
+                        role: modalUser.role !== null ? modalUser.role.id : '',
+                        permissions: modalUser.permissions.map((el) => el.id)
+                    })
+                }
+            }
+        }
+    }
+
     async onSubmit() {
         const data = {
             name: this.state.name,
@@ -43,7 +62,16 @@ class UserForm extends Component {
         }
         this.setState({loading: true, errors: false})
         if (this.state.id !== null) {
-
+            await updateUser(this.state.id,data)
+                .then(res => {
+                    this.props.setUpdateUser(res.data);
+                    toast.success(`${res.data.name} - Updated.`)
+                    this.closeUserForm();
+                })
+                .catch(err => {
+                    toast.error('Can not updated.');
+                    this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
+                })
         } else {
             await this.props.createUser(data)
                 .then(res => {
@@ -64,7 +92,14 @@ class UserForm extends Component {
     }
 
     changeRole(role) {
-        this.setState({role: role})
+        let {modalUser} = this.props.users.showUserForm;
+        let permissions = [];
+        if (!isEmpty(modalUser.role)) {
+            if (modalUser.role.id === role) {
+                permissions = modalUser.permissions.map(el => el.id)
+            }
+        }
+        this.setState({role: role, permissions: permissions})
     }
 
     changePermission(permissionsArray) {
@@ -140,6 +175,7 @@ class UserForm extends Component {
                     </Form.Item>
                     <Form.Item
                         label='Password'
+                        extra={this.state.id ? 'If you want to change password, enter password and password confirmation': ''}
                         hasFeedback
                         validateStatus={this.state.errors.password ? 'error' : ''}
                         help={this.state.errors.password ?? ''}
@@ -229,7 +265,7 @@ class UserForm extends Component {
                     </Form.Item>
                     <Button type="primary" htmlType="submit" loading={this.state.loading}
                             className="ant-btn ant-btn-success mt-2">
-                        Create
+                        {this.state.id ? 'Update' : 'Create'}
                     </Button>
                 </Form>
             )
@@ -237,7 +273,7 @@ class UserForm extends Component {
         return (
             <>
                 <Modal footer={null}
-                       title='Create User'
+                       title={this.state.id ? `Update - ${showUserForm.modalUser.name}` : 'Create User'}
                        visible={showUserForm.show}
                        maskClosable={false} onCancel={this.closeUserForm}>
                     {content}
@@ -250,7 +286,8 @@ class UserForm extends Component {
 
 UserForm.propTypes = {
     createUser: PropTypes.func.isRequired,
-    closeUserForm: PropTypes.func.isRequired
+    closeUserForm: PropTypes.func.isRequired,
+    setUpdateUser: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -259,5 +296,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     createUser,
-    closeUserForm
+    closeUserForm,
+    setUpdateUser
 })(UserForm);

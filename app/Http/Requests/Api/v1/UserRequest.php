@@ -60,6 +60,11 @@ class UserRequest extends FormRequest
             $rules['password_confirmation'] = 'required';
         }
 
+        if ($this->method() === 'PATCH' && $this->password !== null) {
+            $rules ['password'] = 'required|between:6,255|confirmed';
+            $rules['password_confirmation'] = 'required';
+        }
+
         // Check if request method is GET.
         if ($this->method() === 'GET') {
             $rules = [

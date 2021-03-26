@@ -2,7 +2,7 @@ import axios from "axios";
 import {
     CLEAR_USERS_SEARCH_QUERY,
     CLOSE_USERS_FORM,
-    GET_USERS, SET_USER_FORM_LOADING,
+    GET_USERS, SET_UPDATED_USER, SET_USER_FORM_LOADING,
     SET_USERS_LOADING,
     SET_USERS_SEARCH_QUERY,
     SHOW_USERS_FORM
@@ -64,6 +64,14 @@ export const updateUser = (id,data) => {
             .then(res => resolve(res.data))
             .catch(err => reject(err))
     })
+}
+
+// Merge updated user.
+export const setUpdateUser = (payload) => {
+    return {
+        type: SET_UPDATED_USER,
+        payload
+    }
 }
 
 // Set users loading
