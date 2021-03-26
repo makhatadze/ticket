@@ -21,6 +21,8 @@ const initialState = {
         name: '',
         username: '',
         active: '',
+        start_time: '',
+        end_time: '',
         sort: 'id',
         order: 'desc'
     },
@@ -137,6 +139,9 @@ function getSearchQueryParams(searchData) {
         id: searchData.id,
         name: searchData.name,
         active: searchData.active,
+        username: searchData.username,
+        start_time: searchData.start_time,
+        end_time: searchData.end_time,
         sort: searchData.sort,
         order: searchData.order
     }

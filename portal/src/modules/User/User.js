@@ -5,7 +5,7 @@ import {
     deleteUser,
     getUserById,
     getUsers,
-    setUserFormLoading,
+    setUserFormLoading, setUserSearchQuery, showUserFilter,
     showUserForm,
     showUserView
 } from "../../actions/user/userActions";
@@ -17,8 +17,8 @@ import {getRolePermissions} from "../../actions/role/roleActions";
 import UserForm from "./UserForm";
 import UserView from "./UserView";
 import Modal from "antd/es/modal/Modal";
-import {ExclamationCircleOutlined} from "@ant-design/icons";
 import {toast} from "react-toastify";
+import UserFilter from "./UserFilter";
 
 class User extends Component {
     constructor(props) {
@@ -106,27 +106,24 @@ class User extends Component {
     showDeleteUser(event, data) {
         event.preventDefault();
         this.setState({showDeleteConfirm: true, deleteUser: data})
-        console.log(this.state)
-
     }
 
     handleTableChange(pagination, filters, sorter) {
-        console.log('pagination')
-        // let data = {
-        //     current: pagination.current,
-        //     sort: 'id',
-        //     order: 'desc'
-        // }
-        // if (!isEmpty(sorter)) {
-        //     if (sorter.order) {
-        //         data = {
-        //             ...data,
-        //             sort: sorter.field,
-        //             order: (sorter.order === 'ascend') ? 'asc' : 'desc'
-        //         }
-        //     }
-        // }
-        // this.props.setIpRestrictionSearchQuery(data)
+        let data = {
+            current: pagination.current,
+            sort: 'id',
+            order: 'desc'
+        }
+        if (!isEmpty(sorter)) {
+            if (sorter.order) {
+                data = {
+                    ...data,
+                    sort: sorter.field,
+                    order: (sorter.order === 'ascend') ? 'asc' : 'desc'
+                }
+            }
+        }
+        this.props.setUserSearchQuery(data)
 
     }
 
@@ -166,8 +163,8 @@ class User extends Component {
                 <div className="row mb-4 action-container">
                     <div className="col-sm-6 col-lg-8 action-column-left">
                         <Button type="primary" onClick={() => this.showUserForm()}>Create User</Button>
-                        {/*<Button className="ml-2" type="primary"*/}
-                        {/*        onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>*/}
+                        <Button className="ml-2" type="primary"
+                                onClick={() => this.props.showUserFilter()}>Filter</Button>
                     </div>
                     <div className="col-6 col-lg-4 action-column-right">
                         <Button type="primary"
@@ -184,6 +181,7 @@ class User extends Component {
                 />
                 <UserForm/>
                 <UserView/>
+                <UserFilter />
                 <Modal
                     title="Delete user"
                     maskClosable={false}
@@ -207,7 +205,9 @@ User.propTypes = {
     getUsers: Proptypes.func.isRequired,
     showUserForm: Proptypes.func.isRequired,
     setUserFormLoading: Proptypes.func.isRequired,
-    showUserView: Proptypes.func.isRequired
+    showUserView: Proptypes.func.isRequired,
+    setUserSearchQuery: Proptypes.func.isRequired,
+    showUserFilter: Proptypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -218,5 +218,7 @@ export default connect(mapStateToProps, {
     getUsers,
     showUserForm,
     setUserFormLoading,
-    showUserView
+    showUserView,
+    setUserSearchQuery,
+    showUserFilter
 })(User);

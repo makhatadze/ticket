@@ -1,10 +1,10 @@
 import axios from "axios";
 import {
-    CLEAR_USERS_SEARCH_QUERY,
+    CLEAR_USERS_SEARCH_QUERY, CLOSE_USERS_FILTER,
     CLOSE_USERS_FORM, CLOSE_USERS_VIEW,
     GET_USERS, SET_UPDATED_USER, SET_USER_FORM_LOADING,
     SET_USERS_LOADING,
-    SET_USERS_SEARCH_QUERY,
+    SET_USERS_SEARCH_QUERY, SHOW_USERS_FILTER,
     SHOW_USERS_FORM, SHOW_USERS_VIEW
 } from "./userTypes";
 
@@ -125,6 +125,20 @@ export const showUserView = (payload) => {
 export const closeUserView = () => {
     return {
         type: CLOSE_USERS_VIEW
+    }
+}
+
+// Show user filter modal
+export const showUserFilter = () => {
+    return {
+        type: SHOW_USERS_FILTER,
+    }
+}
+
+// Close user filter modal
+export const closeUserFilter = () => {
+    return {
+        type: CLOSE_USERS_FILTER
     }
 }
 
