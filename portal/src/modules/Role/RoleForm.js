@@ -63,7 +63,6 @@ class RoleForm extends Component {
             await this.props.createRole(data)
                 .then(res => {
                     toast.success(`${res.data.name} - Created`);
-                    this.setState({loading: false})
                     this.closeRoleForm()
                 })
                 .catch(err => {

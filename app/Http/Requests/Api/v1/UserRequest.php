@@ -49,6 +49,7 @@ class UserRequest extends FormRequest
         $rules = [
             'name' => 'required|string|max:255',
             'username' => ['required','string','max:255',Rule::unique('users', 'username')->ignore($this->user)],
+            'active' => 'required|boolean',
             'role' => 'nullable|integer|exists:roles,id',
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,id|hasConnRole',

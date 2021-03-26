@@ -1,7 +1,7 @@
 import {
     CLEAR_USERS_SEARCH_QUERY, CLOSE_USERS_FILTER, CLOSE_USERS_FORM, CLOSE_USERS_VIEW,
     GET_USERS,
-    SET_UPDATED_USER,
+    SET_UPDATED_USER, SET_USER_FORM_LOADING,
     SET_USERS_LOADING, SET_USERS_SEARCH_QUERY, SHOW_USERS_FILTER,
     SHOW_USERS_FORM, SHOW_USERS_VIEW
 } from "../../actions/user/userTypes";
@@ -10,7 +10,6 @@ import * as queryString from "querystring";
 
 const initialState = {
     data: [],
-    roles: [],
     searchParams: {
         loading: false,
         count: null,
@@ -28,11 +27,12 @@ const initialState = {
     searchQuery: '',
     showUserForm : {
         show: false,
-        modalUser: {}
+        modalUser: {},
+        loading: false
     },
     showUserView: {
         show: false,
-        modalUser: {}
+        modalUser: {},
     },
     showUserFilter: false
 }
@@ -51,7 +51,6 @@ export default function (state = initialState,action) {
             return {
                 ...state,
                 data: action.payload.data,
-                roles: action.payload.roles,
                 searchParams: {
                     ...state.searchParams,
                     ...action.payload.pagination,
@@ -73,7 +72,8 @@ export default function (state = initialState,action) {
                 ...state,
                 showUserForm: {
                     show: true,
-                    modalUser: action.payload
+                    modalUser: action.payload,
+                    loading: false
                 }
             }
         case CLOSE_USERS_FORM:
@@ -115,6 +115,14 @@ export default function (state = initialState,action) {
             return {
                 ...state,
                 showUserFilter: false
+            }
+        case SET_USER_FORM_LOADING:
+            return {
+                ...state,
+                showUserForm: {
+                    ...state.showUserForm,
+                    loading: true
+                }
             }
         default:
             return state;

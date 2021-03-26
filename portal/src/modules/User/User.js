@@ -1,10 +1,13 @@
 import React, {Component} from "react";
 import * as Proptypes from "prop-types";
 import {connect} from "react-redux";
-import {getUsers, showUserForm} from "../../actions/user/userActions";
+import {getUserById, getUsers, setUserFormLoading, showUserForm} from "../../actions/user/userActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import './User.scss';
+import isEmpty from "../../core/validation/is-empty";
+import {getRolePermissions} from "../../actions/role/roleActions";
+import UserForm from "./UserForm";
 
 class User extends Component {
     constructor(props) {
@@ -12,6 +15,7 @@ class User extends Component {
         this.handleTableChange = this.handleTableChange.bind(this);
         this.editUser = this.editUser.bind(this);
         this.showUser = this.showUser.bind(this);
+        this.showUserForm = this.showUserForm.bind(this);
         this.columns = [
             {
                 title: 'ID',
@@ -64,6 +68,7 @@ class User extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.users.searchQuery !== this.props.users.searchQuery) {
+            console.log(123456)
             this.props.getUsers()
         }
     }
@@ -99,13 +104,24 @@ class User extends Component {
 
     }
 
+    async showUserForm (data = {}) {
+        this.props.setUserFormLoading();
+        if(isEmpty(data)) {
+            await getRolePermissions()
+                .then(res => {
+                    this.props.showUserForm({roles: res.data})
+                })
+                .catch(err => console.log(err))
+        }
+    }
+
     render() {
         const {data, searchParams} = this.props.users;
         return (
             <div className="users">
                 <div className="row mb-4 action-container">
                     <div className="col-sm-6 col-lg-8 action-column-left">
-                        <Button type="primary" onClick={() => this.props.showUserForm()}>Create User</Button>
+                        <Button type="primary" onClick={() => this.showUserForm()}>Create User</Button>
                         {/*<Button className="ml-2" type="primary"*/}
                         {/*        onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>*/}
                     </div>
@@ -122,6 +138,7 @@ class User extends Component {
                     loading={searchParams.loading}
                     onChange={this.handleTableChange}
                 />
+                <UserForm />
             </div>
         )
     }
@@ -130,6 +147,7 @@ class User extends Component {
 User.propTypes = {
     getUsers: Proptypes.func.isRequired,
     showUserForm: Proptypes.func.isRequired,
+    setUserFormLoading: Proptypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -139,4 +157,5 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     getUsers,
     showUserForm,
+    setUserFormLoading
 })(User);

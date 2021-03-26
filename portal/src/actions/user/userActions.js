@@ -2,7 +2,7 @@ import axios from "axios";
 import {
     CLEAR_USERS_SEARCH_QUERY,
     CLOSE_USERS_FORM,
-    GET_USERS,
+    GET_USERS, SET_USER_FORM_LOADING,
     SET_USERS_LOADING,
     SET_USERS_SEARCH_QUERY,
     SHOW_USERS_FORM
@@ -32,10 +32,10 @@ export const getUsers = () => (dispatch, getState) => {
 }
 
 // Get user by ip.
-export const getUserById = (id) => {
+export const getUserById = (id,query = '') => {
     return new Promise(async (resolve, reject) => {
         axios
-            .get(`${url}/user/${id}`)
+            .get(`${url}/user/${id}${query}`)
             .then((res) => resolve(res.data))
             .catch(err => reject(err))
     })
@@ -46,9 +46,9 @@ export const createUser = data => (dispatch,getState) => {
     const {searchQuery} = getState().users;
     return new Promise(async (resolve, reject) => {
         axios
-            .post(`${url}/ip-restriction`,data)
+            .post(`${url}/user`,data)
             .then(res => {
-                searchQuery === '' ? getUsers() : dispatch(clearUserSearchQuery())
+                searchQuery === '' ? dispatch(getUsers()) : dispatch(clearUserSearchQuery())
                 resolve(res.data)
             })
             .catch(err => {
@@ -100,5 +100,12 @@ export const setUserSearchQuery = (payload = {}) => {
     return {
         type: SET_USERS_SEARCH_QUERY,
         payload
+    }
+}
+
+// Set User Form loading
+export const setUserFormLoading = () => {
+    return {
+        type: SET_USER_FORM_LOADING,
     }
 }
