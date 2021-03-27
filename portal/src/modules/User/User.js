@@ -19,6 +19,7 @@ import UserView from "./UserView";
 import Modal from "antd/es/modal/Modal";
 import {toast} from "react-toastify";
 import UserFilter from "./UserFilter";
+import Export from "../../components/Export/Export";
 
 class User extends Component {
     constructor(props) {
@@ -29,10 +30,42 @@ class User extends Component {
         this.showUserForm = this.showUserForm.bind(this);
         this.showDeleteUser = this.showDeleteUser.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+        this.onExportKeyChange = this.onExportKeyChange.bind(this);
         this.state = {
             showDeleteConfirm: false,
             deleteUser: {},
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            exportKeys : [
+                {
+                    key: 'id',
+                    checked: true
+                },
+                {
+                    key: 'name',
+                    checked: true
+                },
+                {
+                    key: 'username',
+                    checked: true
+                },
+                {
+                    key: 'created_at',
+                    checked: true
+                },
+                {
+                    key: 'created_by',
+                    checked: true
+                },
+                {
+                    key: 'updated_at',
+                    checked: true
+                },
+                {
+                    key: 'updated_by',
+                    checked: true
+                }
+
+            ]
         }
         this.columns = [
             {
@@ -143,6 +176,12 @@ class User extends Component {
         this.showUserForm(data)
     }
 
+    onExportKeyChange(value,event) {
+        this.setState({
+            exportKeys: this.state.exportKeys.map(el => el.key === event.target.name ? {key: el.key, checked: !el.checked} : el)
+        })
+    }
+
     async showUserForm(data = {}) {
         this.props.setUserFormLoading();
         if (isEmpty(data)) {
@@ -157,6 +196,8 @@ class User extends Component {
                 .catch(err => console.log(err))
         }
     }
+
+
 
     render() {
         const {data, searchParams} = this.props.users;
@@ -191,6 +232,14 @@ class User extends Component {
                 <UserForm/>
                 <UserView/>
                 <UserFilter />
+                <Export
+                    title='Users Export'
+                    show={true}
+                    exportKeys={this.state.exportKeys}
+                    onSubmit={() => console.log('Submit')}
+                    onCancel={() => console.log('Cancel')}
+                    onChange={this.onExportKeyChange}
+                />
                 <Modal
                     title="Delete user"
                     maskClosable={false}
