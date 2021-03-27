@@ -27,19 +27,4 @@ class IpRestrictionRepository extends BaseRepository implements IpRestrictionRep
         parent::__construct($model);
     }
 
-    /**
-     * @param IpRestrictionRequest $request
-     *
-     * @return IpRestrictionCollection
-     */
-    public function getData(IpRestrictionRequest $request): IpRestrictionCollection
-    {
-        $sortParams = $request->only('sort','order');
-	
-        $data =  (!empty($sortParams)) ? $this->model->sorted($sortParams) : $this->model->query();
-	
-        $data = $data->paginate(3);
-	
-	return new IpRestrictionCollection($data);
-    }
 }

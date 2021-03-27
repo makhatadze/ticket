@@ -9,6 +9,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\Api\v1\IpRestrictionRequest;
 use App\Traits\CustomBleableTrait;
 use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -49,4 +50,40 @@ class IpRestriction extends Model
         'ip',
         'status'
     ];
+
+    /**
+     * @param IpRestrictionRequest $request
+     * @return array
+     */
+    public function getActiveFilters(IpRestrictionRequest $request): array
+    {
+        $activeFilters = [];
+        foreach ($this->getFilterScopes() as $key => $value) {
+            if ($request->filled($key)) {
+                $activeFilters [$key] = $request->{$key};
+            }
+        }
+        return $activeFilters;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getFilterScopes(): array
+    {
+        return [
+            'id' => [
+                'hasParam' => true,
+                'scopeMethod' => 'id'
+            ],
+            'name' => [
+                'hasParam' => true,
+                'scopeMethod' => 'name'
+            ],
+            'ip' => [
+                'hasParam' => true,
+                'scopeMethod' => 'ip'
+            ],
+        ];
+    }
 }

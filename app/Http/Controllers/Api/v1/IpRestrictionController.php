@@ -55,7 +55,7 @@ class IpRestrictionController extends Controller
      */
     public function index(IpRestrictionRequest $request): IpRestrictionCollection
     {
-        return $this->ipRestrictionRepository->getData($request);
+        return new IpRestrictionCollection($this->ipRestrictionRepository->getData($request));
     }
 
     /**

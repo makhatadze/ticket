@@ -18,7 +18,6 @@ interface IpRestrictionRepositoryInterface
     /**
      * @param IpRestrictionRequest $request
      *
-     * @return IpRestrictionCollection
      */
-    public function getData(IpRestrictionRequest $request): IpRestrictionCollection;
+    public function getData(IpRestrictionRequest $request);
 }

@@ -60,9 +60,9 @@ trait ScopeFilter
      * @param $ipAddress
      * @return mixed
      */
-    public function scopeIpAddress($query, $ipAddress)
+    public function scopeIp($query, $ip)
     {
-        return $query->where('ip-address', 'like', '%' . $ipAddress . '%');
+        return $query->where('ip', 'like', '%' . $ip . '%');
 
     }
 

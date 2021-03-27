@@ -28,10 +28,6 @@ interface EloquentRepositoryInterface
      */
     public function all(array $columns): ?Collection;
 
-    /**
-     * @param Request $request
-     */
-    public function getData(Request $request);
 
     /**
      * @param int $perPage

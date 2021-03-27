@@ -52,10 +52,10 @@ class BaseRepository implements EloquentRepositoryInterface
 
     /** Get Data with pagination
      *
-     * @param Request $request
+     * @param $request
      * @return mixed
      */
-    public function getData(Request $request) {
+    public function getData($request) {
         $data = $this->model->query();
 
         $filterScopes = $this->model->getFilterScopes();
