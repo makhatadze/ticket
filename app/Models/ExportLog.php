@@ -52,6 +52,7 @@ class ExportLog extends Model
     public const EXPORT_FILTER = 2;
     public const EXPORT_IDS = 3;
     public const EXPORT_USER = 1;
+    public const EXPORT_IP_RESTRICTION = 2;
 
     /**
      * Get the export log's file.

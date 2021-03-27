@@ -7,6 +7,7 @@ import {
 } from "./exportTypes";
 import axios from "axios";
 import {toast} from "react-toastify";
+import generateTitle from "../../core/generate/generateTitle";
 const url = process.env.MIX_SERVER_API_URL;
 const fileDownload = require('js-file-download');
 
@@ -24,8 +25,8 @@ export const exportData = (keys) => (dispatch, getState) => {
         .post(`${url}/${module}/export${searchQuery}`, data,{ responseType: 'blob'})
         .then(res => {
             dispatch(exportLoadingFalse())
-            fileDownload(res.data,'users.xlsx')
-            toast.success(`Download Successfully`)
+            fileDownload(res.data,`${module}.xlsx`)
+            toast.success(`${generateTitle(module)} - Download Successfully`)
         })
         .catch(err => {
             dispatch(exportLoadingFalse())

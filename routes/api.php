@@ -29,6 +29,7 @@ Route::middleware('ipMiddleware')->group(function () {
 
             // IpRestriction
             Route::post('ip-restriction/{ipRestriction}/restore',[IpRestrictionController::class,'restore']);
+            Route::post('ip-restriction/export',[IpRestrictionController::class,'exportToExcel'])->middleware('can:ipRestrictionExport');
             Route::apiResource('ip-restriction', IpRestrictionController::class);
         });
 

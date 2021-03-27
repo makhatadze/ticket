@@ -100,6 +100,21 @@ class IpRestrictionPolicy
      * Determine whether the user can restore the model.
      *
      * @param User $user
+     * @return mixed
+     * @throws PermissionException
+     */
+    public function ipRestrictionExport(User $user)
+    {
+        if(!$user->hasPermission('export_ip')) {
+            throw new PermissionException();
+        }
+        return true;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     *
+     * @param User $user
      * @param User $model
      *
      * @return mixed

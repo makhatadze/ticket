@@ -14,23 +14,39 @@ use App\Exceptions\DeleteException;
 use App\Exceptions\RestoreException;
 use App\Exceptions\TrashException;
 use App\Exceptions\ValidationException;
+use App\Exports\IpRestrictionExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\IpRestrictionRequest;
 use App\Http\Resources\Api\v1\IpRestrictionCollection;
 use App\Http\Resources\Api\v1\IpRestrictionResource;
+use App\Models\ExportLog;
+use App\Models\File;
 use App\Policies\IpRestrictionPolicy;
+use App\Repositories\ExportLogRepositoryInterface;
 use App\Repositories\IpRestrictionRepositoryInterface;
+use Carbon\Carbon;
 use http\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class IpRestrictionController extends Controller
 {
+    /**
+     * @var ExportLogRepositoryInterface
+     */
+    private $exportLogRepository;
+    /**
+     * @var IpRestrictionRepositoryInterface
+     */
     private $ipRestrictionRepository;
 
-    public function __construct(IpRestrictionRepositoryInterface $ipRestrictionRepository)
+    public function __construct(IpRestrictionRepositoryInterface $ipRestrictionRepository,ExportLogRepositoryInterface  $exportLogRepository)
     {
         $this->ipRestrictionRepository = $ipRestrictionRepository;
+        $this->exportLogRepository = $exportLogRepository;
 
         $this->authorizeResource(IpRestrictionPolicy::class);
     }
@@ -129,5 +145,40 @@ class IpRestrictionController extends Controller
     public function restore(int $id): IpRestrictionResource
     {
         return new IpRestrictionResource($this->ipRestrictionRepository->restore($id));
+    }
+
+    /**
+     * @param Request $request
+     * @return BinaryFileResponse
+     */
+    public function exportToExcel(Request $request)
+    {
+        if ($request->filled('type')) {
+            $userExport = (new IpRestrictionExport())
+                ->setKeys($request['keys'])
+                ->setIpRestrictionIps($request['ids'])
+                ->setType(intval($request['type']))
+                ->setRequest($request);
+            $extension = 'xlsx';
+            $fileName = Carbon::now()->timestamp . '-ip-restriction.' . $extension;
+            $path = '/export/' . Carbon::now()->format('Y/m/d') . '/' . $fileName;
+            $filePath = '/public'.$path;
+            Excel::store($userExport,  $filePath);
+
+            $exportLogModel = $this->exportLogRepository->create([
+                'type' => ExportLog::EXPORT_IP_RESTRICTION
+            ]);
+
+            $exportLogModel->file()->create([
+                'name' => $fileName,
+                'path' => $path,
+                'format' => $extension,
+                'type' => File::DEFAULT,
+            ]);
+
+            $fullPath = Storage::disk('local')->path($filePath);
+
+            return response()->download($fullPath);
+        }
     }
 }
