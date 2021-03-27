@@ -17,6 +17,7 @@ use App\Exceptions\UpdateException;
 use App\Exceptions\ValidationException;
 use App\Models\IpRestriction;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
@@ -47,6 +48,46 @@ class BaseRepository implements EloquentRepositoryInterface
     public function all($columns = ["*"]): Collection
     {
         return $this->model->get($columns);
+    }
+
+    /** Get Data with pagination
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function getData(Request $request) {
+        $data = $this->model->query();
+
+        $filterScopes = $this->model->getFilterScopes();
+        $activeFilters = $this->model->getActiveFilters($request);
+
+        foreach ($activeFilters as $filter => $value) {
+            if (!array_key_exists($filter, $filterScopes)) {
+                continue;
+            }
+            $filterScopeData = $filterScopes[$filter];
+
+            if (false === $filterScopeData['hasParam']) {
+                $data->{$value}();
+                continue;
+            }
+            $methodToExecute = $filterScopeData['scopeMethod'];
+            $data->{$methodToExecute}($value);
+        }
+
+        $sortParams = ['sort' => 'id','order' => 'desc'];
+
+        if ($request->filled('sort') && $request->filled('order')) {
+            $sortParams = $request->only('sort','order');
+        }
+
+        $perPage = 10;
+
+        if ($request->filled('per_page')) {
+            $perPage = $request['per_page'];
+        }
+
+        return $data->sorted($sortParams)->paginate($perPage);
     }
 
     /**

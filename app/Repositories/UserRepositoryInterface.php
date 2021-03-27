@@ -18,10 +18,8 @@ interface UserRepositoryInterface
 {
     /**
      * @param UserRequest $request
-     *
-     * @return UserCollection
      */
-    public function getData(UserRequest $request): UserCollection;
+    public function getData(UserRequest $request);
 
     /**
      * Create new model

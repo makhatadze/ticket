@@ -51,7 +51,7 @@ class UserController extends Controller
      */
     public function index(UserRequest $request): UserCollection
     {
-        return $this->userRepository->getData($request);
+        return new UserCollection($this->userRepository->getData($request));
     }
 
     /**

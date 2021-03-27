@@ -29,48 +29,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         parent::__construct($model);
     }
 
-    /**
-     * @param UserRequest $request
-     *
-     * @return UserCollection
-     */
-    public function getData(UserRequest $request): UserCollection
-    {
-        $data = $this->model->query();
-
-        $filterScopes = $this->model->getFilterScopes();
-        $activeFilters = $this->model->getActiveFilters($request);
-
-        foreach ($activeFilters as $filter => $value) {
-            if (!array_key_exists($filter, $filterScopes)) {
-                continue;
-            }
-            $filterScopeData = $filterScopes[$filter];
-
-            if (false === $filterScopeData['hasParam']) {
-                $data->{$value}();
-                continue;
-            }
-            $methodToExecute = $filterScopeData['scopeMethod'];
-            $data->{$methodToExecute}($value);
-        }
-
-        $sortParams = ['sort' => 'id','order' => 'desc'];
-
-        if ($request->filled('sort') && $request->filled('order')) {
-            $sortParams = $request->only('sort','order');
-        }
-
-        $perPage = 10;
-
-        if ($request->filled('per_page')) {
-            $perPage = $request['per_page'];
-        }
-
-        $data = $data->sorted($sortParams)->paginate($perPage);
-
-        return new UserCollection($data);
-    }
 
     /**
      * Create new user

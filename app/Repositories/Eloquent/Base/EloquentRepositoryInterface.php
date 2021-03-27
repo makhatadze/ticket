@@ -10,6 +10,7 @@
 namespace App\Repositories\Eloquent\Base;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
@@ -26,6 +27,11 @@ interface EloquentRepositoryInterface
      * @return Collection
      */
     public function all(array $columns): ?Collection;
+
+    /**
+     * @param Request $request
+     */
+    public function getData(Request $request);
 
     /**
      * @param int $perPage
