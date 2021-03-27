@@ -53,6 +53,10 @@ class User extends Component {
                     checked: true
                 },
                 {
+                    key: 'active',
+                    checked: true
+                },
+                {
                     key: 'created_at',
                     checked: true
                 },
@@ -202,8 +206,9 @@ class User extends Component {
     }
 
     showExportModal(type = EXPORT_ALL) {
+
         let payload = {
-            title: 'Export Users - FILTER',
+            title: `Export Users - `,
             show: false,
             module: 'user',
             type: type,

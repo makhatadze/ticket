@@ -77,21 +77,6 @@ class Role extends Model
     }
 
     /**
-     * @param RoleRequest $request
-     * @return array
-     */
-    public function getActiveFilters(RoleRequest $request): array
-    {
-        $activeFilters = [];
-        foreach ($this->getFilterScopes() as $key => $value) {
-            if ($request->filled($key)) {
-                $activeFilters [$key] = $request->{$key};
-            }
-        }
-        return $activeFilters;
-    }
-
-    /**
      * @return array[]
      */
     public function getFilterScopes(): array

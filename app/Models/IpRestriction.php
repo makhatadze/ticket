@@ -15,6 +15,7 @@ use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class IpRestriction
@@ -50,21 +51,6 @@ class IpRestriction extends Model
         'ip',
         'status'
     ];
-
-    /**
-     * @param IpRestrictionRequest $request
-     * @return array
-     */
-    public function getActiveFilters(IpRestrictionRequest $request): array
-    {
-        $activeFilters = [];
-        foreach ($this->getFilterScopes() as $key => $value) {
-            if ($request->filled($key)) {
-                $activeFilters [$key] = $request->{$key};
-            }
-        }
-        return $activeFilters;
-    }
 
     /**
      * @return array[]

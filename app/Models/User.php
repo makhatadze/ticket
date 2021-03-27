@@ -11,6 +11,7 @@ namespace App\Models;
 use App\Http\Requests\Api\v1\UserRequest;
 use App\Traits\HasRolesAndPermissions;
 use App\Traits\ScopeFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -78,20 +79,6 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * @param UserRequest $request
-     * @return array
-     */
-    public function getActiveFilters(UserRequest $request): array
-    {
-        $activeFilters = [];
-        foreach ($this->getFilterScopes() as $key => $value) {
-            if ($request->filled($key)) {
-                $activeFilters [$key] = $request->{$key};
-            }
-        }
-        return $activeFilters;
-    }
 
     /**
      * @return array[]

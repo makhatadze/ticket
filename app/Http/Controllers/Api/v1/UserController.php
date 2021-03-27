@@ -6,6 +6,7 @@
  * Time: 11:58
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Exceptions\DeleteException;
@@ -17,7 +18,10 @@ use App\Http\Resources\Api\v1\RoleResource;
 use App\Http\Resources\Api\v1\UserCollection;
 use App\Http\Resources\Api\v1\UserResource;
 use App\Http\Resources\Api\v1\UserRolePermissionsResource;
+use App\Models\ExportLog;
+use App\Models\File;
 use App\Models\User;
+use App\Repositories\ExportLogRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -29,11 +33,19 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
+    /**
+     * @var UserRepositoryInterface
+     */
     private $userRepository;
+    /**
+     * @var ExportLogRepositoryInterface
+     */
+    private $exportLogRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository, ExportLogRepositoryInterface $exportLogRepository)
     {
         $this->userRepository = $userRepository;
+        $this->exportLogRepository = $exportLogRepository;
 
         $this->authorizeResource(User::class);
     }
@@ -81,7 +93,7 @@ class UserController extends Controller
      * @return UserRolePermissionsResource
      * @throws ValidationException
      */
-    public function show(UserRequest $request,int $id)
+    public function show(UserRequest $request, int $id)
     {
         $data = $this->userRepository->findOrFail($id);
         if ($request['roles-permissions']) {
@@ -133,33 +145,36 @@ class UserController extends Controller
      * @param Request $request
      * @return BinaryFileResponse
      */
-    public function exportToExcel(Request $request): BinaryFileResponse
+    public function exportToExcel(Request $request)
     {
-
         if ($request->filled('type')) {
-            switch ($request['type']){
-                case self::EXPORT_ALL:
-                    $userExport = (new UsersExport())->setKeys($request['keys']);
-                    $filename = Carbon::now()->format('Ymdhms').'-users.xlsx';
-                    Excel::store($userExport,$filename);
+            $userExport = (new UsersExport())
+                ->setKeys($request['keys'])
+                ->setUserIds($request['ids'])
+                ->setType(intval($request['type']))
+                ->setRequest($request);
+            $extension = 'xlsx';
+            $fileName = Carbon::now()->timestamp . '-users.' . $extension;
+            $path = '/export/' . Carbon::now()->format('Y/m/d') . '/' . $fileName;
+            $filePath = '/public'.$path;
+            Excel::store($userExport,  $filePath);
 
-                    $fullPath = Storage::disk('local')->path($filename);
+            $exportLogModel = $this->exportLogRepository->create([
+                'type' => ExportLog::EXPORT_USER
+            ]);
 
-                    return response()->download($fullPath);
+            $exportLogModel->file()->create([
+                'name' => $fileName,
+                'path' => $path,
+                'format' => $extension,
+                'type' => File::DEFAULT,
+            ]);
 
-                case self::EXPORT_FILTER:
-                case self::EXPORT_IDS:
-                default:
+            $fullPath = Storage::disk('local')->path($filePath);
 
-            }
-        };
-//        if ( false === $this->checkTicketIds($ticketIds) ) {
-//            return redirect('/')->with('danger', 'Provide Correct ticket Ids!');
-//        }
-//
-//        $ticketExport = (new TicketsExport)->setIds($ticketIds)->download();
-//
-//        return $ticketExport;
+            return response()->download($fullPath);
+        }
     }
+
 
 }

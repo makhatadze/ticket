@@ -13,6 +13,7 @@ use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
@@ -38,7 +39,7 @@ class ExportLog extends Model
      *
      * @var string
      */
-    protected $table = 'roles';
+    protected $table = 'export_logs';
 
     /**
      * The attributes that are mass assignable.
@@ -46,4 +47,17 @@ class ExportLog extends Model
      * @var array
      */
     protected $fillable = ['type'];
+
+    public const EXPORT_ALL = 1;
+    public const EXPORT_FILTER = 2;
+    public const EXPORT_IDS = 3;
+    public const EXPORT_USER = 1;
+
+    /**
+     * Get the export log's file.
+     */
+    public function file(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
 }

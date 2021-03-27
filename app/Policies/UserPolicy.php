@@ -98,6 +98,20 @@ class UserPolicy
      * Determine whether the user can restore the model.
      *
      * @param User  $user
+     * @return mixed
+     */
+    public function userExport(User $user)
+    {
+        if(!$user->hasPermission('export_user')) {
+            throw new PermissionException();
+        }
+        return true;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     *
+     * @param User  $user
      * @param User  $model
      * @return mixed
      */

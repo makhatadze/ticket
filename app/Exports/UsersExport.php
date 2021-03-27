@@ -9,7 +9,9 @@
 
 namespace App\Exports;
 
+use App\Models\ExportLog;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -48,6 +50,15 @@ class UsersExport implements
     private $writerType = Excel::CSV;
 
     /**
+     * @var integer
+     */
+    private $type;
+
+    /**
+     * @var Request
+     */
+    private $request;
+    /**
      * Optional headers
      */
     private $headers = [
@@ -59,7 +70,17 @@ class UsersExport implements
      */
     public function query()
     {
-        return User::query();
+        $users = User::query();
+        switch ($this->getType()){
+            case ExportLog::EXPORT_ALL:
+                return $users;
+            case ExportLog::EXPORT_FILTER:
+                return (new User())->filter($this->getRequest());
+            case ExportLog::EXPORT_IDS:
+                return $users->WhereIn('id',$this->getUserIds());
+            default:
+                return false;
+        }
     }
 
     /**
@@ -151,6 +172,41 @@ class UsersExport implements
     public function setUserIds(array $userIds): UsersExport
     {
         $this->userIds = $userIds;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType(int $type): UsersExport
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param Request $request
+     * @return UsersExport
+     */
+    public function setRequest(Request $request): UsersExport
+    {
+        $this->request = $request;
         return $this;
     }
 

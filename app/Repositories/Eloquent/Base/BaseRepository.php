@@ -56,30 +56,7 @@ class BaseRepository implements EloquentRepositoryInterface
      * @return mixed
      */
     public function getData($request) {
-        $data = $this->model->query();
-
-        $filterScopes = $this->model->getFilterScopes();
-        $activeFilters = $this->model->getActiveFilters($request);
-
-        foreach ($activeFilters as $filter => $value) {
-            if (!array_key_exists($filter, $filterScopes)) {
-                continue;
-            }
-            $filterScopeData = $filterScopes[$filter];
-
-            if (false === $filterScopeData['hasParam']) {
-                $data->{$value}();
-                continue;
-            }
-            $methodToExecute = $filterScopeData['scopeMethod'];
-            $data->{$methodToExecute}($value);
-        }
-
-        $sortParams = ['sort' => 'id','order' => 'desc'];
-
-        if ($request->filled('sort') && $request->filled('order')) {
-            $sortParams = $request->only('sort','order');
-        }
+        $data = $this->model->filter($request);
 
         $perPage = 10;
 
@@ -87,7 +64,7 @@ class BaseRepository implements EloquentRepositoryInterface
             $perPage = $request['per_page'];
         }
 
-        return $data->sorted($sortParams)->paginate($perPage);
+        return $data->paginate($perPage);
     }
 
     /**

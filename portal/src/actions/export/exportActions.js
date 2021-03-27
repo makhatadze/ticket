@@ -24,7 +24,7 @@ export const exportData = (keys) => (dispatch, getState) => {
         .post(`${url}/${module}/export${searchQuery}`, data,{ responseType: 'blob'})
         .then(res => {
             dispatch(exportLoadingFalse())
-            fileDownload(res.data,'test.xlsx')
+            fileDownload(res.data,'users.xlsx')
             toast.success(`Download Successfully`)
         })
         .catch(err => {
