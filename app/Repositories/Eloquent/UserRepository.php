@@ -55,7 +55,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             $data->{$methodToExecute}($value);
         }
 
-        $data = $data->paginate(3);
+        $sortParams = ['sort' => 'id','order' => 'desc'];
+
+        if ($request->filled('sort') && $request->filled('order')) {
+            $sortParams = $request->only('sort','order');
+        }
+
+        $perPage = 10;
+
+        if ($request->filled('per_page')) {
+            $perPage = $request['per_page'];
+        }
+
+        $data = $data->sorted($sortParams)->paginate($perPage);
+
         return new UserCollection($data);
     }
 

@@ -10,6 +10,7 @@
 namespace App\Models;
 
 use App\Traits\CustomBleableTrait;
+use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
@@ -30,7 +31,7 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  */
 class IpRestriction extends Model
 {
-    use softDeletes, BlameableTrait, CustomBleableTrait;
+    use softDeletes, BlameableTrait, CustomBleableTrait, ScopeFilter;
 
     /**
      * The table associated with the model.
@@ -48,9 +49,4 @@ class IpRestriction extends Model
         'ip',
         'status'
     ];
-    
-    public function scopeSorted($query,array $sortParams)
-    {
-	return $query->orderBy($sortParams['sort'],$sortParams['order']);
-    }
 }

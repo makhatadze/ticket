@@ -17,6 +17,16 @@ trait ScopeFilter
 {
     /**
      * @param $query
+     * @param array $sortParams
+     * @return mixed
+     */
+    public function scopeSorted($query, array $sortParams)
+    {
+        return $query->orderBy($sortParams['sort'], $sortParams['order']);
+    }
+
+    /**
+     * @param $query
      * @param $id
      * @return mixed
      */
@@ -50,7 +60,8 @@ trait ScopeFilter
      * @param $ipAddress
      * @return mixed
      */
-    public function scopeIpAddress($query, $ipAddress) {
+    public function scopeIpAddress($query, $ipAddress)
+    {
         return $query->where('ip-address', 'like', '%' . $ipAddress . '%');
 
     }
@@ -60,8 +71,9 @@ trait ScopeFilter
      * @param $status
      * @return mixed
      */
-    public function scopeStatus($query, $status) {
-        return $query->where('status',  $status);
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
     }
 
     /**
@@ -69,8 +81,9 @@ trait ScopeFilter
      * @param $active
      * @return mixed
      */
-    public function scopeActive($query, $active) {
-        return $query->where('active',  $active);
+    public function scopeActive($query, $active)
+    {
+        return $query->where('active', $active);
     }
 
     /**
@@ -78,7 +91,8 @@ trait ScopeFilter
      * @param $startTime
      * @return mixed
      */
-    public function scopeStartTime($query, $startTime) {
+    public function scopeStartTime($query, $startTime)
+    {
         return $query->where('created_at', '>=', $startTime);
     }
 
@@ -87,7 +101,8 @@ trait ScopeFilter
      * @param $endTime
      * @return mixed
      */
-    public function scopeEndTime($query, $endTime) {
+    public function scopeEndTime($query, $endTime)
+    {
         return $query->where('created_at', '<=', Carbon::parse($endTime)->addDay(1));
     }
 
