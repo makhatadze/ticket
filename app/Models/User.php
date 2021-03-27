@@ -8,7 +8,9 @@
  */
 namespace App\Models;
 
+use App\Http\Requests\Api\v1\UserRequest;
 use App\Traits\HasRolesAndPermissions;
+use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -35,7 +37,7 @@ class User extends Authenticatable implements JWTSubject
 {
     public const ACTIVE = true;
     public const NOT_ACTIVE = false;
-    use HasFactory, Notifiable,softDeletes, HasRolesAndPermissions;
+    use HasFactory, Notifiable,softDeletes, HasRolesAndPermissions, ScopeFilter;
 
     /**
      * The table associated with the model.
@@ -75,6 +77,54 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @param UserRequest $request
+     * @return array
+     */
+    public function getActiveFilters(UserRequest $request): array
+    {
+        $activeFilters = [];
+        foreach ($this->getFilterScopes() as $key => $value) {
+            if ($request->filled($key)) {
+                $activeFilters [$key] = $request->{$key};
+            }
+        }
+        return $activeFilters;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getFilterScopes(): array
+    {
+        return [
+            'id' => [
+                'hasParam' => true,
+                'scopeMethod' => 'id'
+            ],
+            'name' => [
+                'hasParam' => true,
+                'scopeMethod' => 'name'
+            ],
+            'username' => [
+                'hasParam' => true,
+                'scopeMethod' => 'username'
+            ],
+            'active' => [
+                'hasParam' => true,
+                'scopeMethod' => 'active'
+            ],
+            'start_time' => [
+                'hasParam' => true,
+                'scopeMethod' => 'startTime'
+            ],
+            'end_time' => [
+                'hasParam' => true,
+                'scopeMethod' => 'endTime'
+            ]
+        ];
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

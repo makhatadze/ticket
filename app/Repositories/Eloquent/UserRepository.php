@@ -38,6 +38,23 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $data = $this->model->query();
 
+        $filterScopes = $this->model->getFilterScopes();
+        $activeFilters = $this->model->getActiveFilters($request);
+
+        foreach ($activeFilters as $filter => $value) {
+            if (!array_key_exists($filter, $filterScopes)) {
+                continue;
+            }
+            $filterScopeData = $filterScopes[$filter];
+
+            if (false === $filterScopeData['hasParam']) {
+                $data->{$value}();
+                continue;
+            }
+            $methodToExecute = $filterScopeData['scopeMethod'];
+            $data->{$methodToExecute}($value);
+        }
+
         $data = $data->paginate(3);
         return new UserCollection($data);
     }
