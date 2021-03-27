@@ -56,7 +56,7 @@ class RoleController extends Controller
      */
     public function index(RoleRequest $request): RoleCollection
     {
-        return $this->roleRepository->getData($request);
+        return new RoleCollection($this->roleRepository->getData($request));
     }
 
     /**

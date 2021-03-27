@@ -9,7 +9,9 @@
 namespace App\Models;
 
 use App\Exceptions\DataNotFoundException;
+use App\Http\Requests\Api\v1\RoleRequest;
 use App\Traits\CustomBleableTrait;
+use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,7 +35,7 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  */
 class Role extends Model
 {
-    use BlameableTrait, softDeletes, CustomBleableTrait;
+    use BlameableTrait, softDeletes, CustomBleableTrait, ScopeFilter;
     /**
      * The table associated with the model.
      *
@@ -72,5 +74,37 @@ class Role extends Model
             throw new DataNotFoundException();
         }
         return $model->permissions()->where('id',$permissionId)->exists();
+    }
+
+    /**
+     * @param RoleRequest $request
+     * @return array
+     */
+    public function getActiveFilters(RoleRequest $request): array
+    {
+        $activeFilters = [];
+        foreach ($this->getFilterScopes() as $key => $value) {
+            if ($request->filled($key)) {
+                $activeFilters [$key] = $request->{$key};
+            }
+        }
+        return $activeFilters;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getFilterScopes(): array
+    {
+        return [
+            'id' => [
+                'hasParam' => true,
+                'scopeMethod' => 'id'
+            ],
+            'name' => [
+                'hasParam' => true,
+                'scopeMethod' => 'name'
+            ],
+        ];
     }
 }

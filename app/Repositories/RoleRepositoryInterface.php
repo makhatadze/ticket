@@ -18,9 +18,8 @@ interface RoleRepositoryInterface
     /**
      * @param RoleRequest $request
      *
-     * @return RoleCollection
      */
-    public function getData(RoleRequest $request): RoleCollection;
+    public function getData(RoleRequest $request);
 
     /**
      * Create new model
