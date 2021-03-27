@@ -20,6 +20,8 @@ import Modal from "antd/es/modal/Modal";
 import {toast} from "react-toastify";
 import UserFilter from "./UserFilter";
 import Export from "../../components/Export/Export";
+import {closeExportModal, exportData, showExportModal} from "../../actions/export/exportActions";
+import {EXPORT_ALL, EXPORT_FILTER, EXPORT_IDS} from "../../actions/export/exportTypes";
 
 class User extends Component {
     constructor(props) {
@@ -31,11 +33,13 @@ class User extends Component {
         this.showDeleteUser = this.showDeleteUser.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.onExportKeyChange = this.onExportKeyChange.bind(this);
+        this.showExportModal = this.showExportModal.bind(this);
+        this.exportSubmit = this.exportSubmit.bind(this);
         this.state = {
             showDeleteConfirm: false,
             deleteUser: {},
             selectedRowKeys: [],
-            exportKeys : [
+            exportKeys: [
                 {
                     key: 'id',
                     checked: true
@@ -176,9 +180,18 @@ class User extends Component {
         this.showUserForm(data)
     }
 
-    onExportKeyChange(value,event) {
+    exportSubmit () {
+        let keysArray = [];
+        this.state.exportKeys.forEach(el => el.checked ? keysArray.push(el.key) : '');
+        isEmpty(keysArray) ? toast.error('Keys are empty.') : this.props.exportData(keysArray)
+    }
+
+    onExportKeyChange(value, event) {
         this.setState({
-            exportKeys: this.state.exportKeys.map(el => el.key === event.target.name ? {key: el.key, checked: !el.checked} : el)
+            exportKeys: this.state.exportKeys.map(el => el.key === event.target.name ? {
+                key: el.key,
+                checked: !el.checked
+            } : el)
         })
     }
 
@@ -197,10 +210,20 @@ class User extends Component {
         }
     }
 
-
+    showExportModal(type = EXPORT_ALL) {
+        let payload = {
+            title: 'Export Users - FILTER',
+            show: false,
+            module: 'user',
+            type: type,
+            searchQuery: this.props.users.searchQuery,
+            ids: this.state.selectedRowKeys
+        }
+        this.props.showExportModal(type,payload)
+    }
 
     render() {
-        const {data, searchParams} = this.props.users;
+        const {data, searchParams,searchQuery} = this.props.users;
         return (
             <div className="users">
                 <div className="row mb-4 action-container">
@@ -208,10 +231,16 @@ class User extends Component {
                         <Button type="primary" onClick={() => this.showUserForm()}>Create User</Button>
                         <Button type="primary"
                                 onClick={() => this.props.showUserFilter()}>Filter</Button>
+                        {(!isEmpty(searchQuery) || !isEmpty(this.state.selectedRowKeys)) ? (
+                            <Button type="primary"
+                                    onClick={() => {isEmpty(this.state.selectedRowKeys) ?
+                                        this.showExportModal(EXPORT_FILTER) : this.showExportModal(EXPORT_IDS)}}>{isEmpty(this.state.selectedRowKeys)
+                                ? 'Export Filter' : 'Export Checked'}</Button>
+                        ): (
+                            ''
+                        )}
                         <Button type="primary"
-                                onClick={() => window.print()}>{isEmpty(this.state.selectedRowKeys) ? 'Export Filter' : 'Export Checked'}</Button>
-                        <Button type="primary"
-                                onClick={() => window.print()}>Export All</Button>
+                                onClick={() => this.showExportModal(EXPORT_ALL)}>Export All</Button>
                         <Button type="primary"
                                 onClick={() => window.print()}>Print</Button>
                     </div>
@@ -231,13 +260,14 @@ class User extends Component {
                 />
                 <UserForm/>
                 <UserView/>
-                <UserFilter />
+                <UserFilter/>
                 <Export
-                    title='Users Export'
-                    show={true}
+                    title={this.props.export.title}
+                    show={this.props.export.show}
                     exportKeys={this.state.exportKeys}
-                    onSubmit={() => console.log('Submit')}
-                    onCancel={() => console.log('Cancel')}
+                    loading={this.props.export.loading}
+                    onSubmit={this.exportSubmit}
+                    onCancel={this.props.closeExportModal}
                     onChange={this.onExportKeyChange}
                 />
                 <Modal
@@ -266,10 +296,14 @@ User.propTypes = {
     showUserView: Proptypes.func.isRequired,
     setUserSearchQuery: Proptypes.func.isRequired,
     showUserFilter: Proptypes.func.isRequired,
+    showExportModal: Proptypes.func.isRequired,
+    closeExportModal: Proptypes.func.isRequired,
+    exportData: Proptypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-    users: state.users
+    users: state.users,
+    export: state.export
 })
 
 export default connect(mapStateToProps, {
@@ -278,5 +312,8 @@ export default connect(mapStateToProps, {
     setUserFormLoading,
     showUserView,
     setUserSearchQuery,
-    showUserFilter
+    showUserFilter,
+    showExportModal,
+    closeExportModal,
+    exportData,
 })(User);

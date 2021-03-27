@@ -11,7 +11,8 @@ const Export = ({
                     exportKeys,
                     onSubmit,
                     onChange,
-                    onCancel
+                    onCancel,
+                    loading
                 }) => {
     const switchKeys = [];
     exportKeys.forEach((item, key) => {
@@ -39,7 +40,7 @@ const Export = ({
                 <Row gutter={24}>
                     {switchKeys}
                 </Row>
-                <Button type="primary" htmlType="submit"
+                <Button type="primary" htmlType="submit" loading={loading}
                         className="ant-btn ant-btn-success mt-2">
                     Export
                 </Button>
@@ -51,6 +52,7 @@ const Export = ({
 Export.propTypes = {
     title: PropTypes.string,
     show: PropTypes.bool,
+    loading: PropTypes.bool,
     exportKeys: PropTypes.array,
     onSubmit: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
