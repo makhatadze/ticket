@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import {toast} from "react-toastify";
 const url = process.env.MIX_SERVER_API_URL;
+const fileDownload = require('js-file-download');
 
 
 // Create new user
@@ -20,12 +21,13 @@ export const exportData = (keys) => (dispatch, getState) => {
         keys: keys
     }
     axios
-        .post(`${url}/${module}/export${searchQuery}`, data)
+        .post(`${url}/${module}/export${searchQuery}`, data,{ responseType: 'blob'})
         .then(res => {
             dispatch(exportLoadingFalse())
+            fileDownload(res.data,'test.xlsx')
+            toast.success(`Download Successfully`)
         })
         .catch(err => {
-            console.log(err.response)
             dispatch(exportLoadingFalse())
         })
 }

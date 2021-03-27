@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Exceptions\DeleteException;
 use App\Exceptions\ValidationException;
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\UserRequest;
 use App\Http\Resources\Api\v1\RoleResource;
@@ -18,7 +19,12 @@ use App\Http\Resources\Api\v1\UserResource;
 use App\Http\Resources\Api\v1\UserRolePermissionsResource;
 use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 
 class UserController extends Controller
@@ -124,9 +130,36 @@ class UserController extends Controller
     }
 
     /**
-     * @param UserRequest $request
+     * @param Request $request
+     * @return BinaryFileResponse
      */
-    public function exportToExcel(UserRequest $request) {
+    public function exportToExcel(Request $request): BinaryFileResponse
+    {
+
+        if ($request->filled('type')) {
+            switch ($request['type']){
+                case self::EXPORT_ALL:
+                    $userExport = (new UsersExport())->setKeys($request['keys']);
+                    $filename = Carbon::now()->format('Ymdhms').'-users.xlsx';
+                    Excel::store($userExport,$filename);
+
+                    $fullPath = Storage::disk('local')->path($filename);
+
+                    return response()->download($fullPath);
+
+                case self::EXPORT_FILTER:
+                case self::EXPORT_IDS:
+                default:
+
+            }
+        };
+//        if ( false === $this->checkTicketIds($ticketIds) ) {
+//            return redirect('/')->with('danger', 'Provide Correct ticket Ids!');
+//        }
+//
+//        $ticketExport = (new TicketsExport)->setIds($ticketIds)->download();
+//
+//        return $ticketExport;
     }
 
 }

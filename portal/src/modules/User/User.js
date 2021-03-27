@@ -57,18 +57,9 @@ class User extends Component {
                     checked: true
                 },
                 {
-                    key: 'created_by',
-                    checked: true
-                },
-                {
                     key: 'updated_at',
                     checked: true
                 },
-                {
-                    key: 'updated_by',
-                    checked: true
-                }
-
             ]
         }
         this.columns = [
