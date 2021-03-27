@@ -24,6 +24,7 @@ Route::middleware('ipMiddleware')->group(function () {
 
             // Users
             Route::post('user/{user}/restore',[UserController::class,'restore']);
+            Route::post('user/export',[UserController::class,'exportToExcel']);
             Route::apiResource('user', UserController::class);
 
             // IpRestriction

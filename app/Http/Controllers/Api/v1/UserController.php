@@ -123,4 +123,10 @@ class UserController extends Controller
         return new UserResource($this->userRepository->restore($id));
     }
 
+    /**
+     * @param UserRequest $request
+     */
+    public function exportToExcel(UserRequest $request) {
+    }
+
 }
