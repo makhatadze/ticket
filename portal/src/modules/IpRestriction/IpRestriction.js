@@ -15,6 +15,9 @@ import IpRestrictionView from "./IpRestrictionView";
 import IpRestrictionFilter from "./IpRestrictionFilter";
 import isEmpty from "../../core/validation/is-empty";
 import './IpRestriction.scss';
+import {EXPORT_ALL, EXPORT_FILTER, EXPORT_IDS} from "../../actions/export/exportTypes";
+import {closeExportModal, exportData, showExportModal} from "../../actions/export/exportActions";
+import Export from "../../components/Export/Export";
 
 class IpRestriction extends Component {
     constructor(props) {
@@ -22,6 +25,9 @@ class IpRestriction extends Component {
         this.handleTableChange = this.handleTableChange.bind(this)
         this.editIpRestriction = this.editIpRestriction.bind(this)
         this.showIpRestriction = this.showIpRestriction.bind(this)
+        this.exportSubmit = this.exportSubmit.bind(this)
+        this.onExportKeyChange = this.onExportKeyChange.bind(this)
+        this.showExportModal = this.showExportModal.bind(this)
         this.columns = [
             {
                 title: 'ID',
@@ -66,6 +72,43 @@ class IpRestriction extends Component {
 
             }
         ]
+        this.state = {
+            selectedRowKeys: [],
+            exportKeys: [
+                {
+                    key: 'id',
+                    checked: true
+                },
+                {
+                    key: 'name',
+                    checked: true
+                },
+                {
+                    key: 'ip',
+                    checked: true
+                },
+                {
+                    key: 'status',
+                    checked: true
+                },
+                {
+                    key: 'created_at',
+                    checked: true
+                },
+                {
+                    key: 'updated_at',
+                    checked: true
+                },
+                {
+                    key: 'created_by',
+                    checked: true
+                },
+                {
+                    key: 'updated_by',
+                    checked: true
+                },
+            ]
+        }
     }
 
     componentDidMount() {
@@ -112,8 +155,36 @@ class IpRestriction extends Component {
 
     }
 
+    exportSubmit() {
+        let keysArray = [];
+        this.state.exportKeys.forEach(el => el.checked ? keysArray.push(el.key) : '');
+        isEmpty(keysArray) ? toast.error('Keys are empty.') : this.props.exportData(keysArray)
+    }
+
+    onExportKeyChange(value, event) {
+        this.setState({
+            exportKeys: this.state.exportKeys.map(el => el.key === event.target.name ? {
+                key: el.key,
+                checked: !el.checked
+            } : el)
+        })
+    }
+
+    showExportModal(type = EXPORT_ALL) {
+
+        let payload = {
+            title: `Export IpRestrictions - `,
+            show: false,
+            module: 'ip-restriction',
+            type: type,
+            searchQuery: this.props.ipRestrictions.searchQuery,
+            ids: this.state.selectedRowKeys
+        }
+        this.props.showExportModal(type, payload)
+    }
+
     render() {
-        const {data, searchParams} = this.props.ipRestrictions;
+        const {data, searchParams,searchQuery} = this.props.ipRestrictions;
 
         return (
             <div className="ip-restriction">
@@ -123,6 +194,18 @@ class IpRestriction extends Component {
                             Ip</Button>
                         <Button className="ml-2" type="primary"
                                 onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>
+                        {(!isEmpty(searchQuery) || !isEmpty(this.state.selectedRowKeys)) ? (
+                            <Button type="primary"
+                                    onClick={() => {
+                                        isEmpty(this.state.selectedRowKeys) ?
+                                            this.showExportModal(EXPORT_FILTER) : this.showExportModal(EXPORT_IDS)
+                                    }}>{isEmpty(this.state.selectedRowKeys)
+                                ? 'Export Filter' : 'Export Checked'}</Button>
+                        ) : (
+                            ''
+                        )}
+                        <Button type="primary"
+                                onClick={() => this.showExportModal(EXPORT_ALL)}>Export All</Button>
                         <Button className="ml-2" type="primary"
                                 onClick={() => window.print()}>Print</Button>
                     </div>
@@ -134,10 +217,24 @@ class IpRestriction extends Component {
                     pagination={searchParams}
                     loading={searchParams.loading}
                     onChange={this.handleTableChange}
+                    rowSelection={{
+                        type: "checkbox",
+                        onChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys: selectedRowKeys}),
+                        selectedRowKeys: this.state.selectedRowKeys
+                    }}
                 />
                 <IpRestrictionForm/>
                 <IpRestrictionView/>
                 <IpRestrictionFilter/>
+                <Export
+                    title={this.props.export.title}
+                    show={this.props.export.show}
+                    exportKeys={this.state.exportKeys}
+                    loading={this.props.export.loading}
+                    onSubmit={this.exportSubmit}
+                    onCancel={this.props.closeExportModal}
+                    onChange={this.onExportKeyChange}
+                />
             </div>
         );
     }
@@ -148,18 +245,24 @@ IpRestriction.propTypes = {
     showIpRestrictionForm: Proptypes.func.isRequired,
     showIpRestrictionView: Proptypes.func.isRequired,
     showIpRestrictionFilter: Proptypes.func.isRequired,
-    setIpRestrictionSearchQuery: Proptypes.func.isRequired
+    setIpRestrictionSearchQuery: Proptypes.func.isRequired,
+    showExportModal: Proptypes.func.isRequired,
+    closeExportModal: Proptypes.func.isRequired,
+    exportData: Proptypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-    ipRestrictions: state.ipRestrictions
+    ipRestrictions: state.ipRestrictions,
+    export: state.export
 })
 
-export default withRouter(connect(mapStateToProps,
-    {
-        getIpRestrictions,
-        showIpRestrictionForm,
-        showIpRestrictionView,
-        showIpRestrictionFilter,
-        setIpRestrictionSearchQuery
-    })(IpRestriction))
+export default withRouter(connect(mapStateToProps, {
+    getIpRestrictions,
+    showIpRestrictionForm,
+    showIpRestrictionView,
+    showIpRestrictionFilter,
+    setIpRestrictionSearchQuery,
+    showExportModal,
+    closeExportModal,
+    exportData,
+})(IpRestriction))
