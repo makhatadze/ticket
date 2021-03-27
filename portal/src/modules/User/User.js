@@ -163,14 +163,14 @@ class User extends Component {
         return (
             <div className="users">
                 <div className="row mb-4 action-container">
-                    <div className="col-sm-6 col-lg-8 action-column-left">
+                    <div className="col">
                         <Button type="primary" onClick={() => this.showUserForm()}>Create User</Button>
                         <Button type="primary"
                                 onClick={() => this.props.showUserFilter()}>Filter</Button>
-                    </div>
-                    <div className="col-6 col-lg-4 action-column-right">
                         <Button type="primary"
-                                onClick={() => window.print()}>Export</Button>
+                                onClick={() => window.print()}>{isEmpty(this.state.selectedRowKeys) ? 'Export Filter' : 'Export Checked'}</Button>
+                        <Button type="primary"
+                                onClick={() => window.print()}>Export All</Button>
                         <Button type="primary"
                                 onClick={() => window.print()}>Print</Button>
                     </div>

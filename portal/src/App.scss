@@ -30,3 +30,12 @@
     text-align: center;
   }
 }
+
+.action-container {
+    button {
+        margin-top: 5px;
+        &:not(:last-of-type) {
+            margin-right: 5px;
+        }
+    }
+}

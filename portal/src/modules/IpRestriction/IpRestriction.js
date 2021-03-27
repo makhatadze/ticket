@@ -118,13 +118,11 @@ class IpRestriction extends Component {
         return (
             <div className="ip-restriction">
                 <div className="row mb-4 action-container">
-                    <div className="col-sm-6 col-lg-8 action-column-left">
+                    <div className="col">
                         <Button type="primary" onClick={() => this.props.showIpRestrictionForm()}>Create
                             Ip</Button>
                         <Button className="ml-2" type="primary"
                                 onClick={() => this.props.showIpRestrictionFilter()}>Filter</Button>
-                    </div>
-                    <div className="col-6 col-lg-4 action-column-right">
                         <Button className="ml-2" type="primary"
                                 onClick={() => window.print()}>Print</Button>
                     </div>
