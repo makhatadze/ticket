@@ -10,7 +10,6 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Exceptions\DeleteException;
-use App\Exceptions\TrashException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\RoleRequest;
@@ -26,6 +25,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class RoleController extends Controller
 {
+
+    /**
+     * @var RoleRepositoryInterface
+     */
     private $roleRepository;
 
     public function __construct(RoleRepositoryInterface $roleRepository)

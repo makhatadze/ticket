@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\DepartmentController;
 use App\Http\Controllers\Api\v1\IpRestrictionController;
 use App\Http\Controllers\Api\v1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
@@ -31,6 +32,10 @@ Route::middleware('ipMiddleware')->group(function () {
             Route::post('ip-restriction/{ipRestriction}/restore',[IpRestrictionController::class,'restore']);
             Route::post('ip-restriction/export',[IpRestrictionController::class,'exportToExcel'])->middleware('can:ipRestrictionExport');
             Route::apiResource('ip-restriction', IpRestrictionController::class);
+
+            // Department
+            Route::apiResource('department', DepartmentController::class);
+
         });
 
     });

@@ -9,7 +9,6 @@
 namespace App\Models;
 
 use App\Exceptions\DataNotFoundException;
-use App\Http\Requests\Api\v1\RoleRequest;
 use App\Traits\CustomBleableTrait;
 use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Builder;
