@@ -8,9 +8,11 @@
  */
 namespace App\Providers;
 
+use App\Models\Department;
 use App\Models\IpRestriction;
 use App\Models\Role;
 use App\Models\User;
+use App\Policies\DepartmentPolicy;
 use App\Policies\IpRestrictionPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
@@ -28,7 +30,8 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         Role::class => RolePolicy::class,
         User::class => UserPolicy::class,
-        IpRestriction::class => IpRestrictionPolicy::class
+        IpRestriction::class => IpRestrictionPolicy::class,
+        Department::class => DepartmentPolicy::class
     ];
 
     /**

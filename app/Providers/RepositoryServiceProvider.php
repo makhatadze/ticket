@@ -9,8 +9,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\DepartmentRepositoryInterface;
 use App\Repositories\Eloquent\Base\BaseRepository;
 use App\Repositories\Eloquent\Base\EloquentRepositoryInterface;
+use App\Repositories\Eloquent\DepartmentRepository;
 use App\Repositories\Eloquent\ExportLogRepository;
 use App\Repositories\Eloquent\IpRestrictionRepository;
 use App\Repositories\Eloquent\RoleRepository;
@@ -45,5 +47,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(IpRestrictionRepositoryInterface::class, IpRestrictionRepository::class);
         $this->app->bind(ExportLogRepositoryInterface::class, ExportLogRepository::class);
+        $this->app->bind(DepartmentRepositoryInterface::class,DepartmentRepository::class);
     }
 }
