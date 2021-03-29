@@ -97,8 +97,10 @@ class UsersExport implements
         $mapping = [];
         foreach ($this->keys as $key) {
             if ($key === 'created_at' || $key === 'updated_at') {
-                $mapping [] = $user->{$key}->format('l jS \\of F Y h:i:s A');
-                continue;
+                if ($user->created_at && $user->updated_at) {
+                    $mapping [] = $user->{$key}->format('l jS \\of F Y h:i:s A');
+                    continue;
+                }
             }
             if ($key === 'active') {
                 $mapping [] = $userActive[$user->{$key}];
