@@ -65,6 +65,12 @@ export default [
                 key: '/ip-restriction',
                 icon: 'SafetyOutlined',
                 isLevel: true
+            },
+            {
+                title: 'Export Log',
+                key: '/export-log',
+                icon: 'DownSquareOutlined',
+                isLevel: true
             }
         ]
     },
