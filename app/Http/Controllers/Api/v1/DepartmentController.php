@@ -8,6 +8,7 @@
  */
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\DepartmentRequest;
@@ -95,5 +96,31 @@ class DepartmentController extends Controller
     public function update(DepartmentRequest $request, int $id)
     {
         return $this->departmentRepository->updateItem($id, $request);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return DepartmentResource|JsonResponse
+     * @throws DeleteException
+     */
+    public function destroy(int $id)
+    {
+        return new DepartmentResource($this->departmentRepository->delete($id));
+    }
+
+    /**
+     * Restore specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return DepartmentResource|JsonResponse
+     * @throws ValidationException
+     */
+    public function restore(int $id)
+    {
+        return new DepartmentResource($this->departmentRepository->restore($id));
     }
 }
