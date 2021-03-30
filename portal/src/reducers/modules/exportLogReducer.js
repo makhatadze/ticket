@@ -1,9 +1,9 @@
 import * as queryString from "querystring";
 import {
-    CLEAR_EXPORT_LOG_SEARCH_QUERY,
+    CLEAR_EXPORT_LOG_SEARCH_QUERY, CLOSE_EXPORT_LOG_FILTER,
     GET_EXPORT_LOGS,
     SET_EXPORT_LOG_SEARCH_QUERY,
-    SET_EXPORT_LOGS_LOADING
+    SET_EXPORT_LOGS_LOADING, SHOW_EXPORT_LOG_FILTER
 } from "../../actions/export-log/exportLogTypes";
 
 const initialState = {
@@ -23,6 +23,7 @@ const initialState = {
         order: 'desc'
     },
     searchQuery: '',
+    showExportLogFilter: false
 };
 
 export default function (state = initialState, action) {
@@ -55,6 +56,16 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 searchQuery: ''
+            }
+        case SHOW_EXPORT_LOG_FILTER:
+            return {
+                ...state,
+                showExportLogFilter: true
+            }
+        case CLOSE_EXPORT_LOG_FILTER:
+            return {
+                ...state,
+                showExportLogFilter: false
             }
         default:
             return state;

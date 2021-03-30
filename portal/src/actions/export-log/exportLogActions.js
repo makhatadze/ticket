@@ -1,9 +1,9 @@
 import axios from "axios";
 import {
-    CLEAR_EXPORT_LOG_SEARCH_QUERY,
+    CLEAR_EXPORT_LOG_SEARCH_QUERY, CLOSE_EXPORT_LOG_FILTER,
     GET_EXPORT_LOGS,
     SET_EXPORT_LOG_SEARCH_QUERY,
-    SET_EXPORT_LOGS_LOADING
+    SET_EXPORT_LOGS_LOADING, SHOW_EXPORT_LOG_FILTER
 } from "./exportLogTypes";
 
 const url = process.env.MIX_SERVER_API_URL;
@@ -48,5 +48,19 @@ export const setExportLogSearchQuery = (payload = {}) => {
 export const clearExportLogSearchQuery = () => {
     return {
         type: CLEAR_EXPORT_LOG_SEARCH_QUERY
+    }
+}
+
+// Show export log filter
+export const showExportLogFilter = () => {
+    return {
+        type: SHOW_EXPORT_LOG_FILTER
+    }
+}
+
+// Close export log filter
+export const closeExportLogFilter = () => {
+    return{
+        type: CLOSE_EXPORT_LOG_FILTER
     }
 }
