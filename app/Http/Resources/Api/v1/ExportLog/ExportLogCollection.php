@@ -12,14 +12,37 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ExportLogCollection extends ResourceCollection
 {
+    private $pagination;
+
+    public function __construct($resource)
+    {
+        $this->pagination = [
+            'total' => $resource->total(),
+            'count' => $resource->lastPage(),
+            'current' => $resource->currentPage(),
+            'pageSize' => $resource->perPage()
+        ];
+
+
+        $resource = $resource->getCollection();
+        parent::__construct($resource);
+    }
+
     /**
      * Transform the resource collection into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection->map(
+                function ($exportLog) {
+                    return new ExportLogResource($exportLog);
+                }
+            ),
+            'pagination' => $this->pagination,
+        ];
     }
 }
