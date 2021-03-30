@@ -24,7 +24,7 @@ class ExportLogController extends Controller
 
     public function __construct(ExportLogRepositoryInterface $exportLogRepository)
     {
-        $this->$exportLogRepository = $exportLogRepository;
+        $this->exportLogRepository = $exportLogRepository;
 
         $this->authorizeResource(ExportLog::class);
     }

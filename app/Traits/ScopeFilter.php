@@ -153,4 +153,13 @@ trait ScopeFilter
         return $query->where('created_at', '<=', Carbon::parse($endTime)->addDay(1));
     }
 
+    /**
+     * @param $query
+     * @param $endTime
+     * @return mixed
+     */
+    public function scopeType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
 }

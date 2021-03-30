@@ -53,6 +53,32 @@ class ExportLog extends Model
     public const EXPORT_USER = 1;
     public const EXPORT_IP_RESTRICTION = 2;
 
+
+    /**
+     * @return array[]
+     */
+    public function getFilterScopes(): array
+    {
+        return [
+            'id' => [
+                'hasParam' => true,
+                'scopeMethod' => 'id'
+            ],
+            'type' => [
+                'hasParam' => true,
+                'scopeMethod' => 'type'
+            ],
+            'start_time' => [
+                'hasParam' => true,
+                'scopeMethod' => 'startTime'
+            ],
+            'end_time' => [
+                'hasParam' => true,
+                'scopeMethod' => 'endTime'
+            ]
+        ];
+    }
+
     /**
      * Get the export log's file.
      */
