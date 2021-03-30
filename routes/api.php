@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\DepartmentController;
+use App\Http\Controllers\Api\v1\ExportLogController;
 use App\Http\Controllers\Api\v1\IpRestrictionController;
 use App\Http\Controllers\Api\v1\IssueController;
 use App\Http\Controllers\Api\v1\RoleController;
@@ -40,6 +41,8 @@ Route::middleware('ipMiddleware')->group(function () {
             // Issue
             Route::apiResource('issue',IssueController::class);
 
+            // Export Log
+            Route::get('export-log',[ExportLogController::class,'index']);
         });
 
     });

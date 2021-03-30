@@ -9,21 +9,15 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Http\Requests\Api\v1\RoleRequest;
-use App\Http\Resources\Api\v1\ExportLogResource;
-use App\Http\Resources\Api\v1\RoleCollection;
-use App\Http\Resources\Api\v1\RoleResource;
 use App\Models\ExportLog;
-use App\Models\Role;
 use App\Repositories\Eloquent\Base\BaseRepository;
 use App\Repositories\ExportLogRepositoryInterface;
-use App\Repositories\RoleRepositoryInterface;
 
 class ExportLogRepository extends BaseRepository implements ExportLogRepositoryInterface
 {
 
     /**
-     * RoleRepository constructor.
+     * ExportLogRepository constructor.
      *
      * @param ExportLog $model
      */
@@ -31,7 +25,5 @@ class ExportLogRepository extends BaseRepository implements ExportLogRepositoryI
     {
         parent::__construct($model);
     }
-
-
 
 }
