@@ -1,9 +1,9 @@
 <?php
 /**
- *  app/Http/Resources/Api/v1/Department/DepartmentResource.php
+ *  app/Http/Resources/Api/v1/Department/DepartmentRelationResource.php
  *
- * Date-Time: 29.03.21
- * Time: 12:01
+ * Date-Time: 30.03.21
+ * Time: 09:51
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
 namespace App\Http\Resources\Api\v1\Department;
@@ -11,7 +11,7 @@ namespace App\Http\Resources\Api\v1\Department;
 use App\Http\Resources\Api\v1\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DepartmentResource extends JsonResource
+class DepartmentRelationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -28,7 +28,9 @@ class DepartmentResource extends JsonResource
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'createdBy' => $this->createdBy,
-            'updatedBy' => $this->updatedBy,
+            'updatedBy' =>$this->updatedBy,
+            'heads' => $this->heads()->get()->toArray(),
+            'members' => $this->members()->get()->toArray(),
         ];
     }
 }

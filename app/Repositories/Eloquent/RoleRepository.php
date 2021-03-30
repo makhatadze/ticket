@@ -32,7 +32,7 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
     /**
      * Create new role
      *
-     * @param array $attributes
+     * @param RoleRequest $request
      *
      * @return RoleResource
      */

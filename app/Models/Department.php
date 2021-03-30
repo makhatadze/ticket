@@ -11,6 +11,7 @@ namespace App\Models;
 use App\Traits\CustomBleableTrait;
 use App\Traits\ScopeFilter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,7 +48,8 @@ class Department extends Model
      */
     protected $fillable = ['name','type'];
 
-
+    public const DEPARTMENT_HEAD = 1;
+    public const DEPARTMENT_MEMBER = 2;
 
     /**
      * @return array[]
@@ -64,5 +66,25 @@ class Department extends Model
                 'scopeMethod' => 'name'
             ],
         ];
+    }
+
+    /**
+     * Get heads
+     *
+     * @return BelongsToMany
+     */
+    public function heads(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'departments_users')->where('type',self::DEPARTMENT_HEAD)->withPivot(['type']);
+    }
+
+    /**
+     * Get members
+     *
+     * @return BelongsToMany
+     */
+    public function members(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'departments_users')->where('type',self::DEPARTMENT_MEMBER)->withPivot(['type']);
     }
 }
