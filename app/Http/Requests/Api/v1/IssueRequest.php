@@ -9,6 +9,7 @@
 namespace App\Http\Requests\Api\v1;
 
 use App\Exceptions\ValidationException;
+use App\Models\Issue;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -32,8 +33,23 @@ class IssueRequest extends FormRequest
     public function rules()
     {
         $rules = [
-
+            'department_id' => 'required|exists:departments,id',
+            'name' => 'required|string|max:255',
+            'status' => 'required|boolean',
+            'type' => 'required|in:1,2,3',
         ];
+
+        if (in_array($this->method(),['POST','PATCH'],true)) {
+            if ($this->type === Issue::ISSUE_DEFAULT) {
+                $rules ['departments'] = 'nullable|array';
+            }
+            if ($this->type === Issue::ISSUE_WITHDRAWAL) {
+                $rules ['departments'] = 'required|array';
+            }
+            $rules['departments.*.id'] = 'required|exists:departments,id';
+            $rules['departments.*.type'] = 'required|in:1,2,3';
+            $rules['departments.*.permission'] = 'required|in:1,2';
+        }
 
         // Check if request method is GET.
         if ($this->method() === 'GET') {
