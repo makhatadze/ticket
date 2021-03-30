@@ -8,6 +8,7 @@
  */
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\IssueRequest;
@@ -94,5 +95,31 @@ class IssueController extends Controller
     public function update(IssueRequest $request, int $id)
     {
         return $this->issueRepository->updateItem($id, $request);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return IssueResource|JsonResponse
+     * @throws DeleteException
+     */
+    public function destroy(int $id)
+    {
+        return new IssueResource($this->issueRepository->delete($id));
+    }
+
+    /**
+     * Restore specified resource from storage.
+     *
+     * @param int $id
+     *
+     * @return IssueResource|JsonResponse
+     * @throws ValidationException
+     */
+    public function restore(int $id)
+    {
+        return new IssueResource($this->issueRepository->restore($id));
     }
 }
