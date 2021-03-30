@@ -22,7 +22,7 @@ class IssueRepository extends BaseRepository implements IssueRepositoryInterface
     /**
      * IssueRepository constructor.
      *
-     * @param Department $model
+     * @param Issue $model
      */
     public function __construct(Issue $model)
     {

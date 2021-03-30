@@ -8,9 +8,12 @@
  */
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\IssueRequest;
+use App\Http\Resources\Api\v1\Department\DepartmentRelationResource;
 use App\Http\Resources\Api\v1\Issue\IssueCollection;
+use App\Http\Resources\Api\v1\Issue\IssueRelationResource;
 use App\Http\Resources\Api\v1\Issue\IssueResource;
 use App\Models\Issue;
 use App\Repositories\IssueRepositoryInterface;
@@ -63,5 +66,19 @@ class IssueController extends Controller
     public function store(IssueRequest $request)
     {
         return $this->issueRepository->createNewItem($request);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     *
+     * @return IssueRelationResource
+     * @throws ValidationException
+     */
+    public function show(int $id): IssueRelationResource
+    {
+        $data = $this->issueRepository->findOrFail($id);
+        return new IssueRelationResource($data);
     }
 }
