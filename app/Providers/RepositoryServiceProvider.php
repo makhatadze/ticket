@@ -15,10 +15,12 @@ use App\Repositories\Eloquent\Base\EloquentRepositoryInterface;
 use App\Repositories\Eloquent\DepartmentRepository;
 use App\Repositories\Eloquent\ExportLogRepository;
 use App\Repositories\Eloquent\IpRestrictionRepository;
+use App\Repositories\Eloquent\IssueRepository;
 use App\Repositories\Eloquent\RoleRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\ExportLogRepositoryInterface;
 use App\Repositories\IpRestrictionRepositoryInterface;
+use App\Repositories\IssueRepositoryInterface;
 use App\Repositories\RoleRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -48,5 +50,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(IpRestrictionRepositoryInterface::class, IpRestrictionRepository::class);
         $this->app->bind(ExportLogRepositoryInterface::class, ExportLogRepository::class);
         $this->app->bind(DepartmentRepositoryInterface::class,DepartmentRepository::class);
+        $this->app->bind(IssueRepositoryInterface::class,IssueRepository::class);
     }
 }

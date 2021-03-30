@@ -10,10 +10,12 @@ namespace App\Providers;
 
 use App\Models\Department;
 use App\Models\IpRestriction;
+use App\Models\Issue;
 use App\Models\Role;
 use App\Models\User;
 use App\Policies\DepartmentPolicy;
 use App\Policies\IpRestrictionPolicy;
+use App\Policies\IssuePolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -31,7 +33,8 @@ class AuthServiceProvider extends ServiceProvider
         Role::class => RolePolicy::class,
         User::class => UserPolicy::class,
         IpRestriction::class => IpRestrictionPolicy::class,
-        Department::class => DepartmentPolicy::class
+        Department::class => DepartmentPolicy::class,
+        Issue::class => IssuePolicy::class
     ];
 
     /**
