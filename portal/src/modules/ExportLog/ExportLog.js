@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getExportLogs} from "../../actions/export-log/exportLogActions";
+import {getExportLogs, setExportLogSearchQuery} from "../../actions/export-log/exportLogActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {EXPORT_MODULES} from "../../actions/export-log/exportLogTypes";
@@ -79,7 +79,7 @@ class ExportLog extends Component {
                 }
             }
         }
-        this.props.setRoleSearchQuery(data)
+        this.props.setExportLogSearchQuery(data)
     }
 
     render() {
@@ -113,6 +113,7 @@ class ExportLog extends Component {
 
 ExportLog.propTypes = {
     getExportLogs: PropTypes.func.isRequired,
+    setExportLogSearchQuery: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -120,5 +121,6 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-    getExportLogs
+    getExportLogs,
+    setExportLogSearchQuery
 })(ExportLog)
