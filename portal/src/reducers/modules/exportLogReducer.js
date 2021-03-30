@@ -1,5 +1,10 @@
 import * as queryString from "querystring";
-import {GET_EXPORT_LOGS, SET_EXPORT_LOGS_LOADING} from "../../actions/export-log/exportLogTypes";
+import {
+    CLEAR_EXPORT_LOG_SEARCH_QUERY,
+    GET_EXPORT_LOGS,
+    SET_EXPORT_LOG_SEARCH_QUERY,
+    SET_EXPORT_LOGS_LOADING
+} from "../../actions/export-log/exportLogTypes";
 
 const initialState = {
     data: [],
@@ -12,6 +17,8 @@ const initialState = {
         pageSize: 10,
         id: '',
         type: '',
+        start_time: '',
+        end_time: '',
         sort: 'id',
         order: 'desc'
     },
@@ -38,6 +45,17 @@ export default function (state = initialState, action) {
                     loading: false
                 }
             }
+        case SET_EXPORT_LOG_SEARCH_QUERY:
+            let searchQuery = queryString.parse(state.searchQuery)
+            return {
+                ...state,
+                searchQuery: `?${queryString.stringify(getSearchQueryParams({...state.searchParams, ...searchQuery, ...action.payload}))}`
+            }
+        case CLEAR_EXPORT_LOG_SEARCH_QUERY:
+            return {
+                ...state,
+                searchQuery: ''
+            }
         default:
             return state;
     }
@@ -50,6 +68,8 @@ function getSearchQueryParams(searchData) {
         page: searchData.current,
         id: searchData.id,
         type: searchData.name,
+        start_time: searchData.start_time,
+        end_time: searchData.end_time,
         sort: searchData.sort,
         order: searchData.order
     }
