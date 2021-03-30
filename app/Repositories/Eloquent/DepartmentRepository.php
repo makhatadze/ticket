@@ -46,6 +46,29 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
     }
 
     /**
+     * Update department item
+     *
+     * @param int $id
+     * @param DepartmentRequest $request
+     *
+     * @return mixed
+     */
+    public function updateItem(int $id, DepartmentRequest $request): DepartmentResource
+    {
+        $attributes = $request->only('name', 'type');
+        $this->model = $this->update($id, $attributes);
+
+        // Remove users
+        $this->model->heads()->detach();
+        $this->model->members()->detach();
+
+        // Attach heads, members
+        $this->attachUsers($request);
+
+        return new DepartmentResource($this->model);
+    }
+
+    /**
      *  Attach users department
      *
      * @param DepartmentRequest $request
@@ -67,7 +90,6 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
                         continue;
                     }
                     $this->model->members()->attach($member, ['type' => Department::DEPARTMENT_MEMBER]);
-
                 }
             }
         }

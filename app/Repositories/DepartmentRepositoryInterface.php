@@ -28,4 +28,15 @@ interface DepartmentRepositoryInterface
      * @return DepartmentResource
      */
     public function createNewItem(DepartmentRequest $request): DepartmentResource;
+
+
+    /**
+     * Update department item
+     *
+     * @param int $id
+     * @param DepartmentRequest $request
+     *
+     * @return mixed
+     */
+    public function updateItem(int $id, DepartmentRequest $request): DepartmentResource;
 }
