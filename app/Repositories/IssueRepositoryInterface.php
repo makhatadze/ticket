@@ -9,6 +9,7 @@
 namespace App\Repositories;
 
 
+use App\Http\Requests\Api\v1\DepartmentRequest;
 use App\Http\Requests\Api\v1\IssueRequest;
 use App\Http\Resources\Api\v1\Issue\IssueResource;
 
@@ -29,4 +30,13 @@ interface IssueRepositoryInterface
      */
     public function createNewItem(IssueRequest $request): IssueResource;
 
+    /**
+     * Update issue item
+     *
+     * @param int $id
+     * @param IssueRequest $request
+     *
+     * @return mixed
+     */
+    public function updateItem(int $id, IssueRequest $request): IssueResource;
 }

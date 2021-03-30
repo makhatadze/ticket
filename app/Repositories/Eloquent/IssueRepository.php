@@ -11,7 +11,6 @@ namespace App\Repositories\Eloquent;
 
 use App\Http\Requests\Api\v1\IssueRequest;
 use App\Http\Resources\Api\v1\Issue\IssueResource;
-use App\Models\Department;
 use App\Models\Issue;
 use App\Models\Withdrawal;
 use App\Repositories\Eloquent\Base\BaseRepository;
@@ -42,11 +41,51 @@ class IssueRepository extends BaseRepository implements IssueRepositoryInterface
         $this->model = $this->create($attributes);
 
         // Attach departments
-        if($request['departments'] !== null) {
+        if ($request['departments'] !== null) {
             $this->attachDepartments($request['departments']);
         }
 
         if ($request['type'] === Issue::ISSUE_WITHDRAWAL) {
+            foreach ($request['withdrawals'] as $withdrawal) {
+                $model = new Withdrawal();
+                $model->name = $withdrawal['name'];
+                $model->payment = $withdrawal['payment'];
+                $this->model->withdrawal()->save($model);
+            }
+        }
+
+        if ($request['type'] === Issue::ISSUE_CUSTOM) {
+            $this->attachDepartments($request['custom_departments']);
+        }
+
+        return new IssueResource($this->model);
+    }
+
+    /**
+     * Update issue item
+     *
+     * @param int $id
+     * @param IssueRequest $request
+     *
+     * @return mixed
+     */
+    public function updateItem(int $id, IssueRequest $request): IssueResource
+    {
+        $attributes = $request->only('department_id', 'name', 'status', 'type');
+        $this->model = $this->update($id, $attributes);
+
+        // Detach departments
+        $this->model->departments()->detach();
+
+        // Attach departments
+        if ($request['departments'] !== null) {
+            $this->attachDepartments($request['departments']);
+        }
+
+        if ($request['type'] === Issue::ISSUE_WITHDRAWAL) {
+            if ($this->model->withdrawal !== null) {
+                $this->model->withdrawal()->delete();
+            }
             foreach ($request['withdrawals'] as $withdrawal) {
                 $model = new Withdrawal();
                 $model->name = $withdrawal['name'];

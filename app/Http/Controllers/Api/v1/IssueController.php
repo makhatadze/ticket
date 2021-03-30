@@ -17,6 +17,7 @@ use App\Http\Resources\Api\v1\Issue\IssueRelationResource;
 use App\Http\Resources\Api\v1\Issue\IssueResource;
 use App\Models\Issue;
 use App\Repositories\IssueRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class IssueController extends Controller
@@ -80,5 +81,18 @@ class IssueController extends Controller
     {
         $data = $this->issueRepository->findOrFail($id);
         return new IssueRelationResource($data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param IssueRequest $request
+     * @param int $id
+     *
+     * @return IssueResource|JsonResponse
+     */
+    public function update(IssueRequest $request, int $id)
+    {
+        return $this->issueRepository->updateItem($id, $request);
     }
 }
