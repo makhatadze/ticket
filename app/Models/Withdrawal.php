@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\CustomBleableTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,7 +29,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Withdrawal extends Model
 {
-    use BlameableTrait, softDeletes, CustomBleableTrait;
+    use HasFactory, BlameableTrait, softDeletes, CustomBleableTrait;
     /**
      * The table associated with the model.
      *
@@ -54,7 +55,7 @@ class Withdrawal extends Model
     /**
      * @return MorphTo
      */
-    public function withrawalable(): MorphTo
+    public function withdrawalable(): MorphTo
     {
         return $this->morphTo();
     }

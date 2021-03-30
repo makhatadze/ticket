@@ -12,6 +12,7 @@ use App\Exceptions\ValidationException;
 use App\Models\Issue;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class IssueRequest extends FormRequest
 {
@@ -34,7 +35,7 @@ class IssueRequest extends FormRequest
     {
         $rules = [
             'department_id' => 'required|exists:departments,id',
-            'name' => 'required|string|max:255',
+            'name' => ['required','string','max:255', Rule::unique('issues', 'name')->ignore($this->issue)],
             'status' => 'required|boolean',
             'type' => 'required|in:1,2,3',
         ];
@@ -45,6 +46,15 @@ class IssueRequest extends FormRequest
             }
             if ($this->type === Issue::ISSUE_WITHDRAWAL) {
                 $rules ['departments'] = 'required|array';
+                $rules ['withdrawals'] = 'required|array';
+                $rules['withdrawals.*.name'] = 'required|string|max:255';
+                $rules['withdrawals.*.payment'] = 'required|array';
+            }
+            if ($this->type === Issue::ISSUE_CUSTOM) {
+                $rules ['custom_departments'] = 'required|array';
+                $rules['custom_departments.*.id'] = 'required|exists:departments,id';
+                $rules['withdrawals.*.type'] = 'required|in:4';
+                $rules['withdrawals.*.permission'] = 'required|in:0';
             }
             $rules['departments.*.id'] = 'required|exists:departments,id';
             $rules['departments.*.type'] = 'required|in:1,2,3';

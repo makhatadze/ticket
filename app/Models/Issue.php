@@ -6,6 +6,7 @@
  * Time: 11:00
  * @author Vito Makhatadze <vitomaxatadze@gmail.com>
  */
+
 namespace App\Models;
 
 use App\Traits\CustomBleableTrait;
@@ -26,7 +27,7 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  * @property integer $department_id
  * @property string $name
  * @property boolean $status
- * @property integer$type
+ * @property integer $type
  * @property string $created_at
  * @property string $updated_at
  * @property string|null $deleted_at
@@ -39,6 +40,7 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
 class Issue extends Model
 {
     use BlameableTrait, softDeletes, CustomBleableTrait, ScopeFilter;
+
     /**
      * The table associated with the model.
      *
@@ -51,20 +53,23 @@ class Issue extends Model
      *
      * @var array
      */
-    protected $fillable = ['department_id','name','status','type'];
+    protected $fillable = ['department_id', 'name', 'status', 'type'];
 
     // issue
     public const ISSUE_DEFAULT = 1;
     public const ISSUE_WITHDRAWAL = 2;
+    public const ISSUE_CUSTOM = 3;
 
     // issue departments
     public const ISSUE_DEPARTMENT_DEFAULT = 1;
     public const ISSUE_DEPARTMENT_WITHDRAWAL_PRIMARY = 2;
     public const ISSUE_DEPARTMENT_WITHDRAWAL_SECONDARY = 3;
+    public const ISSUE_DEPARTMENT_CUSTOM_GROUP = 4;
 
     // issue department permissions
     public const ISSUE_DEPARTMENT_PERMISSION_WRITE_READ = 1;
-    public const ISSUE_DEPARTMENT_PERMISSION_READ = 1;
+    public const ISSUE_DEPARTMENT_PERMISSION_READ = 2;
+    public const ISSUE_DEPARTMENT_PERMISSION_NONE = 0;
 
     /**
      * @return array[]
@@ -104,7 +109,7 @@ class Issue extends Model
      */
     public function withdrawal(): MorphMany
     {
-        return $this->morphMany(Withdrawal::class, 'withrawalable');
+        return $this->morphMany(Withdrawal::class, 'withdrawalable');
     }
 
     /**
@@ -114,6 +119,6 @@ class Issue extends Model
      */
     public function departments(): BelongsToMany
     {
-        return $this->belongsToMany(Department::class, 'issues_departments')->withPivot(['type','permission']);
+        return $this->belongsToMany(Department::class, 'issues_departments')->withPivot(['type', 'permission']);
     }
 }

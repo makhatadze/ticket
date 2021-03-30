@@ -13,6 +13,7 @@ use App\Http\Requests\Api\v1\IssueRequest;
 use App\Http\Resources\Api\v1\Issue\IssueResource;
 use App\Models\Department;
 use App\Models\Issue;
+use App\Models\Withdrawal;
 use App\Repositories\Eloquent\Base\BaseRepository;
 use App\Repositories\IssueRepositoryInterface;
 
@@ -37,11 +38,26 @@ class IssueRepository extends BaseRepository implements IssueRepositoryInterface
      */
     public function createNewItem(IssueRequest $request): IssueResource
     {
-        $attributes = $request->only('department_id', 'name','status','type');
+        $attributes = $request->only('department_id', 'name', 'status', 'type');
         $this->model = $this->create($attributes);
 
         // Attach departments
-        $this->attachDepartments($request);
+        if($request['departments'] !== null) {
+            $this->attachDepartments($request['departments']);
+        }
+
+        if ($request['type'] === Issue::ISSUE_WITHDRAWAL) {
+            foreach ($request['withdrawals'] as $withdrawal) {
+                $model = new Withdrawal();
+                $model->name = $withdrawal['name'];
+                $model->payment = $withdrawal['payment'];
+                $this->model->withdrawal()->save($model);
+            }
+        }
+
+        if ($request['type'] === Issue::ISSUE_CUSTOM) {
+            $this->attachDepartments($request['custom_departments']);
+        }
 
         return new IssueResource($this->model);
     }
@@ -49,14 +65,13 @@ class IssueRepository extends BaseRepository implements IssueRepositoryInterface
     /**
      *  Attach departments
      *
-     * @param IssueRequest $request
-     *
+     * @param array $departments
      */
-    protected function attachDepartments(IssueRequest $request): void
+    protected function attachDepartments(array $departments): void
     {
         if ($this->model) {
-            if ($request->has('departments')) {
-                foreach ($request['departments'] as $department) {
+            if (count($departments) > 0) {
+                foreach ($departments as $department) {
                     $this->model->departments()->attach($department['id'],
                         ['type' => $department['type'],
                             'permission' => $department['permission']
