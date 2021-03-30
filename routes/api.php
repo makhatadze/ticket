@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\DepartmentController;
 use App\Http\Controllers\Api\v1\IpRestrictionController;
+use App\Http\Controllers\Api\v1\IssueController;
 use App\Http\Controllers\Api\v1\RoleController;
 use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,9 @@ Route::middleware('ipMiddleware')->group(function () {
 
             // Department
             Route::apiResource('department', DepartmentController::class);
+
+            // Issue
+            Route::apiResource('issue',IssueController::class);
 
         });
 

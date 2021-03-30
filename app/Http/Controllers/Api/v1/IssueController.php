@@ -9,9 +9,46 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\IssueRequest;
+use App\Http\Resources\Api\v1\Issue\IssueCollection;
+use App\Models\Issue;
+use App\Repositories\IssueRepositoryInterface;
 use Illuminate\Http\Request;
 
 class IssueController extends Controller
 {
-    //
+    /**
+     * @var IssueRepositoryInterface
+     */
+    private $issueRepository;
+
+    public function __construct(IssueRepositoryInterface $issueRepository) {
+        $this->issueRepository = $issueRepository;
+
+        $this->authorizeResource(Issue::class);
+
+    }
+
+    /**
+     * Get the list of resource methods which do not have model parameters.
+     *
+     * @return array
+     */
+    protected function resourceMethodsWithoutModels(): array
+    {
+        return ['index', 'store', 'update', 'destroy', 'show', 'restore'];
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param IssueRequest $request
+     *
+     * @return IssueCollection
+     *
+     */
+    public function index(IssueRequest $request): IssueCollection
+    {
+        return new IssueCollection($this->issueRepository->getData($request));
+    }
 }
