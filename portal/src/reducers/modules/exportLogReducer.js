@@ -78,7 +78,7 @@ function getSearchQueryParams(searchData) {
         per_page: searchData.pageSize,
         page: searchData.current,
         id: searchData.id,
-        type: searchData.name,
+        type: searchData.type,
         start_time: searchData.start_time,
         end_time: searchData.end_time,
         sort: searchData.sort,

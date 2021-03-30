@@ -1,14 +1,13 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getExportLogs, setExportLogSearchQuery} from "../../actions/export-log/exportLogActions";
+import {getExportLogs, setExportLogSearchQuery, showExportLogFilter} from "../../actions/export-log/exportLogActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {EXPORT_MODULES} from "../../actions/export-log/exportLogTypes";
-import RoleForm from "../Role/RoleForm";
-import RoleView from "../Role/RoleView";
-import RoleFilter from "../Role/RoleFilter";
 import isEmpty from "../../core/validation/is-empty";
+import ExportLogFilter from "./ExportLogFilter";
+import moment from "moment";
 const baseUrl = process.env.MIX_SITE_URL;
 
 class ExportLog extends Component {
@@ -35,6 +34,14 @@ class ExportLog extends Component {
                 sorter: false,
                 render: element => (
                     <>{EXPORT_MODULES[`${element}`]}</>
+                )
+            },
+            {
+                title: 'Created At',
+                dataIndex: 'createdAt',
+                sorter: false,
+                render: element => (
+                    <>{moment(element).format('LLLL')}</>
                 )
             },
             {
@@ -89,7 +96,7 @@ class ExportLog extends Component {
                 <div className="row mb-4 action-container">
                     <div className="col">
                         <Button className="ml-2" type="primary"
-                                onClick={() => this.props.showRoleFilter()}>Filter</Button>
+                                onClick={() => this.props.showExportLogFilter()}>Filter</Button>
                         <Button className="ml-2" type="primary"
                                 onClick={() => window.print()}>Print</Button>
                     </div>
@@ -102,9 +109,7 @@ class ExportLog extends Component {
                     loading={searchParams.loading}
                     onChange={this.handleTableChange}
                 />
-                <RoleForm/>
-                <RoleView/>
-                <RoleFilter/>
+                <ExportLogFilter />
             </div>
         )
     }
@@ -113,7 +118,8 @@ class ExportLog extends Component {
 
 ExportLog.propTypes = {
     getExportLogs: PropTypes.func.isRequired,
-    setExportLogSearchQuery: PropTypes.func.isRequired
+    setExportLogSearchQuery: PropTypes.func.isRequired,
+    showExportLogFilter: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -122,5 +128,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     getExportLogs,
-    setExportLogSearchQuery
+    setExportLogSearchQuery,
+    showExportLogFilter
 })(ExportLog)
