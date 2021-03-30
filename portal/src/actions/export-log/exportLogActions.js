@@ -1,5 +1,10 @@
 import axios from "axios";
-import {GET_EXPORT_LOGS, SET_EXPORT_LOGS_LOADING} from "./exportLogTypes";
+import {
+    CLEAR_EXPORT_LOG_SEARCH_QUERY,
+    GET_EXPORT_LOGS,
+    SET_EXPORT_LOG_SEARCH_QUERY,
+    SET_EXPORT_LOGS_LOADING
+} from "./exportLogTypes";
 
 const url = process.env.MIX_SERVER_API_URL;
 
@@ -28,5 +33,20 @@ export const getExportLogs = () => (dispatch, getState) => {
 export const setExportLogLoading = () => {
     return {
         type: SET_EXPORT_LOGS_LOADING
+    }
+}
+
+// Set export log search query
+export const setExportLogSearchQuery = (payload = {}) => {
+    return {
+        type: SET_EXPORT_LOG_SEARCH_QUERY,
+        payload
+    }
+}
+
+// Clear export log search query
+export const clearExportLogSearchQuery = () => {
+    return {
+        type: CLEAR_EXPORT_LOG_SEARCH_QUERY
     }
 }

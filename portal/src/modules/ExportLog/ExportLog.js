@@ -8,6 +8,7 @@ import {EXPORT_MODULES} from "../../actions/export-log/exportLogTypes";
 import RoleForm from "../Role/RoleForm";
 import RoleView from "../Role/RoleView";
 import RoleFilter from "../Role/RoleFilter";
+import isEmpty from "../../core/validation/is-empty";
 const baseUrl = process.env.MIX_SITE_URL;
 
 class ExportLog extends Component {
@@ -64,21 +65,21 @@ class ExportLog extends Component {
 
 
     handleTableChange(pagination, filters, sorter) {
-        // let data = {
-        //     current: pagination.current,
-        //     sort: 'id',
-        //     order: 'desc'
-        // }
-        // if (!isEmpty(sorter)) {
-        //     if (sorter.order) {
-        //         data = {
-        //             ...data,
-        //             sort: sorter.field,
-        //             order: (sorter.order === 'ascend') ? 'asc' : 'desc'
-        //         }
-        //     }
-        // }
-        // this.props.setRoleSearchQuery(data)
+        let data = {
+            current: pagination.current,
+            sort: 'id',
+            order: 'desc'
+        }
+        if (!isEmpty(sorter)) {
+            if (sorter.order) {
+                data = {
+                    ...data,
+                    sort: sorter.field,
+                    order: (sorter.order === 'ascend') ? 'asc' : 'desc'
+                }
+            }
+        }
+        this.props.setRoleSearchQuery(data)
     }
 
     render() {
