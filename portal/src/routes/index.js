@@ -12,6 +12,7 @@ import NotFound from "../modules/404/NotFound";
 import ChangePassword from "../modules/Profile/ChangePassword";
 import User from "../modules/User/User";
 import ExportLog from "../modules/ExportLog/ExportLog";
+import Department from "../modules/Department/Department";
 
 
 const Routes = () => {
@@ -31,6 +32,7 @@ const Routes = () => {
                             <PrivateRoute exact path="/ip-restriction" component={IpRestriction}/>
                             <PrivateRoute exact path="/user" component={User}/>
                             <PrivateRoute exact path="/export-log" component={ExportLog}/>
+                            <PrivateRoute exact path="/department" component={Department}/>
                             <PrivateRoute exact path="/change-password" component={ChangePassword} />
                             <PrivateRoute component={NotFound} />
                         </Switch>
