@@ -1,4 +1,19 @@
-const initialState = {};
+const initialState = {
+    data: [],
+    searchParams: {
+        loading: false,
+        count: null,
+        per_page: 10,
+        current: 1,
+        total: null,
+        pageSize: 10,
+        id: '',
+        name: '',
+        type: '',
+        sort: 'id',
+        order: 'desc'
+    }
+};
 
 
 export default function (state = initialState, action) {
