@@ -12,7 +12,9 @@ const initialState = {
         type: '',
         sort: 'id',
         order: 'desc'
-    }
+    },
+    searchQuery: '',
+    users: [],
 };
 
 
