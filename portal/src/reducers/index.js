@@ -7,6 +7,7 @@ import ipRestrictionReducer from "./modules/ipRestrictionReducer";
 import userReducer from "./modules/userReducer";
 import exportReducer from "./modules/exportReducer";
 import exportLogReducer from "./modules/exportLogReducer";
+import departmentReducer from "./modules/departmentReducer";
 
 export default combineReducers({
     auth: authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
     ipRestrictions: ipRestrictionReducer,
     users: userReducer,
     export: exportReducer,
-    exportLog: exportLogReducer
+    exportLog: exportLogReducer,
+    departments: departmentReducer
 });
