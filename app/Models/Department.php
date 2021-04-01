@@ -51,6 +51,9 @@ class Department extends Model
     public const DEPARTMENT_HEAD = 1;
     public const DEPARTMENT_MEMBER = 2;
 
+    public const DEPARTMENT_TYPE_DEFAULT = 1;
+    public const DEPARTMENT_TYPE_GROUP = 2;
+
     /**
      * @return array[]
      */

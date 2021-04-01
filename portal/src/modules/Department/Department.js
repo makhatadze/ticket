@@ -2,11 +2,47 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getDepartments} from "../../actions/department/departmentActions";
-import {Button, Table} from "antd";
+import {Button, Space, Table, Tag} from "antd";
+import {Link} from "react-router-dom";
+import {DEPARTMENT_TYPES} from "../../actions/department/departmentTypes";
 
 class Department extends Component {
     constructor(props) {
         super(props);
+        this.columns = [
+            {
+                title: 'ID',
+                dataIndex: 'id',
+                sorter: true,
+            },
+            {
+                title: 'Name',
+                dataIndex: 'name',
+                sorter: true,
+            },
+            {
+                title: 'Type',
+                dataIndex: 'type',
+                sorter: false,
+                render: element => (
+                    <>{DEPARTMENT_TYPES[element]}</>
+                )
+            },
+            {
+                title: 'Action',
+                dataIndex: '',
+                key: 'x',
+                render: (element) => <>
+                    <Space size="middle">
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => console.log('show')}>Show</Link>
+                        <Link to='' className="ant-dropdown-link"
+                              onClick={(event) => console.log('edit')}>Edit</Link>
+                    </Space>
+                </>
+            },
+        ]
+
     }
 
     componentDidMount() {
