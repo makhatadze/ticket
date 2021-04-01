@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getDepartments} from "../../actions/department/departmentActions";
+import {getDepartments, setDepartmentSearchQuery} from "../../actions/department/departmentActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {DEPARTMENT_TYPES} from "../../actions/department/departmentTypes";
@@ -51,6 +51,12 @@ class Department extends Component {
         this.props.getDepartments();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.departments.searchQuery !== this.props.departments.searchQuery) {
+            this.props.getDepartments()
+        }
+    }
+
     handleTableChange(pagination, filters, sorter) {
         let data = {
             current: pagination.current,
@@ -66,7 +72,7 @@ class Department extends Component {
                 }
             }
         }
-        this.props.setRoleSearchQuery(data)
+        this.props.setDepartmentSearchQuery(data)
     }
 
     render() {
@@ -97,7 +103,8 @@ class Department extends Component {
 }
 
 Department.propTypes = {
-    getDepartments: PropTypes.func.isRequired
+    getDepartments: PropTypes.func.isRequired,
+    setDepartmentSearchQuery: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -105,5 +112,6 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-    getDepartments
+    getDepartments,
+    setDepartmentSearchQuery
 })(Department)
