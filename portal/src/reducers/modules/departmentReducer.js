@@ -1,4 +1,9 @@
-import {GET_DEPARTMENTS, SET_DEPARTMENTS_LOADING} from "../../actions/department/departmentTypes";
+import {
+    GET_DEPARTMENTS,
+    SET_DEPARTMENTS_LOADING,
+    SET_DEPARTMENTS_SEARCH_QUERY
+} from "../../actions/department/departmentTypes";
+import queryString from "querystring";
 
 const initialState = {
     data: [],
@@ -40,7 +45,28 @@ export default function (state = initialState, action) {
                     loading: false
                 }
             }
+        case SET_DEPARTMENTS_SEARCH_QUERY:
+            let searchQuery = queryString.parse(state.searchQuery)
+            return {
+                ...state,
+                searchQuery: `?${queryString.stringify(getSearchQueryParams({...state.searchParams, ...searchQuery, ...action.payload}))}`
+            }
         default:
             return state;
+    }
+}
+
+
+
+// Return only available search params
+function getSearchQueryParams(searchData) {
+    return {
+        per_page: searchData.pageSize,
+        page: searchData.current,
+        id: searchData.id,
+        name: searchData.name,
+        type: searchData.type,
+        sort: searchData.sort,
+        order: searchData.order
     }
 }

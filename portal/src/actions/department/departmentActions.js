@@ -1,5 +1,5 @@
 import axios from "axios";
-import {GET_DEPARTMENTS, SET_DEPARTMENTS_LOADING} from "./departmentTypes";
+import {GET_DEPARTMENTS, SET_DEPARTMENTS_LOADING, SET_DEPARTMENTS_SEARCH_QUERY} from "./departmentTypes";
 
 const url = process.env.MIX_SERVER_API_URL;
 
@@ -28,5 +28,13 @@ export const getDepartments = () => (dispatch, getState) => {
 export const setDepartmentsLoading = () => {
     return {
         type: SET_DEPARTMENTS_LOADING
+    }
+}
+
+// Set Department Search Query
+export const setDepartmentSearchQuery = (payload = {} ) => {
+    return {
+        type: SET_DEPARTMENTS_SEARCH_QUERY,
+        payload
     }
 }

@@ -5,6 +5,7 @@ import {getDepartments} from "../../actions/department/departmentActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {DEPARTMENT_TYPES} from "../../actions/department/departmentTypes";
+import isEmpty from "../../core/validation/is-empty";
 
 class Department extends Component {
     constructor(props) {
@@ -42,11 +43,30 @@ class Department extends Component {
                 </>
             },
         ]
+        this.handleTableChange = this.handleTableChange.bind(this)
 
     }
 
     componentDidMount() {
         this.props.getDepartments();
+    }
+
+    handleTableChange(pagination, filters, sorter) {
+        let data = {
+            current: pagination.current,
+            sort: 'id',
+            order: 'desc'
+        }
+        if (!isEmpty(sorter)) {
+            if (sorter.order) {
+                data = {
+                    ...data,
+                    sort: sorter.field,
+                    order: (sorter.order === 'ascend') ? 'asc' : 'desc'
+                }
+            }
+        }
+        this.props.setRoleSearchQuery(data)
     }
 
     render() {
@@ -56,7 +76,7 @@ class Department extends Component {
             <div className="department">
                 <div className="row mb-4 action-container">
                     <div className="col">
-                        <Button type="primary" onClick={() => console.log('show Form')}>Create Role</Button>
+                        <Button type="primary" onClick={() => console.log('show Form')}>Create Department</Button>
                         <Button className="ml-2" type="primary"
                                 onClick={() => console.log('show filter')}>Filter</Button>
                         <Button className="ml-2" type="primary"
