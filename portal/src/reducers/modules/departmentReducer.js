@@ -1,7 +1,8 @@
 import {
+    CLOSE_DEPARTMENT_FILTER,
     GET_DEPARTMENTS,
     SET_DEPARTMENTS_LOADING,
-    SET_DEPARTMENTS_SEARCH_QUERY
+    SET_DEPARTMENTS_SEARCH_QUERY, SHOW_DEPARTMENT_FILTER
 } from "../../actions/department/departmentTypes";
 import queryString from "querystring";
 
@@ -22,6 +23,7 @@ const initialState = {
     },
     searchQuery: '',
     users: [],
+    showDepartmentFilter: false
 };
 
 
@@ -51,11 +53,20 @@ export default function (state = initialState, action) {
                 ...state,
                 searchQuery: `?${queryString.stringify(getSearchQueryParams({...state.searchParams, ...searchQuery, ...action.payload}))}`
             }
+        case SHOW_DEPARTMENT_FILTER:
+            return {
+                ...state,
+                showDepartmentFilter: true
+            }
+        case CLOSE_DEPARTMENT_FILTER:
+            return {
+                ...state,
+                showDepartmentFilter: false
+            }
         default:
             return state;
     }
 }
-
 
 
 // Return only available search params

@@ -1,5 +1,11 @@
 import axios from "axios";
-import {GET_DEPARTMENTS, SET_DEPARTMENTS_LOADING, SET_DEPARTMENTS_SEARCH_QUERY} from "./departmentTypes";
+import {
+    CLOSE_DEPARTMENT_FILTER,
+    GET_DEPARTMENTS,
+    SET_DEPARTMENTS_LOADING,
+    SET_DEPARTMENTS_SEARCH_QUERY,
+    SHOW_DEPARTMENT_FILTER
+} from "./departmentTypes";
 
 const url = process.env.MIX_SERVER_API_URL;
 
@@ -36,5 +42,19 @@ export const setDepartmentSearchQuery = (payload = {} ) => {
     return {
         type: SET_DEPARTMENTS_SEARCH_QUERY,
         payload
+    }
+}
+
+// Show Department filter
+export const showDepartmentFilter = () => {
+    return {
+        type: SHOW_DEPARTMENT_FILTER
+    }
+}
+
+// Close Department filter
+export const closeDepartmentFilter = () => {
+    return {
+        type: CLOSE_DEPARTMENT_FILTER
     }
 }
