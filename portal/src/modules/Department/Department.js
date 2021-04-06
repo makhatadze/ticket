@@ -2,15 +2,18 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {
+    getDepartmentById,
     getDepartments,
     setDepartmentSearchQuery,
-    showDepartmentFilter
+    showDepartmentFilter, showDepartmentView
 } from "../../actions/department/departmentActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {DEPARTMENT_TYPES} from "../../actions/department/departmentTypes";
 import isEmpty from "../../core/validation/is-empty";
 import DepartmentFilter from "./DepartmentFilter";
+import {toast} from "react-toastify";
+import DepartmentView from "./DepartmentView";
 
 class Department extends Component {
     constructor(props) {
@@ -41,7 +44,7 @@ class Department extends Component {
                 render: (element) => <>
                     <Space size="middle">
                         <Link to='' className="ant-dropdown-link"
-                              onClick={(event) => console.log('show')}>Show</Link>
+                              onClick={(event) => this.showDepartment(event,element)}>Show</Link>
                         <Link to='' className="ant-dropdown-link"
                               onClick={(event) => console.log('edit')}>Edit</Link>
                     </Space>
@@ -61,6 +64,13 @@ class Department extends Component {
             console.log(123)
             this.props.getDepartments()
         }
+    }
+
+    async showDepartment(event,data) {
+        event.preventDefault();
+        await getDepartmentById(data.id)
+            .then(res => this.props.showDepartmentView(res.data))
+            .catch(err => toast.error(err.response.data.message))
     }
 
     handleTableChange(pagination, filters, sorter) {
@@ -104,6 +114,7 @@ class Department extends Component {
                     onChange={this.handleTableChange}
                 />
                 <DepartmentFilter />
+                <DepartmentView />
             </div>
         )
     }
@@ -113,6 +124,7 @@ Department.propTypes = {
     getDepartments: PropTypes.func.isRequired,
     setDepartmentSearchQuery: PropTypes.func.isRequired,
     showDepartmentFilter: PropTypes.func.isRequired,
+    showDepartmentView: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -122,5 +134,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     getDepartments,
     setDepartmentSearchQuery,
-    showDepartmentFilter
+    showDepartmentFilter,
+    showDepartmentView
 })(Department)
