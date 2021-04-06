@@ -68,6 +68,10 @@ class Department extends Model
                 'hasParam' => true,
                 'scopeMethod' => 'name'
             ],
+            'type' => [
+                'hasParam' => true,
+                'scopeMethod' => 'type'
+            ]
         ];
     }
 

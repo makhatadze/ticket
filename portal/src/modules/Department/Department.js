@@ -1,11 +1,16 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getDepartments, setDepartmentSearchQuery} from "../../actions/department/departmentActions";
+import {
+    getDepartments,
+    setDepartmentSearchQuery,
+    showDepartmentFilter
+} from "../../actions/department/departmentActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
 import {DEPARTMENT_TYPES} from "../../actions/department/departmentTypes";
 import isEmpty from "../../core/validation/is-empty";
+import DepartmentFilter from "./DepartmentFilter";
 
 class Department extends Component {
     constructor(props) {
@@ -53,6 +58,7 @@ class Department extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.departments.searchQuery !== this.props.departments.searchQuery) {
+            console.log(123)
             this.props.getDepartments()
         }
     }
@@ -84,7 +90,7 @@ class Department extends Component {
                     <div className="col">
                         <Button type="primary" onClick={() => console.log('show Form')}>Create Department</Button>
                         <Button className="ml-2" type="primary"
-                                onClick={() => console.log('show filter')}>Filter</Button>
+                                onClick={() => this.props.showDepartmentFilter()}>Filter</Button>
                         <Button className="ml-2" type="primary"
                                 onClick={() => window.print()}>Print</Button>
                     </div>
@@ -97,6 +103,7 @@ class Department extends Component {
                     loading={searchParams.loading}
                     onChange={this.handleTableChange}
                 />
+                <DepartmentFilter />
             </div>
         )
     }
@@ -105,6 +112,7 @@ class Department extends Component {
 Department.propTypes = {
     getDepartments: PropTypes.func.isRequired,
     setDepartmentSearchQuery: PropTypes.func.isRequired,
+    showDepartmentFilter: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -113,5 +121,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     getDepartments,
-    setDepartmentSearchQuery
+    setDepartmentSearchQuery,
+    showDepartmentFilter
 })(Department)

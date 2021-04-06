@@ -155,7 +155,8 @@ trait ScopeFilter
 
     /**
      * @param $query
-     * @param $endTime
+     * @param $type
+     *
      * @return mixed
      */
     public function scopeType($query, $type)
