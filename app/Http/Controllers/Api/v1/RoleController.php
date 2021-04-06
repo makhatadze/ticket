@@ -139,4 +139,9 @@ class RoleController extends Controller
     {
         return RolePermissionResource::collection($this->roleRepository->all());
     }
+    
+    public function test()
+    {
+        return json_encode(['success']);
+    }
 }

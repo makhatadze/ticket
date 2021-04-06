@@ -9,6 +9,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use DB;
 use App\Http\Requests\Api\v1\RoleRequest;
 use App\Http\Resources\Api\v1\RoleCollection;
 use App\Http\Resources\Api\v1\RoleResource;
@@ -60,13 +61,27 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
         $attributes = $request->only('name', 'slug');
         $this->model = $this->update($id, $attributes);
 
-        // Remove permissions
-        $this->model->permissions()->detach();
+        // get old permissions
+        $roleOldPermissions = $this->model->permissions()->pluck('id')->toArray();
+
+        $newPermissions = array_values(array_diff($request['permissions'],$roleOldPermissions));
+        $oldPermissions = array_values(array_diff($roleOldPermissions,$request['permissions']));
 
         // Attach permissions
         $this->syncPermissions($request);
 
-        return new RoleResource($this->model);
+        foreach ($this->model->users as $user) {
+            if (count($oldPermissions)) {
+                $user->permissions()->wherePivotIn('permission_id',$oldPermissions)->detach();
+            }
+            if (count($newPermissions)) {
+                foreach ($newPermissions as $newPermission) {
+                    $user->permissions()->attach($newPermission);
+                }
+            }
+        }
+
+        return new RoleResource($this->model);        
     }
 
     /**
