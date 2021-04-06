@@ -4,7 +4,7 @@ import {
     GET_DEPARTMENTS,
     SET_DEPARTMENTS_LOADING,
     SET_DEPARTMENTS_SEARCH_QUERY,
-    SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_VIEW
+    SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_FORM, SHOW_DEPARTMENT_VIEW
 } from "./departmentTypes";
 
 const url = process.env.MIX_SERVER_API_URL;
@@ -80,5 +80,13 @@ export const showDepartmentView = (payload = {}) => {
 export const closeDepartmentView = () => {
     return {
         type: CLOSE_DEPARTMENT_VIEW
+    }
+}
+
+// show department form
+export const showDepartmentForm = (payload = {}) => {
+    return {
+        type: SHOW_DEPARTMENT_FORM,
+        payload
     }
 }
