@@ -23,7 +23,11 @@ const initialState = {
     },
     searchQuery: '',
     users: [],
-    showDepartmentFilter: false
+    showDepartmentFilter: false,
+    showDepartmentView: {
+        show: false,
+        modalDepartment: {}
+    }
 };
 
 
