@@ -9,6 +9,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use DB;
 use App\Http\Requests\Api\v1\RoleRequest;
 use App\Http\Resources\Api\v1\RoleCollection;
 use App\Http\Resources\Api\v1\RoleResource;
@@ -65,8 +66,31 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 
         // Attach permissions
         $this->syncPermissions($request);
+        
+        
+        // იმ მომხარებელთა id-ები, რომლებთანაც დაკავშირებულია ეს როლი
+        $user_ids = DB::table('users_roles')->select('user_id')->where('role_id',$id)->pluck('user_id');
+        
+        // მომხმარებლებთან დაკავშირებული უკვე არსებული ყველა უფლების წაშლა
+        DB::table('users_permissions')->whereIn('user_id',$user_ids)->delete();
+        
+        // აქ შეინახება მომხმარებლისა და უფლებების ახალი წყვილები
+        $new_permissions = [];
+        
+        foreach($user_ids as $user_id)
+        {
+            foreach($request->permissions as $permission_id)
+            {
+                $new_permissions[] = [
+                    'user_id' => $user_id,
+                    'permission_id' => $permission_id
+                ];
+            }
+        }
 
-        return new RoleResource($this->model);
+        DB::table('users_permissions')->insert($data);  
+
+        return new RoleResource($this->model);        
     }
 
     /**
