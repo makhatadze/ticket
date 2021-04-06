@@ -1,8 +1,8 @@
 import {
-    CLOSE_DEPARTMENT_FILTER,
+    CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_VIEW,
     GET_DEPARTMENTS,
     SET_DEPARTMENTS_LOADING,
-    SET_DEPARTMENTS_SEARCH_QUERY, SHOW_DEPARTMENT_FILTER
+    SET_DEPARTMENTS_SEARCH_QUERY, SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_VIEW
 } from "../../actions/department/departmentTypes";
 import queryString from "querystring";
 
@@ -65,6 +65,22 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 showDepartmentFilter: false
+            }
+        case SHOW_DEPARTMENT_VIEW:
+            return {
+                ...state,
+                showDepartmentView: {
+                    show: true,
+                    modalDepartment: action.payload
+                }
+            }
+        case CLOSE_DEPARTMENT_VIEW:
+            return {
+                ...state,
+                showDepartmentView: {
+                    show: false,
+                    modalDepartment: {}
+                }
             }
         default:
             return state;
