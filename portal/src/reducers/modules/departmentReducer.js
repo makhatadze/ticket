@@ -1,8 +1,8 @@
 import {
-    CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_VIEW,
-    GET_DEPARTMENTS,
+    CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_FORM, CLOSE_DEPARTMENT_VIEW,
+    GET_DEPARTMENTS, SET_DEPARTMENT_FORM_LOADING,
     SET_DEPARTMENTS_LOADING,
-    SET_DEPARTMENTS_SEARCH_QUERY, SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_VIEW
+    SET_DEPARTMENTS_SEARCH_QUERY, SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_FORM, SHOW_DEPARTMENT_VIEW
 } from "../../actions/department/departmentTypes";
 import queryString from "querystring";
 
@@ -26,6 +26,11 @@ const initialState = {
     showDepartmentView: {
         show: false,
         modalDepartment: {}
+    },
+    showDepartmentForm: {
+        show: false,
+        modalDepartment: {},
+        loading: false
     }
 };
 
@@ -80,6 +85,32 @@ export default function (state = initialState, action) {
                 showDepartmentView: {
                     show: false,
                     modalDepartment: {}
+                }
+            }
+        case SHOW_DEPARTMENT_FORM:
+            return {
+                ...state,
+                showDepartmentForm: {
+                    show: true,
+                    modalDepartment: action.payload,
+                    loading: false
+                }
+            }
+        case CLOSE_DEPARTMENT_FORM:
+            return {
+                ...state,
+                showDepartmentForm: {
+                    show: false,
+                    modalDepartment: {},
+                    loading: false
+                }
+            }
+        case SET_DEPARTMENT_FORM_LOADING:
+            return {
+                ...state,
+                showDepartmentForm: {
+                    ...state.showDepartmentForm,
+                    loading: true
                 }
             }
         default:
