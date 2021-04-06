@@ -81,7 +81,6 @@ class Department extends Component {
                 if (isEmpty(data)) {
                     this.props.showDepartmentForm({...usersObject})
                 } else {
-                    console.log('Edit')
                 }
             })
             .catch(err => console.log(err))
