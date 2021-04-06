@@ -32,7 +32,7 @@ class RoleView extends Component {
                        maskClosable={false} onCancel={() => this.props.closeRoleView()}>
                     <p>ID: {showRoleView.modalRole.id}</p>
                     <p>Name: {showRoleView.modalRole.name}</p>
-                    <p>IP: {showRoleView.modalRole.ip}</p>
+                    <p>Slug: {showRoleView.modalRole.slug}</p>
                     {permissions}
                     <Collapse>
                         {(!isEmpty(showRoleView.modalRole.createdBy) && showRoleView.modalRole.createdAt) ? (
