@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
     CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_FORM, CLOSE_DEPARTMENT_VIEW,
-    GET_DEPARTMENTS,
+    GET_DEPARTMENTS, SET_DEPARTMENT_FORM_LOADING,
     SET_DEPARTMENTS_LOADING,
     SET_DEPARTMENTS_SEARCH_QUERY,
     SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_FORM, SHOW_DEPARTMENT_VIEW
@@ -95,5 +95,12 @@ export const showDepartmentForm = (payload = {}) => {
 export const closeDepartmentForm = () => {
     return {
         type: CLOSE_DEPARTMENT_FORM
+    }
+}
+
+// set department form loading
+export const setDepartmentFormLoading = () => {
+    return {
+        type: SET_DEPARTMENT_FORM_LOADING
     }
 }
