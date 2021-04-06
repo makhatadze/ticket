@@ -30,6 +30,15 @@ export const getDepartments = () => (dispatch, getState) => {
         )
 }
 
+export const getDepartmentById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        axios
+            .get(`${url}/department/${id}`)
+            .then((res) => resolve(res.data))
+            .catch(err => reject(err))
+    })
+}
+
 // Set Departments Loading
 export const setDepartmentsLoading = () => {
     return {
