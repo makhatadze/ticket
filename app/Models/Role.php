@@ -50,13 +50,23 @@ class Role extends Model
     protected $fillable = ['name','slug'];
 
     /**
-     * Get roles
+     * Get permissions
      *
      * @return BelongsToMany
      */
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class, 'roles_permissions');
+    }
+
+    /**
+     * Get users
+     *
+     * @return BelongsToMany
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'users_roles');
     }
 
     /**

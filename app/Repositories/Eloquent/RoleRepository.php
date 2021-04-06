@@ -61,34 +61,25 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
         $attributes = $request->only('name', 'slug');
         $this->model = $this->update($id, $attributes);
 
-        // Remove permissions
-        $this->model->permissions()->detach();
+        // get old permissions
+        $roleOldPermissions = $this->model->permissions()->pluck('id')->toArray();
+
+        $newPermissions = array_values(array_diff($request['permissions'],$roleOldPermissions));
+        $oldPermissions = array_values(array_diff($roleOldPermissions,$request['permissions']));
 
         // Attach permissions
         $this->syncPermissions($request);
-        
-        
-        // იმ მომხარებელთა id-ები, რომლებთანაც დაკავშირებულია ეს როლი
-        $user_ids = DB::table('users_roles')->select('user_id')->where('role_id',$id)->pluck('user_id');
-        
-        // მომხმარებლებთან დაკავშირებული უკვე არსებული ყველა უფლების წაშლა
-        DB::table('users_permissions')->whereIn('user_id',$user_ids)->delete();
-        
-        // აქ შეინახება მომხმარებლისა და უფლებების ახალი წყვილები
-        $new_permissions = [];
-        
-        foreach($user_ids as $user_id)
-        {
-            foreach($request->permissions as $permission_id)
-            {
-                $new_permissions[] = [
-                    'user_id' => $user_id,
-                    'permission_id' => $permission_id
-                ];
+
+        foreach ($this->model->users as $user) {
+            if (count($oldPermissions)) {
+                $user->permissions()->wherePivotIn('permission_id',$oldPermissions)->detach();
+            }
+            if (count($newPermissions)) {
+                foreach ($newPermissions as $newPermission) {
+                    $user->permissions()->attach($newPermission);
+                }
             }
         }
-
-        DB::table('users_permissions')->insert($data);  
 
         return new RoleResource($this->model);        
     }

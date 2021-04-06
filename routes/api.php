@@ -46,11 +46,6 @@ Route::middleware('ipMiddleware')->group(function () {
             // Export Log
             Route::get('export-log', [ExportLogController::class, 'index']);
             
-            // Test
-            Route::get('test', [TestController::class, 'index']);
-            
         });
-        
     });
-    
 });
