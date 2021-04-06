@@ -1,10 +1,10 @@
 import axios from "axios";
 import {
-    CLOSE_DEPARTMENT_FILTER,
+    CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_VIEW,
     GET_DEPARTMENTS,
     SET_DEPARTMENTS_LOADING,
     SET_DEPARTMENTS_SEARCH_QUERY,
-    SHOW_DEPARTMENT_FILTER
+    SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_VIEW
 } from "./departmentTypes";
 
 const url = process.env.MIX_SERVER_API_URL;
@@ -38,7 +38,7 @@ export const setDepartmentsLoading = () => {
 }
 
 // Set Department Search Query
-export const setDepartmentSearchQuery = (payload = {} ) => {
+export const setDepartmentSearchQuery = (payload = {}) => {
     return {
         type: SET_DEPARTMENTS_SEARCH_QUERY,
         payload
@@ -56,5 +56,20 @@ export const showDepartmentFilter = () => {
 export const closeDepartmentFilter = () => {
     return {
         type: CLOSE_DEPARTMENT_FILTER
+    }
+}
+
+// Show department view
+export const showDepartmentView = (payload = {}) => {
+    return {
+        type: SHOW_DEPARTMENT_VIEW,
+        payload
+    }
+}
+
+// Close department view
+export const closeDepartmentView = () => {
+    return {
+        type: CLOSE_DEPARTMENT_VIEW
     }
 }
