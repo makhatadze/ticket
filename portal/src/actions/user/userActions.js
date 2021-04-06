@@ -156,3 +156,13 @@ export const setUserFormLoading = () => {
         type: SET_USER_FORM_LOADING,
     }
 }
+
+// Get all users without pagination
+export const getAllUsers = async () => {
+    return new Promise(async (resolve, reject) => {
+        axios
+            .get(`${url}/user-all`)
+            .then(res => resolve(res.data))
+            .catch(err => reject(err.response.data))
+    })
+}

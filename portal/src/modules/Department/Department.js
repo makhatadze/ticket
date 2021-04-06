@@ -5,7 +5,7 @@ import {
     getDepartmentById,
     getDepartments, setDepartmentFormLoading,
     setDepartmentSearchQuery,
-    showDepartmentFilter, showDepartmentView
+    showDepartmentFilter, showDepartmentForm, showDepartmentView
 } from "../../actions/department/departmentActions";
 import {Button, Space, Table, Tag} from "antd";
 import {Link} from "react-router-dom";
@@ -14,6 +14,7 @@ import isEmpty from "../../core/validation/is-empty";
 import DepartmentFilter from "./DepartmentFilter";
 import {toast} from "react-toastify";
 import DepartmentView from "./DepartmentView";
+import {getAllUsers} from "../../actions/user/userActions";
 
 class Department extends Component {
     constructor(props) {
@@ -44,7 +45,7 @@ class Department extends Component {
                 render: (element) => <>
                     <Space size="middle">
                         <Link to='' className="ant-dropdown-link"
-                              onClick={(event) => this.showDepartment(event,element)}>Show</Link>
+                              onClick={(event) => this.showDepartment(event, element)}>Show</Link>
                         <Link to='' className="ant-dropdown-link"
                               onClick={(event) => console.log('edit')}>Edit</Link>
                     </Space>
@@ -65,7 +66,7 @@ class Department extends Component {
         }
     }
 
-    async showDepartment(event,data) {
+    async showDepartment(event, data) {
         event.preventDefault();
         await getDepartmentById(data.id)
             .then(res => this.props.showDepartmentView(res.data))
@@ -74,6 +75,17 @@ class Department extends Component {
 
     async showDepartmentForm(data = {}) {
         this.props.setDepartmentFormLoading();
+        getAllUsers()
+            .then(res => {
+                let usersObject = {'users': res.data};
+                if (isEmpty(data)) {
+                    this.props.showDepartmentForm({...usersObject})
+                } else {
+                    console.log('Edit')
+                }
+            })
+            .catch(err => console.log(err))
+
     }
 
     handleTableChange(pagination, filters, sorter) {
@@ -101,7 +113,7 @@ class Department extends Component {
             <div className="department">
                 <div className="row mb-4 action-container">
                     <div className="col">
-                        <Button type="primary" onClick={() => console.log('show Form')}>Create Department</Button>
+                        <Button type="primary" onClick={() => this.showDepartmentForm()}>Create Department</Button>
                         <Button className="ml-2" type="primary"
                                 onClick={() => this.props.showDepartmentFilter()}>Filter</Button>
                         <Button className="ml-2" type="primary"
@@ -116,8 +128,8 @@ class Department extends Component {
                     loading={searchParams.loading}
                     onChange={this.handleTableChange}
                 />
-                <DepartmentFilter />
-                <DepartmentView />
+                <DepartmentFilter/>
+                <DepartmentView/>
             </div>
         )
     }
@@ -129,6 +141,8 @@ Department.propTypes = {
     showDepartmentFilter: PropTypes.func.isRequired,
     showDepartmentView: PropTypes.func.isRequired,
     setDepartmentFormLoading: PropTypes.func.isRequired,
+    showDepartmentForm: PropTypes.func.isRequired,
+
 }
 
 const mapStateToProps = state => ({
@@ -140,5 +154,6 @@ export default connect(mapStateToProps, {
     setDepartmentSearchQuery,
     showDepartmentFilter,
     showDepartmentView,
-    setDepartmentFormLoading
+    setDepartmentFormLoading,
+    showDepartmentForm
 })(Department)
