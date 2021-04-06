@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {
     getDepartmentById,
-    getDepartments,
+    getDepartments, setDepartmentFormLoading,
     setDepartmentSearchQuery,
     showDepartmentFilter, showDepartmentView
 } from "../../actions/department/departmentActions";
@@ -52,7 +52,7 @@ class Department extends Component {
             },
         ]
         this.handleTableChange = this.handleTableChange.bind(this)
-
+        this.showDepartmentForm = this.showDepartmentForm.bind(this)
     }
 
     componentDidMount() {
@@ -61,7 +61,6 @@ class Department extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.departments.searchQuery !== this.props.departments.searchQuery) {
-            console.log(123)
             this.props.getDepartments()
         }
     }
@@ -71,6 +70,10 @@ class Department extends Component {
         await getDepartmentById(data.id)
             .then(res => this.props.showDepartmentView(res.data))
             .catch(err => toast.error(err.response.data.message))
+    }
+
+    async showDepartmentForm(data = {}) {
+        this.props.setDepartmentFormLoading();
     }
 
     handleTableChange(pagination, filters, sorter) {
@@ -125,6 +128,7 @@ Department.propTypes = {
     setDepartmentSearchQuery: PropTypes.func.isRequired,
     showDepartmentFilter: PropTypes.func.isRequired,
     showDepartmentView: PropTypes.func.isRequired,
+    setDepartmentFormLoading: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -135,5 +139,6 @@ export default connect(mapStateToProps, {
     getDepartments,
     setDepartmentSearchQuery,
     showDepartmentFilter,
-    showDepartmentView
+    showDepartmentView,
+    setDepartmentFormLoading
 })(Department)
