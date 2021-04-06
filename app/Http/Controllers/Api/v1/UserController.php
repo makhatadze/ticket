@@ -26,6 +26,7 @@ use App\Repositories\UserRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -176,5 +177,15 @@ class UserController extends Controller
         }
     }
 
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @param UserRequest $request
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function getUsers(UserRequest $request): AnonymousResourceCollection
+    {
+        return UserResource::collection($this->userRepository->all());
+    }
 }

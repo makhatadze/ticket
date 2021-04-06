@@ -27,6 +27,7 @@ Route::middleware('ipMiddleware')->group(function () {
 
             // Users
             Route::post('user/{user}/restore',[UserController::class,'restore']);
+            Route::get('user-all',[UserController::class,'getUsers']);
             Route::post('user/export',[UserController::class,'exportToExcel'])->middleware('can:userExport');
             Route::apiResource('user', UserController::class);
 
