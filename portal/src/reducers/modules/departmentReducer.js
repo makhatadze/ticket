@@ -22,7 +22,6 @@ const initialState = {
         order: 'desc'
     },
     searchQuery: '',
-    users: [],
     showDepartmentFilter: false,
     showDepartmentView: {
         show: false,
