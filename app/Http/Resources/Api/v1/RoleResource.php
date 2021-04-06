@@ -28,8 +28,8 @@ class RoleResource extends JsonResource
             'slug' => $this->slug,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'createdBy' => new UserResource($this->createdBy),
-            'updatedBy' => new UserResource($this->updatedBy),
+            'createdBy' => $this->createdBy,
+            'updatedBy' => $this->updatedBy,
             'permissions' => new PermissionCollection($this->permissions)
         ];
     }
