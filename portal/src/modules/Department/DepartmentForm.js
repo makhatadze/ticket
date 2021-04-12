@@ -11,6 +11,7 @@ import {EyeInvisibleOutlined, EyeTwoTone} from "@ant-design/icons";
 class DepartmentForm extends Component{
     constructor(props) {
         super(props);
+
         this.state = {
             id: null,
             name: '',
@@ -22,6 +23,10 @@ class DepartmentForm extends Component{
             headsArray : [],
             membersArray : [],
         }
+
+        this.changeHeads = this.changeHeads.bind(this);
+        this.changeMembers = this.changeMembers.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -43,8 +48,13 @@ class DepartmentForm extends Component{
     changeHeads(heads) {
         let {modalDepartment} = this.props.departments.showDepartmentForm;
         this.setState({heads: heads})
-
     }
+
+    changeMembers(members) {
+        let {modalDepartment} = this.props.departments.showDepartmentForm;
+        this.setState({members: members})
+    }
+
     onChange(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -56,6 +66,7 @@ class DepartmentForm extends Component{
         const {Option} = Select;
 
         const selectHeads = [];
+        const selectMembers = [];
 
         let content;
         if (showDepartmentForm.loading || isEmpty(showDepartmentForm.modalDepartment)) {
@@ -65,6 +76,9 @@ class DepartmentForm extends Component{
         } else {
             showDepartmentForm.modalDepartment.users.forEach(el => {
                 selectHeads.push(<Option key={el.id} value={el.id}>
+                    {el.name}
+                </Option>)
+                selectMembers.push(<Option key={el.id} value={el.id}>
                     {el.name}
                 </Option>)
             })
@@ -101,6 +115,27 @@ class DepartmentForm extends Component{
                             placeholder="Select Heads"
                         >
                             {selectHeads}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Members"
+                        hasFeedback
+                        validateStatus={this.state.errors.members ? 'error' : ''}
+                        help={this.state.errors.members ?? ''}
+                        style={{
+                            marginBottom: 1
+                        }}
+                    >
+                        <Select
+                            mode="multiple"
+                            size="default"
+                            allowClear
+                            value={this.state.members}
+                            onChange={this.changeMembers}
+                            style={{width: "100%"}}
+                            placeholder="Select Members"
+                        >
+                            {selectMembers}
                         </Select>
                     </Form.Item>
                     <Button type="primary" htmlType="submit" loading={this.state.loading}
