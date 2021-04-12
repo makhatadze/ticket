@@ -15,6 +15,7 @@ import DepartmentFilter from "./DepartmentFilter";
 import {toast} from "react-toastify";
 import DepartmentView from "./DepartmentView";
 import {getAllUsers} from "../../actions/user/userActions";
+import DepartmentForm from "./DepartmentForm";
 
 class Department extends Component {
     constructor(props) {
@@ -129,6 +130,7 @@ class Department extends Component {
                 />
                 <DepartmentFilter/>
                 <DepartmentView/>
+                <DepartmentForm />
             </div>
         )
     }
