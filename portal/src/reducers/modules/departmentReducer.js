@@ -1,4 +1,5 @@
 import {
+    CLEAR_DEPARTMENTS_SEARCH_QUERY,
     CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_FORM, CLOSE_DEPARTMENT_VIEW,
     GET_DEPARTMENTS, SET_DEPARTMENT_FORM_LOADING,
     SET_DEPARTMENTS_LOADING,
@@ -112,6 +113,11 @@ export default function (state = initialState, action) {
                     ...state.showDepartmentForm,
                     loading: true
                 }
+            }
+        case CLEAR_DEPARTMENTS_SEARCH_QUERY:
+            return {
+                ...state,
+                searchQuery: ''
             }
         default:
             return state;
