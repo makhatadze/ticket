@@ -41,6 +41,20 @@ export const getDepartmentById = (id) => {
     })
 }
 
+// Create new department
+export const createDepartment = data => (dispatch, getState) => {
+    const {searchQuery} = getState().users;
+    return new Promise(async (resolve, reject) => {
+        axios
+            .post(`${url}/department`, data)
+            .then(res => {
+                searchQuery === '' ? dispatch(getDepartments()) : dispatch(clearDepartmentSearchQuery())
+            })
+            .catch(err => reject(err))
+    })
+}
+
+
 // Set Departments Loading
 export const setDepartmentsLoading = () => {
     return {

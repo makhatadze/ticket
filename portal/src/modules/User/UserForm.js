@@ -60,7 +60,7 @@ class UserForm extends Component {
             role: this.state.role,
             permissions: this.state.permissions
         }
-        this.setState({loading: true, errors: false})
+        this.setState({loading: true, errors: {}})
         if (this.state.id !== null) {
             await updateUser(this.state.id,data)
                 .then(res => {
