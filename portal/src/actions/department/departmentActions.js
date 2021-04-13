@@ -30,6 +30,7 @@ export const getDepartments = () => (dispatch, getState) => {
         )
 }
 
+// Get department by id
 export const getDepartmentById = (id) => {
     return new Promise(async (resolve, reject) => {
         axios
