@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+    CLEAR_DEPARTMENTS_SEARCH_QUERY,
     CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_FORM, CLOSE_DEPARTMENT_VIEW,
     GET_DEPARTMENTS, SET_DEPARTMENT_FORM_LOADING,
     SET_DEPARTMENTS_LOADING,
@@ -103,5 +104,12 @@ export const closeDepartmentForm = () => {
 export const setDepartmentFormLoading = () => {
     return {
         type: SET_DEPARTMENT_FORM_LOADING
+    }
+}
+
+// Clear departments SearchQuery
+export const clearDepartmentSearchQuery = () => {
+    return {
+        type: CLEAR_DEPARTMENTS_SEARCH_QUERY
     }
 }
