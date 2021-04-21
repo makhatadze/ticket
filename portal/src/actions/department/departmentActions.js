@@ -43,12 +43,13 @@ export const getDepartmentById = (id) => {
 
 // Create new department
 export const createDepartment = data => (dispatch, getState) => {
-    const {searchQuery} = getState().users;
+    const {searchQuery} = getState().departments;
     return new Promise(async (resolve, reject) => {
         axios
             .post(`${url}/department`, data)
             .then(res => {
                 searchQuery === '' ? dispatch(getDepartments()) : dispatch(clearDepartmentSearchQuery())
+                resolve(res.data)
             })
             .catch(err => reject(err))
     })
