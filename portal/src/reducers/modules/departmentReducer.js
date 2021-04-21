@@ -1,9 +1,16 @@
 import {
     CLEAR_DEPARTMENTS_SEARCH_QUERY,
-    CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_FORM, CLOSE_DEPARTMENT_VIEW,
-    GET_DEPARTMENTS, SET_DEPARTMENT_FORM_LOADING,
+    CLOSE_DEPARTMENT_FILTER,
+    CLOSE_DEPARTMENT_FORM,
+    CLOSE_DEPARTMENT_VIEW,
+    GET_DEPARTMENTS,
+    SET_DEPARTMENT_FORM_LOADING,
     SET_DEPARTMENTS_LOADING,
-    SET_DEPARTMENTS_SEARCH_QUERY, SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_FORM, SHOW_DEPARTMENT_VIEW
+    SET_DEPARTMENTS_SEARCH_QUERY,
+    SET_UPDATE_DEPARTMENT,
+    SHOW_DEPARTMENT_FILTER,
+    SHOW_DEPARTMENT_FORM,
+    SHOW_DEPARTMENT_VIEW
 } from "../../actions/department/departmentTypes";
 import queryString from "querystring";
 
@@ -118,6 +125,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 searchQuery: ''
+            }
+        case SET_UPDATE_DEPARTMENT:
+            return {
+                ...state,
+                data: state.data.map(el => el.id === action.payload.id ? action.payload : el)
             }
         default:
             return state;
