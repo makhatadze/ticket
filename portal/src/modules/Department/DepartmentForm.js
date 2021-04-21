@@ -5,8 +5,12 @@ import isEmpty from "../../core/validation/is-empty";
 import {Button, Form, Input, Modal, Radio, Select, Switch} from "antd";
 import Spinner from "../../components/Spinner/Spinner";
 import formLayout from "../../core/config/formLayout";
-import {EyeInvisibleOutlined, EyeTwoTone} from "@ant-design/icons";
-import {closeDepartmentForm, createDepartment} from "../../actions/department/departmentActions";
+import {
+    closeDepartmentForm,
+    createDepartment,
+    setUpdateDepartment,
+    updateDepartment
+} from "../../actions/department/departmentActions";
 import {toast} from "react-toastify";
 
 
@@ -82,7 +86,16 @@ class DepartmentForm extends Component {
             errors: {}
         });
         if (this.state.id !== null) {
-
+            await updateDepartment(this.state.id,data)
+                .then(res => {
+                    this.props.setUpdateDepartment(res.data);
+                    toast.success(`${res.data.name} - Updated.`)
+                    this.closeDepartmentForm();
+                })
+                .catch(err => {
+                    toast.error('Can not updated.');
+                    this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
+                })
         } else {
             this.props.createDepartment(data)
                 .then(res => {
@@ -214,7 +227,9 @@ class DepartmentForm extends Component {
 
 DepartmentForm.propTypes = {
     createDepartment: PropTypes.func.isRequired,
-    closeDepartmentForm: PropTypes.func.isRequired
+    closeDepartmentForm: PropTypes.func.isRequired,
+    setUpdateDepartment: PropTypes.func.isRequired
+
 }
 
 const mapStateToProps = state => ({
@@ -223,5 +238,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     createDepartment,
-    closeDepartmentForm
+    closeDepartmentForm,
+    setUpdateDepartment
 })(DepartmentForm);
