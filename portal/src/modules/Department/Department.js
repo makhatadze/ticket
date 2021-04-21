@@ -68,11 +68,11 @@ class Department extends Component {
         }
     }
 
-    editDepartment(event,data) {
+    async editDepartment(event,data) {
         event.preventDefault();
-        this.showDepartmentForm(data)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
+        await getDepartmentById(data.id)
+            .then(res => this.showDepartmentForm(res.data))
+            .catch(err => toast.error(err.response.data.message))
     }
 
     async showDepartment(event, data) {

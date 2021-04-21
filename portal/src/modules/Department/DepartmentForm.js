@@ -115,7 +115,6 @@ class DepartmentForm extends Component {
 
         const selectHeads = [];
         const selectMembers = [];
-
         let content;
         if (showDepartmentForm.loading || isEmpty(showDepartmentForm.modalDepartment)) {
             content = (
