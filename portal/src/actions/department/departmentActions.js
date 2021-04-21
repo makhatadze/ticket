@@ -4,7 +4,7 @@ import {
     CLOSE_DEPARTMENT_FILTER, CLOSE_DEPARTMENT_FORM, CLOSE_DEPARTMENT_VIEW,
     GET_DEPARTMENTS, SET_DEPARTMENT_FORM_LOADING,
     SET_DEPARTMENTS_LOADING,
-    SET_DEPARTMENTS_SEARCH_QUERY,
+    SET_DEPARTMENTS_SEARCH_QUERY, SET_UPDATE_DEPARTMENT,
     SHOW_DEPARTMENT_FILTER, SHOW_DEPARTMENT_FORM, SHOW_DEPARTMENT_VIEW
 } from "./departmentTypes";
 
@@ -55,6 +55,22 @@ export const createDepartment = data => (dispatch, getState) => {
     })
 }
 
+// Update Department
+export const updateDepartment = (id,data) => {
+    return new Promise(async (resolve,reject) => {
+        axios.patch(`${url}/department/${id}`,data)
+            .then(res => resolve(res.data))
+            .catch(err => reject(err))
+    })
+}
+
+// Merge updated department
+export const setUpdateDepartment = (payload) => {
+    return {
+        type: SET_UPDATE_DEPARTMENT,
+        payload
+    }
+}
 
 // Set Departments Loading
 export const setDepartmentsLoading = () => {
