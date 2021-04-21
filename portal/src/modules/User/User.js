@@ -173,6 +173,8 @@ class User extends Component {
     editUser(event, data) {
         event.preventDefault()
         this.showUserForm(data)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
     }
 
     exportSubmit () {
