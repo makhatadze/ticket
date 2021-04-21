@@ -40,8 +40,8 @@ class DepartmentForm extends Component {
                         id: modalDepartment.id,
                         name: modalDepartment.name,
                         type: modalDepartment.type,
-                        heads: modalDepartment.heads.map((el) => el.id),
-                        members: modalDepartment.members.map((el) => el.id),
+                        heads: modalDepartment.heads && modalDepartment.heads.map((el) => el.id),
+                        members: modalDepartment.members && modalDepartment.members.map((el) => el.id),
                     })
                 }
             }

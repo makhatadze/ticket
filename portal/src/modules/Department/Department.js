@@ -48,13 +48,14 @@ class Department extends Component {
                         <Link to='' className="ant-dropdown-link"
                               onClick={(event) => this.showDepartment(event, element)}>Show</Link>
                         <Link to='' className="ant-dropdown-link"
-                              onClick={(event) => console.log('edit')}>Edit</Link>
+                              onClick={(event) => this.editDepartment(event,element)}>Edit</Link>
                     </Space>
                 </>
             },
         ]
-        this.handleTableChange = this.handleTableChange.bind(this)
-        this.showDepartmentForm = this.showDepartmentForm.bind(this)
+        this.handleTableChange = this.handleTableChange.bind(this);
+        this.showDepartmentForm = this.showDepartmentForm.bind(this);
+        this.editDepartment = this.editDepartment.bind(this);
     }
 
     componentDidMount() {
@@ -65,6 +66,13 @@ class Department extends Component {
         if (prevProps.departments.searchQuery !== this.props.departments.searchQuery) {
             this.props.getDepartments()
         }
+    }
+
+    editDepartment(event,data) {
+        event.preventDefault();
+        this.showDepartmentForm(data)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
     }
 
     async showDepartment(event, data) {
@@ -82,6 +90,7 @@ class Department extends Component {
                 if (isEmpty(data)) {
                     this.props.showDepartmentForm({...usersObject})
                 } else {
+                    this.props.showDepartmentForm({...data,...usersObject})
                 }
             })
             .catch(err => console.log(err))
