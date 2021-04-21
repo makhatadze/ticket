@@ -25,7 +25,7 @@ class ExportLog extends Component {
                 dataIndex: 'createdBy',
                 sorter: false,
                 render: element => (
-                    <>{element.name}</>
+                    <>{!isEmpty(element) && element.name}</>
                 )
             },
             {
