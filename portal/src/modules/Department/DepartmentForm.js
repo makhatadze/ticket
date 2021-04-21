@@ -90,7 +90,8 @@ class DepartmentForm extends Component {
                     this.closeDepartmentForm();
                 })
                 .catch(err => {
-                    toast.error
+                    toast.error('Can not created.')
+                    this.setState({errors: JSON.parse(err.response.data.errors), loading: false})
                 })
         }
     }
